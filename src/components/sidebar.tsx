@@ -1,0 +1,55 @@
+import { ActivityIcon, ChevronLeft, ChevronRight, Inbox, Send, User } from "lucide-react";
+import { useSidebar } from "@/context/sideBarContext";
+import { useMSidebar } from "@/context/mobileSideBarContext";
+import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+const Sidebar = () => {
+    const {sideBar, toggleSidebar} = useSidebar();
+    const {mSideBar, toggleMSidebar} = useMSidebar();
+    
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+    const sideBarUse = isDesktop ? sideBar : mSideBar;
+    const toggle = isDesktop ? toggleSidebar : toggleMSidebar;
+
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return (
+        <div className={sideBarUse ? "lg:w-[15%] md:w-[30%] w-[60%] md:relative fixed" : "lg:w-[5%] w-[12%]"}>
+            {sideBarUse && <div className="border-r border-gray-300 bg-white z-1000 w-full h-screen px-2 cursor-pointer">
+                <div className="h-15 flex justify-end items-center">
+                    <button className="px-3" onClick={() => toggle(false)}>
+                        <ChevronLeft />
+                    </button>
+                </div>
+                <div className="space-y-4 **:flex **:gap-1.5 *:p-2 font-inter *:hover:bg-gray-200 *:hover:rounded-md">
+                    <NavLink to="/inbox"><li><Inbox size={20} /> <span className="text-[14px]">Inbox</span></li></NavLink>
+                    <NavLink to="/send_message"><li><Send size={20} /> <span className="text-[14px]">Send Message</span></li></NavLink>
+                    <NavLink to="/user_profile"><li><User size={20} /> <span className="text-[14px]">User Profile</span></li></NavLink>
+                    <NavLink to="/" end><li><ActivityIcon size={20} /> <span className="text-[14px]">Status Feed</span></li></NavLink>
+                </div>
+            </div>}
+            {!sideBarUse && <div className="border-r border-gray-300 w-full h-screen px-2 cursor-pointer">
+                <div className="h-15 border-b border-gray-300 flex justify-center items-center">
+                    <button className="px-3" onClick={() => toggle(true)}>
+                        <ChevronRight />
+                    </button>
+                </div>
+                <div className="space-y-4 mt-2 flex flex-col items-center list-none *:p-2 font-inter *:hover:bg-gray-200 *:hover:rounded-md">
+                    <NavLink to="/inbox"><li><Inbox size={20} /></li></NavLink>
+                    <NavLink to="/send_message"><li><Send size={20} /></li></NavLink>
+                    <NavLink to="/user_profile"><li><User size={20} /></li></NavLink>
+                    <NavLink to="/"><li><ActivityIcon size={20} /></li></NavLink>
+                </div>
+            </div>}
+        </div>        
+    );
+}
+
+export default Sidebar;
