@@ -17,8 +17,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/Register" element={<Register />} />
-        <Route path="/Verify" element={<Verify />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify" element={<Verify />} />
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<StatusFeed />} />
           <Route path="/view_status" element={<ViewStatus />} />

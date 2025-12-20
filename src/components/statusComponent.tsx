@@ -7,8 +7,8 @@ export const UserInfo = ({ username, time } : UserInfoType) => (
       <User size={30} aria-hidden="true" />
     </div>
     <div>
-      <b className="md:text-lg text-[16px]">{username}</b>
-      <p className="text-xs text-gray-500">{time}</p>
+      <b className="md:text-lg text-[18px]">{username}</b>
+      <p className="text-[14px] text-gray-500">{time}</p>
     </div>
   </div>
 );

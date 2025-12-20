@@ -18,7 +18,7 @@ const StatusFeed = () => {
         }
     }
     return (
-        <div className={`bg-gray-50 w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter overflow-hidden border-t border-gray-100 flex`}>
+        <div className={`bg-gray-50 w-full h-[calc(100vh-60px)] md:px-10 px-2 py-5 font-inter text-gray-600 font-medium overflow-hidden border-t border-gray-100 flex`}>
             <div className="lg:w-[70%] w-full overflow-y-auto no-scrollbar">
                 <div className="border border-gray-200 bg-white rounded-md md:p-6 py-6 px-3 space-y-5">
                     <div className="flex gap-3">
@@ -32,18 +32,18 @@ const StatusFeed = () => {
                         <div className="space-y-5">
                             <div className="flex gap-3 items-center cursor-pointer" onClick={openFIle}>
                                 <Image size={16} /> 
-                                <p className="text-[14px]">Image</p>
+                                <p className="text-[16px]">Image</p>
                             </div>
                             <input type="file" name="image" id="image" ref={filePicker} onChange={handleChange} className="hidden" />
                             {image && <div className="w-30 h-25">
                                 <img src={image ? URL.createObjectURL(image) : ""} alt={image ? URL.createObjectURL(image) : ""} className="w-full h-full object-contain" />
                             </div>}
                         </div>
-                        <Button label="Post anonymously" buttonType="colored" extraClass="px-3 md:text-[16px] text-[12px]" />
+                        <Button label="Post" buttonType="colored" extraClass="px-4 md:text-[16px] text-[12px]" />
                     </div>
                 </div>
 
-                <div className="flex gap-3 text-[14px]">
+                <div className="flex gap-3 text-[16px]">
                     <button className="py-2 px-4 rounded-md">Recent</button>
                     <button className="py-2 px-4 rounded-md">Popular</button>
                 </div>

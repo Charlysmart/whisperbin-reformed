@@ -4,7 +4,7 @@ import InboxChat from "@/components/inboxChat";
 
 const Inbox = () => {
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter overflow-y-auto space-y-5`}>
+        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter font-medium overflow-y-auto space-y-5`}>
             <div>
                 <b className="text-[30px] ">Inbox</b>
             </div>
@@ -16,8 +16,8 @@ const Inbox = () => {
                     <input type="search" placeholder="Search messages..." className="border-none w-full outline-none" />
                 </div>
                 <div className="flex w-[10%] gap-2 justify-between *:hover:bg-gray-100">
-                    <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4" />
-                    <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4" />
+                    <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" />
+                    <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" />
                 </div>
             </div>
             <div className="space-y-5">

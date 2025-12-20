@@ -1,4 +1,4 @@
-import { ActivityIcon, ChevronLeft, ChevronRight, Inbox, Send, User } from "lucide-react";
+import { ActivityIcon, Bell, ChevronLeft, ChevronRight, Inbox, Send, User } from "lucide-react";
 import { useSidebar } from "@/context/sideBarContext";
 import { useMSidebar } from "@/context/mobileSideBarContext";
 import { NavLink } from "react-router-dom";
@@ -28,11 +28,12 @@ const Sidebar = () => {
                         <ChevronLeft />
                     </button>
                 </div>
-                <div className="space-y-4 **:flex **:gap-1.5 *:p-2 font-inter *:hover:bg-gray-200 *:hover:rounded-md">
-                    <NavLink to="/inbox"><li><Inbox size={20} /> <span className="text-[14px]">Inbox</span></li></NavLink>
-                    <NavLink to="/send_message"><li><Send size={20} /> <span className="text-[14px]">Send Message</span></li></NavLink>
-                    <NavLink to="/user_profile"><li><User size={20} /> <span className="text-[14px]">User Profile</span></li></NavLink>
-                    <NavLink to="/" end><li><ActivityIcon size={20} /> <span className="text-[14px]">Status Feed</span></li></NavLink>
+                <div className="space-y-4 **:flex **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-gray-200 *:hover:rounded-md">
+                    <NavLink to="/inbox"><li><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
+                    <NavLink to="/send_message"><li><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
+                    <NavLink to="/user_profile"><li><User size={20} /> <span className="text-[16px]">User Profile</span></li></NavLink>
+                    <NavLink to="/" end><li><ActivityIcon size={20} /> <span className="text-[16px]">Status Feed</span></li></NavLink>
+                    <NavLink to="/notifications"><li><Bell size={20} /> <span className="text-[16px]">Notifications</span></li></NavLink>
                 </div>
             </div>}
             {!sideBarUse && <div className="border-r border-gray-300 w-full h-screen px-2 cursor-pointer">
@@ -46,6 +47,7 @@ const Sidebar = () => {
                     <NavLink to="/send_message"><li><Send size={20} /></li></NavLink>
                     <NavLink to="/user_profile"><li><User size={20} /></li></NavLink>
                     <NavLink to="/"><li><ActivityIcon size={20} /></li></NavLink>
+                    <NavLink to="/notifications"><li><Bell size={20} /></li></NavLink>
                 </div>
             </div>}
         </div>        

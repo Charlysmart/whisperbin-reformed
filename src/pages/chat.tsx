@@ -17,7 +17,7 @@ const Chat = () => {
         return () => current.removeEventListener("click", removeMore);
     }, [more])
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto`}>
+        <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto font-semibold`}>
             <div className="h-15 flex justify-between items-center p-3 bg-white">
                 <div className="flex items-center gap-5">
                     <button><ArrowLeft /></button>
@@ -42,74 +42,38 @@ const Chat = () => {
                 <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar">
                     <div className="flex justify-start w-full">
                         <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="md:text-[16px] text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-start text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                     <div className="flex justify-end w-full">
                         <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-end text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                     <div className="flex justify-start w-full">
                         <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="md:text-[16px] text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-start text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                     <div className="flex justify-end w-full">
                         <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-end text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                     <div className="flex justify-start w-full">
                         <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="md:text-[16px] text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-start text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                     <div className="flex justify-end w-full">
                         <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-start w-full">
-                        <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                        <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-start w-full">
-                        <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                        <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-start w-full">
-                        <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-start md:text-[12px] text-[10px]">10:05 PM</p>
-                        </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                        <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 text-white rounded space-y-2">
-                            <p className="md:text-[16px] text-[14px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
-                            <p className="text-end md:text-[12px] text-[10px]">10:05 PM</p>
+                            <p className="text-[16px]">Hello there! Thanks for reaching out. What can I help you with anonymously?</p>
+                            <p className="text-end text-[12px]">10:05 PM</p>
                         </div>
                     </div>
                 </div>
