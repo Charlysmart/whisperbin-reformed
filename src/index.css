@@ -9,4 +9,22 @@
 
 @theme {
     --font-inter: "Inter", sans-serif;
+    --color-secondary: #f8fafc;
+    --color-card: #f1f5f9;
+    --color-primary: #1a1a1a;
+    --color-brand: #666666;
+    --color-accent: #2563eb;
+    --color-border: #e5e7eb;
+}
+
+@layer utility {
+    .button-gradient {
+        background: linear-Gradient(135deg, #1e40af 0%, #60a5fa 100%);
+    }
+    .hovered-button-gradient {
+        background: linear-Gradient(135deg, #1d4ed8, #2563eb);
+    }
+    .avatar-gradient {
+        background: linear-Gradient(135deg, #0ea5e9 0%, #923ef1 100%);
+    }
 }

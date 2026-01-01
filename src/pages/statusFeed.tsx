@@ -1,11 +1,16 @@
 import { Image, User } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { InteractionStats, UserInfo } from "@/components/statusComponent";
 import Button from "@/components/button";
+import { getData } from "@/api/get_request";
+import { useNavigate } from "react-router-dom";
+import { usePreloader } from "@/context/loaderContext";
 
 const StatusFeed = () => {
     const filePicker = useRef<HTMLInputElement | null>(null);
     const [image, setImage] =useState<File | null>(null);
+    const { startLoading, stopLoading } = usePreloader();
+    const navigate = useNavigate();
 
     const openFIle = () => {
         if (filePicker.current) filePicker.current.click();
@@ -17,13 +22,23 @@ const StatusFeed = () => {
             setImage(file)
         }
     }
+
+    async function fetchStatusData() {
+        startLoading();
+
+        getData({url: "/pages/dashboard", navigate, onError: (error) => console.log(error), finallyCallback: () => stopLoading()})
+    }
+
+    useEffect(() => {
+        fetchStatusData();
+    }, []);
     return (
         <div className={`bg-gray-50 w-full h-[calc(100vh-60px)] md:px-10 px-2 py-5 font-inter text-gray-600 font-medium overflow-hidden border-t border-gray-100 flex`}>
             <div className="lg:w-[70%] w-full overflow-y-auto no-scrollbar">
-                <div className="border border-gray-200 bg-white rounded-md md:p-6 py-6 px-3 space-y-5">
+                <div className="shadow-md shadow-gray-200 bg-white rounded-md md:p-6 py-6 px-3 space-y-5">
                     <div className="flex gap-3">
-                        <div className="bg-gray-200 p-2 rounded-full w-fit h-fit">
-                            <User />
+                        <div className="avatar-gradient p-2 rounded-full w-fit h-fit">
+                            <User color="white" className="user" />
                         </div>
                         <input type="text" name="thought" id="thought" placeholder="Share your anonymous thoughts..." className="border border-gray-200 rounded-md w-full text-[14px] px-3" />
                     </div>
@@ -43,13 +58,13 @@ const StatusFeed = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-3 text-[16px]">
+                <div className="flex mt-5 gap-3 text-[16px]">
                     <button className="py-2 px-4 rounded-md">Recent</button>
                     <button className="py-2 px-4 rounded-md">Popular</button>
                 </div>
 
                 <div className="space-y-5">
-                    <div className="border border-gray-200 bg-white rounded-md p-6 space-y-5">
+                    <div className="border border-border bg-card rounded-lg p-6 space-y-5">
                         <UserInfo username="@anonymous_3464" time="4 hours ago" />
                         <div>
                             <p>Just sent my first anonymous message! Feeling empowered by the privacy AnonyText offers. This platform is amazing for sharing thoughts without judgment.</p>
@@ -58,7 +73,7 @@ const StatusFeed = () => {
                         <InteractionStats likes={102} comments={453} liked={true} />
                     </div>
                     
-                    <div className="border border-gray-200 bg-white rounded-md p-6 space-y-5">
+                    <div className="border border-gray-200 bg-card rounded-lg p-6 space-y-5">
                         <UserInfo username="@anonymous_4564" time="1 hours ago" />
                         <div>
                             <p>Just sent my first anonymous message! Feeling empowered by the privacy AnonyText offers. This platform is amazing for sharing thoughts without judgment.</p>

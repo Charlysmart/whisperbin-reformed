@@ -4,7 +4,7 @@ import Logo from "./logo";
 const Header = () => {
     const { sideBar } = useSidebar();
     return (
-        <header className={`flex justify-between items-center px-10 w-full h-15`}>
+        <header className={`flex justify-between items-center md:px-10 px-5 w-full h-15`}>
             <div>
                 <Logo />
             </div>

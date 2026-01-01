@@ -10,23 +10,31 @@ import SidebarLayout from "@/layout/sidebarLayout";
 import Verify from "@/pages/verify";
 import ViewStatus from "./pages/viewStatus";
 import Notification from "./pages/notification";
+import { GradientProvider } from "./components/gradient";
+import Preloader from "./components/preloader";
+import PreloaderProvider from "./context/loaderContext";
+import AnonymousChat from "./pages/anonymous";
 
 
 function App() {
   return (
     <Router>
+      <GradientProvider />
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify" element={<Verify />} />
-        <Route element={<SidebarLayout />}>
-          <Route path="/" element={<StatusFeed />} />
-          <Route path="/view_status" element={<ViewStatus />} />
-          <Route path="/user_profile" element={<UserProfile />} />
-          <Route path="/inbox" element={<Inbox />} />
-          <Route path="/send_message" element={<SendMessage />} />        
-          <Route path="/chat" element={<Chat />} />        
-          <Route path="/notifications" element={<Notification />} />        
+        <Route element={<PreloaderProvider />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route element={<SidebarLayout />}>
+            <Route path="/" element={<StatusFeed />} />
+            <Route path="/view_status" element={<ViewStatus />} />
+            <Route path="/user_profile" element={<UserProfile />} />
+            <Route path="/inbox" element={<Inbox />} />
+            <Route path="/send_message/:username?" element={<SendMessage />} />    
+            <Route path="/anonymous_messages" element={<AnonymousChat />} />
+            <Route path="/chat/:thread" element={<Chat />} />        
+            <Route path="/notifications" element={<Notification />} />  
+          </Route> 
         </Route>
       </Routes>
     </Router>

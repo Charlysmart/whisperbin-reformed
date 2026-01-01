@@ -11,11 +11,11 @@ const NotificationBlock = ({ read, type, content, time, linkText } : Notificatio
         default: ReplyAll,
     };
 
-        const Icon = iconMap[type] || iconMap.default;
+    const Icon = iconMap[type] || iconMap.default;
     return (
-        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-500 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex gap-5 hover:shadow-xl text-gray-600`}>
-            <div className={`${read ? "bg-gray-200" : "bg-blue-500"} h-fit w-fit md:p-3 p-2 rounded-full`}>
-                <Icon fill={read ? "gray" : "white"} color={read ? "gray" : "white"} />
+        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex gap-5 hover:shadow-xl text-gray-600`}>
+            <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
+                <Icon color={read ? "gray" : "white"} />
             </div>
             <div className="space-y-3">
                 <h3 className="font-semibold md:text-[18px] text-[16px]">

@@ -7,8 +7,8 @@ export const UserInfo = ({ username, time } : UserInfoType) => (
       <User size={30} aria-hidden="true" />
     </div>
     <div>
-      <b className="md:text-lg text-[18px]">{username}</b>
-      <p className="text-[14px] text-gray-500">{time}</p>
+      <b className="md:text-lg text-[18px] text-primary">{username}</b>
+      <p className="text-[14px] text-brand">{time}</p>
     </div>
   </div>
 );
@@ -16,7 +16,7 @@ export const UserInfo = ({ username, time } : UserInfoType) => (
 export const InteractionStats = ({ likes, comments, liked } : InteractionStatsType) => (
   <div className="flex gap-5 md:text-[16px] text-[14px]">
     <div className="flex items-center gap-1">
-      <Heart size={16} aria-hidden="true" fill={liked ? "blue" : "transparent"} color={liked ? "blue" : "black"} />
+      <Heart size={16} aria-hidden="true" fill={liked ? "url(#my-gradient)" : "transparent"} color={liked ? "url(#my-gradient)" : "black"} />
       <p>{likes}</p>
     </div>
     <div className="flex items-center gap-1">
