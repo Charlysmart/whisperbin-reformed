@@ -1,3 +1,4 @@
+import Whisperroom from "@/pages/whisperroom"
 import { NavigateFunction } from "react-router-dom"
 
 export type AuthInputTypes = {
@@ -28,8 +29,10 @@ export type ButtonTypes = {
 export type InboxChatType = {
     user : string,
     time : string,
+    image : boolean
     content : string,
-    read : boolean
+    read : boolean,
+    task? : () => void
 }
 
 export type InteractionStatsType = {
@@ -48,8 +51,9 @@ export type NotificationBlockType = {
     type : "message" | "like" | "reply" | "comment" | "comment-reply",
     content? : string,
     time : string,
-    linkText : string,
-    link? : string
+    linkText? : string,
+    link? : string,
+    id : number
 }
 
 export type AnonymousType = {
@@ -81,25 +85,29 @@ export type AlertType = {
 export type AnonymousDataType = {
     message_thread : string,
     content : string,
-    receiver_id : number,
+    replied : boolean,
+    read : boolean,
+    sent_at : string
+}
+
+export type InboxDataType = {
+    message_thread : string,
+    content : string,
+    image : boolean,
     replied : boolean,
     read : boolean,
     sent_at : string
 }
 
 export type ChatType = {
-    userId : number,
-    chat : {
-        sender_id : number,
-        receiver_id : number,
-        message_thread : string,
-        content : string,
-        image : string,
-        sent_at : string | Date,
-        id : number,
-        read : boolean
-    }[]
-}
+    sender : boolean,
+    message_thread : string,
+    content : string,
+    image : string,
+    sent_at : string | Date,
+    id : number,
+    read : boolean
+}[]
 
 export type AxiosType<T> = {
   url: string;
@@ -109,3 +117,15 @@ export type AxiosType<T> = {
   finallyCallback?: () => void;
   navigate?: NavigateFunction
 };
+
+export type WhisperroomType = {
+    id : number,
+    content : string,
+    image : string,
+    time : string,
+    reply_to : number,
+    sender : boolean,
+    admin : boolean,
+    is_admin : boolean
+    room_name : string
+}

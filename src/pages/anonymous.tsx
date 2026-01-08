@@ -3,11 +3,12 @@ import Button from "@/components/button";
 import { usePreloader } from "@/context/loaderContext";
 import { AnonymousDataType, AnonymousType } from "@/utils/types";
 import { Clock, Ghost, MessageSquare, Reply, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { timeFormat } from "@/utils/time";
 import { patchData } from "@/api/patch_request";
 import { alertBox } from "@/utils/alert";
+import { connectSocket } from "@/utils/socket";
 
 const AnonymousBlock = ({ read, content, time, replied, reply, task } : AnonymousType) => {
     const iconMap = {
@@ -45,6 +46,7 @@ const AnonymousChat = () => {
     const [filter, setFilter] = useState<"all" | "unread" | "replied">("all");
     const navigate = useNavigate();
     const { startLoading, stopLoading } = usePreloader();
+    const websocket = useRef<any>(null);
 
     function fetchAnonymous() {
         startLoading();
@@ -76,6 +78,18 @@ const AnonymousChat = () => {
     useEffect(() => {
         fetchAnonymous();
     }, [filter]);
+
+    useEffect(() => {
+        websocket.current = connectSocket({
+            url: "new_anonymous",
+            onOpen: () => console.log("started anonymous"),
+            onMessage: (event) => {
+                const payload = event.data;
+                console.log(payload);
+                setData(prev => ([payload, ...prev]))
+            }
+        })
+    })
 
     return (
         <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>

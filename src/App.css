@@ -34,6 +34,11 @@ input[type="number"] {
   animation: rotate 5s infinite;
 }
 
+[contenteditable]:empty:before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+}
+
 .spinner {
   display: inline-block;
   width: 18px;

@@ -46,7 +46,7 @@ const UserProfile = () => {
             <div className="flex flex-col gap-3 mt-5 border border-gray-100 md:p-5 px-2 py-5 rounded-xl">
                 <b className="md:text-[20px] text-[18px] font-semibold">Incoming Message Preview</b>
                 <div className="border border-gray-100 rounded-xl">
-                    <InboxChat user="Anonyuser_3546" time="2 hours ago" content="Just wanted to say your recent post on the Status Feed was inspiring! Keep it up." read={false} />
+                    <InboxChat user="Anonyuser_3546" time="2 hours ago" content="Just wanted to say your recent post on the Status Feed was inspiring! Keep it up." read={false} image={true} />
                 </div>
                 <p className="md:text-[14px] text-[13px]">This is how an incoming anonymous message will appear in your inbox.</p>
             </div>
@@ -63,7 +63,7 @@ const UserProfile = () => {
                     ))}
                 </div>
                 <div className="flex justify-center mt-3">
-                    <Button label="Save" buttonType="colored" type="button" onclick={updateData} extraClass="px-5" />
+                    <Button label="Save" buttonType="colored" type="button" onclick={updateData} extraClass="px-5 py-2" />
                 </div>
             </div>
         </div>

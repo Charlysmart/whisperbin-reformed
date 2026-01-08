@@ -14,6 +14,9 @@ import { GradientProvider } from "./components/gradient";
 import Preloader from "./components/preloader";
 import PreloaderProvider from "./context/loaderContext";
 import AnonymousChat from "./pages/anonymous";
+import CreateRoom from "./pages/create_room";
+import JoinRoom from "./pages/join_room";
+import Whisperroom from "./pages/whisperroom";
 
 
 function App() {
@@ -33,7 +36,10 @@ function App() {
             <Route path="/send_message/:username?" element={<SendMessage />} />    
             <Route path="/anonymous_messages" element={<AnonymousChat />} />
             <Route path="/chat/:thread" element={<Chat />} />        
-            <Route path="/notifications" element={<Notification />} />  
+            <Route path="/notifications" element={<Notification />} /> 
+            <Route path="/create_room"  element={<CreateRoom />} />
+            <Route path="/join_room"  element={<JoinRoom />} />
+            <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
           </Route> 
         </Route>
       </Routes>

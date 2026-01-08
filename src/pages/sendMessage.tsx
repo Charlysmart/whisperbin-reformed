@@ -1,10 +1,12 @@
+import { getData } from "@/api/get_request";
 import { postData } from "@/api/post_request";
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
 import useFormInput from "@/context/formChange";
+import { usePreloader } from "@/context/loaderContext";
 import { alertBox } from "@/utils/alert";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SendMessage = () => {
     const { username } = useParams();
@@ -12,8 +14,16 @@ const SendMessage = () => {
         username : "",
         message : ""
     });
+    const { startLoading, stopLoading } = usePreloader();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        startLoading();
+        getData({ url: "/pages/general", navigate, onError: (error) => {
+            alertBox({ message: error.response.data.detail, success: false, top: "0" });
+            }, finallyCallback: () => stopLoading()
+        });
+
         if (username) setFormData(prev => ({...prev, username:username}));
     }, []);
 
@@ -45,7 +55,7 @@ const SendMessage = () => {
                         <textarea name="message" id="message" placeholder="Type your anonymous Message here..." className="w-full border border-gray-300 h-20 rounded-md px-2 text-[14px] focus:border-gray-400 resize-none" onChange={handleRegisterInput} value={formData.message} />
                     </div>
                     <p className="text-[13px] p-2 border border-gray-200 bg-gray-100 rounded-md">Your message will be delivered securely and anonymously. The recipient will not know your identity.</p>
-                    <Button label="Send Message" type="submit" buttonType="colored" extraClass="w-full" onclick={sendAnonymous} />
+                    <Button label="Send Message" type="submit" buttonType="brand" extraClass="w-full py-2" onclick={sendAnonymous} />
                 </div>
             </div>
         </div>

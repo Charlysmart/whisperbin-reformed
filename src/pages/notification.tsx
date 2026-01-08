@@ -1,8 +1,16 @@
+import { getData } from "@/api/get_request";
+import { patchData } from "@/api/patch_request";
 import Button from "@/components/button";
+import { usePreloader } from "@/context/loaderContext";
+import { alertBox } from "@/utils/alert";
+import { timeFormat } from "@/utils/time";
 import { NotificationBlockType } from "@/utils/types";
 import { Clock, Heart, Mail, MessageCircle, Reply, ReplyAll } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { connectSocket } from "@/utils/socket";
 
-const NotificationBlock = ({ read, type, content, time, linkText } : NotificationBlockType) => {
+const NotificationBlock = ({ read, type, content, time, linkText, link, id } : NotificationBlockType) => {
     const iconMap = {
         comment: MessageCircle,
         message: Mail,
@@ -10,6 +18,12 @@ const NotificationBlock = ({ read, type, content, time, linkText } : Notificatio
         "comment reply": Reply,
         default: ReplyAll,
     };
+    
+    const navigate = useNavigate();
+
+    const markRead = (id: number, link: string) => {
+        patchData({ url: `pages/markRead?id=${id}`, onSuccess: (response) => navigate(`../${link}`), onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }) })
+    }
 
     const Icon = iconMap[type] || iconMap.default;
     return (
@@ -22,21 +36,39 @@ const NotificationBlock = ({ read, type, content, time, linkText } : Notificatio
                     {type === "comment" ? "Someone commented on your status post" 
                     : type === "message" ? "You received a new anonymous message" 
                     : type === "like" ? "Someone liked your status post" 
-                    : type === "comment-reply" ? "Someone replied to your anonymous message" 
-                    : "Someone replied to your comment"}
+                    : type === "comment-reply" ? "Someone replied to your comment" 
+                    : "Someone replied to your anonymous message"}
                 </h3>
                 <p className="md:text-[16px] text-[15px]">
                     {type === "message" ? "Someone sent you a message via your anonymous link" 
                     : type === "reply" ? "Check your messages to continue the conversation" 
                     : content}
                 </p>
-                <p className="md:text-[14px] text-[13px] flex flex-wrap gap-2"><Clock size={16} /> {time} <span className="text-blue-500">{linkText}</span></p>
+                <p className="md:text-[14px] text-[13px] flex items-center flex-wrap gap-2" onClick={() => markRead(id, link)}><Clock size={16} /> {time} <span className="text-blue-500">{linkText}</span></p>
             </div>
         </div>
     )
 }
 
 const Notification = () => {
+    const navigate = useNavigate();
+    const { startLoading, stopLoading } = usePreloader();
+    const [filter, setFilter] = useState<"all" | "unread">("all")
+    const [data, setData] = useState<{id: number, read: boolean, type: "message" | "like" | "reply" | "comment" | "comment-reply", content?: string, added: string, notify_id: string }[]>([]);
+    const websocket = useRef<any>(null);
+    useEffect(() => {
+        startLoading();
+        getData({ url: `/pages/get_notification?filter=${filter}`, navigate, onSuccess: (response) => setData(response.data), onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading() })
+    }, [filter]);
+    useEffect(() => {
+        websocket.current = connectSocket({
+            url: "new_notification",
+            onMessage: (event) => {
+                const payload = event.data;
+                setData(prev => ([payload, ...prev]));
+            }
+        })
+    }, [])
     return (
         <div className="bg-gray-50 w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter font-medium overflow-y-auto">
             <section className="md:w-[80%] w-full space-y-5">
@@ -45,14 +77,13 @@ const Notification = () => {
                 </div>
                 <div className="w-full flex flex-wrap gap-4">
                     <div className="flex md:gap-2 justify-between *:hover:bg-gray-100">
-                        <Button label="All" buttonType="colored" extraClass="w-fit h-full px-4 py-2 border-0" />
-                        <Button label="Unread" extraClass="w-fit h-full px-4 py-2 border-0" />
-                        <Button label="Posts" extraClass="w-fit h-full px-4 py-2" />
+                        <Button label="All" buttonType={filter === "all" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setFilter("all")} />
+                        <Button label="Unread" buttonType={filter === "unread" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setFilter("unread")} />
                     </div>
                 </div>
                 <div className="space-y-5 cursor-pointer">
-                    <NotificationBlock read={false} time="2 minutes ago" type="message" linkText="View Message"  />
-                    <NotificationBlock read={true} time="30 minutes ago" type="comment" content="I completely agree with you on this..." linkText="View Comment"  />
+                    {data.length >= 1 ? data.map(item => (
+                        <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"}
                 </div>
             </section>
         </div>

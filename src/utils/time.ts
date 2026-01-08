@@ -2,7 +2,10 @@ export const timeFormat = (time: string | Date): string => {
   const now = Date.now();
   const sent = new Date(time).getTime();
 
-  const seconds = Math.floor((now - sent) / 1000);
+  let seconds = Math.floor((now - sent) / 1000);
+
+  // If time is in the future, treat it as "just now" or "0 seconds ago"
+  if (seconds < 0) seconds = 0;
 
   if (seconds < 5) return "just now";
 

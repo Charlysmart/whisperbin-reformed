@@ -1,8 +1,60 @@
 import { Search } from "lucide-react";
 import Button from "@/components/button";
 import InboxChat from "@/components/inboxChat";
+import { useEffect, useRef, useState } from "react";
+import { getData } from "@/api/get_request";
+import { alertBox } from "@/utils/alert";
+import { usePreloader } from "@/context/loaderContext";
+import { useNavigate } from "react-router-dom";
+import { InboxDataType } from "@/utils/types";
+import { timeFormat } from "@/utils/time";
+import { patchData } from "@/api/patch_request";
+import { connectSocket } from "@/utils/socket";
 
 const Inbox = () => {
+    const [data, setData] = useState<InboxDataType[]>([])
+    const { startLoading, stopLoading } = usePreloader();
+    const navigate = useNavigate();
+    const socket = useRef<any>(null)
+
+    useEffect(() => {
+        console.log("📥 Inbox mounted");
+        startLoading();
+        getData({url: "/pages/inbox", navigate, onSuccess: (response) => setData(response.data), onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
+        });
+
+        socket.current = connectSocket({
+            url: "get_new_message",
+            onOpen: () => console.log("🟢 Inbox socket open"),
+            onMessage: (payload) => {
+                console.log("📨 New inbox payload:", payload);
+                const newData = payload.data;
+                setData(prev => {
+                    const index = prev.findIndex((item )=> item.message_thread === newData.message_thread)
+                    if (index !== -1) {
+                        const updated = [...prev]
+                        updated[index] = newData
+                        return updated
+                    }
+                    return [newData, ...prev]
+                });
+            }
+        });
+
+        return () => {
+            console.log("🧹 Inbox unmounted");
+            socket.current?.close();
+        }
+
+    }, []);
+
+    function markAsRead(thread: string, read: boolean) {
+        if (!read) {
+            patchData({ url: `pages/mark_inbox_read?thread=${thread}`, navigate, onSuccess: (response) => navigate(`../chat/${thread}`), onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}) })
+        } else {
+            navigate(`../chat/${thread}`)
+        }
+    }
     return (
         <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter font-medium overflow-y-auto space-y-5`}>
             <div>
@@ -21,10 +73,8 @@ const Inbox = () => {
                 </div>
             </div>
             <div className="space-y-5">
-                <InboxChat user="AnonyUser_234" time="1 hour ago" content="I noticed some unusual activity on the Status Feed. Is everything alright? Stay safe." read={true} />
-                <InboxChat user="AnonyUser_234" time="1 hour ago" content="I noticed some unusual activity on the Status Feed. Is everything alright? Stay safe." read={false} />
-                <InboxChat user="AnonyUser_234" time="1 hour ago" content="I noticed some unusual activity on the Status Feed. Is everything alright? Stay safe." read={false} />
-                <InboxChat user="AnonyUser_234" time="1 hour ago" content="I noticed some unusual activity on the Status Feed. Is everything alright? Stay safe." read={true} />
+                {data.length !== 0 ? data.map(item => (
+                    <InboxChat key={item.message_thread} user={item.message_thread} time={timeFormat(item.sent_at)} content={item.content} read={item.read} task = {() => markAsRead(item.message_thread, item.read)} image={item.image} />)) : "No Chat yet!"}
             </div>
         </div>
     );

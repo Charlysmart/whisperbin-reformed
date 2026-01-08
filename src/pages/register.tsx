@@ -65,8 +65,8 @@ const Register = () => {
                         <AuthInputs type="password" label="Confirm Password" attribute="confirm_password" placeholder="Confirm your password" value={formData.confirm_password} onchange={handleRegisterInput} />
                         <p className="md:text-[14px] text-[14px] mt-2 text-center">Your privacy is our priority. We handle your data with utmost care.</p>
                         <div className="mt-5 flex flex-col gap-4">
-                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Registering...<span className="spinner"/></div> :"Register"} disable={loading ? true : false} buttonType="colored" extraClass="w-full" type="submit" />
-                            <Button label="Already have an account? Login" type="button" buttonType="outlined" extraClass="w-full" onclick={() => navigate("../login")} />
+                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Registering...<span className="spinner"/></div> :"Register"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
+                            <Button label="Already have an account? Login" type="button" buttonType="outlined" extraClass="w-full py-2" onclick={() => navigate("../login")} />
                         </div>
                     </form>
                 </div>

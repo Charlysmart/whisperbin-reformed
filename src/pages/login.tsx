@@ -64,11 +64,11 @@ const Login = () => {
                         <AuthInputs label="Password" type="password" attribute="password"  onchange={handleRegisterInput}  value={formData.password} placeholder="Enter Your password" />
                         <p className="text-[15px] mt-7 text-end text-blue-500 font-bold">Forgot password?</p>
                         <div className="mt-5 mb-5 flex flex-col gap-4">
-                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full" type="submit" />
+                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
                         </div>
                     </form>
                     <div className="text-[14px] space-y-3">
-                        <p>Don't have an account yet? <span className="text-blue-500 font-bold" onClick={() => navigate("../register")}>Register here</span></p>
+                        <p>Don't have an account yet? <span className="text-blue-500 font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
                         <p>Your privacy is our priority. Read our <span className="text-blue-500 font-bold">Privacy Policy.</span></p>
                     </div>
                 </div>

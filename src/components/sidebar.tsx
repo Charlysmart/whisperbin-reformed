@@ -1,4 +1,4 @@
-import { ActivityIcon, Bell, ChevronLeft, ChevronRight, Inbox, Send, User } from "lucide-react";
+import { ActivityIcon, Bell, ChevronLeft, ChevronRight, DoorOpen, GhostIcon, Inbox, LogIn, PlusCircle, Send, User } from "lucide-react";
 import { useSidebar } from "@/context/sideBarContext";
 import { useMSidebar } from "@/context/mobileSideBarContext";
 import { NavLink } from "react-router-dom";
@@ -28,12 +28,14 @@ const Sidebar = () => {
                         <ChevronLeft />
                     </button>
                 </div>
-                <div className="space-y-4 **:flex **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-gray-200 *:hover:rounded-md">
+                <div className="space-y-4 **:flex **:items-center **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-gray-200 *:hover:rounded-md">
                     <NavLink to="/inbox"><li><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
                     <NavLink to="/send_message"><li><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
+                    <NavLink to="/anonymous_messages"><li><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
                     <NavLink to="/user_profile"><li><User size={20} /> <span className="text-[16px]">User Profile</span></li></NavLink>
-                    <NavLink to="/" end><li><ActivityIcon size={20} /> <span className="text-[16px]">Status Feed</span></li></NavLink>
                     <NavLink to="/notifications"><li><Bell size={20} /> <span className="text-[16px]">Notifications</span></li></NavLink>
+                    <NavLink to="/create_room"><li><PlusCircle size={20} /> <span className="text-[16px]">Create Room</span></li></NavLink>
+                    <NavLink to="/join_room"><li><DoorOpen size={20} /> <span className="text-[16px]">Join Room</span></li></NavLink>
                 </div>
             </div>}
             {!sideBarUse && <div className="border-r border-gray-300 w-full h-screen px-2 cursor-pointer">
@@ -45,9 +47,11 @@ const Sidebar = () => {
                 <div className="space-y-4 mt-2 flex flex-col items-center list-none *:p-2 font-inter *:hover:bg-gray-200 *:hover:rounded-md">
                     <NavLink to="/inbox"><li><Inbox size={20} /></li></NavLink>
                     <NavLink to="/send_message"><li><Send size={20} /></li></NavLink>
+                    <NavLink to="/anonymous_messages"><li><GhostIcon size={20} /></li></NavLink>
                     <NavLink to="/user_profile"><li><User size={20} /></li></NavLink>
-                    <NavLink to="/"><li><ActivityIcon size={20} /></li></NavLink>
                     <NavLink to="/notifications"><li><Bell size={20} /></li></NavLink>
+                    <NavLink to="/create_room"><li><PlusCircle size={20} /></li></NavLink>
+                    <NavLink to="/join_room"><li><DoorOpen size={20} /></li></NavLink>
                 </div>
             </div>}
         </div>        
