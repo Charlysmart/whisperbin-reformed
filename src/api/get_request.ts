@@ -43,6 +43,10 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
       }
     }
 
+    if (error.response?.data?.detail === "User not verified") {
+      navigate("../verify")
+    }
+
     if (onError) onError(error);
     else console.error(error);
 

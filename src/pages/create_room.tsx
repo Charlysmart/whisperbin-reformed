@@ -58,7 +58,7 @@ const CreateRoom = () => {
 
     return (
         <div className="flex flex-col gap-5 items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-15vh)]">
-            {modalInfo.modal && <SuccessModal thread="whisperroom_4546h-hddhd6-nn733" title="stacc choir" />}
+            {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
             <div className="px-5 py-7 shadow-xl shadow-gray-200 rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
                 <section className="flex flex-col items-center">
                     <h1 className="font-bold lg:text-[30px] md:text-[25px] text-[18px] text-gray-00">Create New Whisperroom</h1>

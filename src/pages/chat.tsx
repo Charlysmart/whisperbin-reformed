@@ -30,6 +30,7 @@ const Chat = () => {
     const [preview, setPreview] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [showScrollBtn, setShowScrollBtn] = useState(false);
+    const isAtBottomRef = useRef(true);
     const socketRef = useRef<any>(null);
 
     useEffect(() => {
@@ -49,9 +50,22 @@ const Chat = () => {
         }
     }
 
+    const handleScroll = (e) => {
+        const target = e.currentTarget;
+        const isAtBottom =
+            target.scrollHeight - target.scrollTop <= target.clientHeight + 50;
+
+        isAtBottomRef.current = isAtBottom;
+
+        setShowScrollBtn(!isAtBottom);
+        if (isAtBottom) markMessagesAsRead();
+    }
+
     const scrollToBottom = (smooth = true) => {
-        messagesEndRef.current?.scrollIntoView({
-            behavior: smooth ? "smooth" : "auto"
+        requestAnimationFrame(() => {
+            messagesEndRef.current?.scrollIntoView({
+                behavior: smooth ? "smooth" : "auto"
+            });
         });
     };
 
@@ -123,14 +137,26 @@ const Chat = () => {
     }
 
     useEffect(() => {
+        if (data.length > 0) {
+            scrollToBottom(false);
+        }
+    }, [data.length]);
+
+    useEffect(() => {
         getChat();
-        scrollToBottom(false);
 
         socketRef.current = connectSocket({
             url: "send_chat",
             onMessage: (data) => {
                 if (data.type === "message") {
-                    setData(prev => [...prev, data.data]);
+                    setData(prev => {
+                        const updated = [...prev, data.data];
+
+                        if (isAtBottomRef.current) {
+                            setTimeout(() => scrollToBottom(), 0);
+                        }
+                        return updated;
+                    });
                 }
             }
         });
@@ -163,15 +189,7 @@ const Chat = () => {
                 <li><CircleMinusIcon /> Block</li>
             </div>
             <div className="h-[calc(100%-60px)] bg-white border-t border-gray-200 md:px-5 px-2 py-4 flex flex-col justify-between" ref={body} onClick={() => setMore(false)}>
-                <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar"
-                onScroll={(e) => {
-                    const target = e.currentTarget;
-                    const isAtBottom =
-                        target.scrollHeight - target.scrollTop <= target.clientHeight + 50;
-
-                    setShowScrollBtn(!isAtBottom);
-                    if (isAtBottom) markMessagesAsRead();
-                }}>
+                <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
                     {data.map(item => (item.sender ? 
                         <div className="flex justify-end w-full" key={item.id}>
                             <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white">
