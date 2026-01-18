@@ -70,7 +70,7 @@ const Notification = () => {
         })
     }, [])
     return (
-        <div className="bg-gray-50 w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter font-medium overflow-y-auto">
+        <div className="bg-gray-50 w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
             <section className="md:w-[80%] w-full space-y-5">
                 <div>
                     <b className="text-[30px] ">Notifications</b>

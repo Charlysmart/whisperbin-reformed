@@ -27,4 +27,13 @@
     .avatar-gradient {
         background: linear-Gradient(135deg, #0ea5e9 0%, #923ef1 100%);
     }
+    .header-gradient {
+        background: linear-gradient(135deg, #5b8cff, #8A6CFF);
+    }
+    .shadow-5xl {
+        box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.226);
+    }
+    .capture-fix {
+        background-color: rgba(212, 209, 209, 0.11);
+    }
 }

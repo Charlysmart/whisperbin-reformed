@@ -9,8 +9,9 @@ import { timeFormat } from "@/utils/time";
 import { patchData } from "@/api/patch_request";
 import { alertBox } from "@/utils/alert";
 import { connectSocket } from "@/utils/socket";
+import { AnonymousPreview } from "@/components/anonymousPreview";
 
-const AnonymousBlock = ({ read, content, time, replied, reply, task } : AnonymousType) => {
+const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied } : AnonymousType) => {
     const iconMap = {
         chat: MessageSquare,
         reply: Reply,
@@ -18,11 +19,13 @@ const AnonymousBlock = ({ read, content, time, replied, reply, task } : Anonymou
 
     const Icon = replied ? iconMap["chat"] : iconMap["reply"];
     return (
-        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex gap-5 hover:shadow-xl text-gray-600`} onClick={task}>
-            <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
-                <Ghost color={read ? "gray" : "white"} />
+        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex md:gap-5 gap-1 hover:shadow-xl text-gray-600`} onClick={task}>
+            <div className="lg:w-[5%] md:w-[15%] md:block hidden">
+                <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
+                    <Ghost color={read ? "gray" : "white"} />
+                </div>
             </div>
-            <div className="space-y-3 w-full">
+            <div className="space-y-3 lg:w-[95%] md:w-[85%] w-full">
                 <div className="flex items-center gap-5">
                     <div>
                         <h3 className="font-semibold md:text-[18px] text-[16px]">Anonymous</h3>
@@ -30,12 +33,12 @@ const AnonymousBlock = ({ read, content, time, replied, reply, task } : Anonymou
                     </div>
                     <div className={`${!read ? "bg-blue-200 text-blue-600" : replied ? "bg-green-100 text-green-800" : ""} px-4 py-1 rounded-full text-[14px] font-medium`}>{!read ? "New" : replied ? "Replied" : ""}</div>
                 </div>
-                <p className="md:text-[16px] text-[15px]">
-                    {content}
+                <p className="md:text-[16px] text-[15px] whitespace-nowrap overflow-hidden" style={{textOverflow: "ellipsis"}}>
+                        {content}
                 </p>
-                <div className="flex justify-end">
+                {be_replied && <div className="flex justify-end-safe">
                     <Button label={<><Icon size={16} /> {replied ? "View Chat" : "Reply"}</>} buttonType={replied ? "grayed" : "colored"} onclick={reply} extraClass="w-fit h-full px-4 py-2 flex gap-1 items-center" type="button" />
-                </div>
+                </div>}
             </div>
         </div>
     );
@@ -47,6 +50,10 @@ const AnonymousChat = () => {
     const navigate = useNavigate();
     const { startLoading, stopLoading } = usePreloader();
     const websocket = useRef<any>(null);
+    const [modal, openModal] = useState<{content: string, opened: boolean}>({
+        content: "",
+        opened: false
+    });
 
     function fetchAnonymous() {
         startLoading();
@@ -56,9 +63,10 @@ const AnonymousChat = () => {
     function fetchData() {
         getData({url: `/pages/get_anonymous?filter=${filter}`, navigate, onSuccess: (response) => {
             setData(response.data);
+            console.log(response.data)
         }, onError: (error) => {
             if (error.response) console.log(error.response.data.detail);            
-        }, finallyCallback: () => stopLoading() })  
+        }, finallyCallback: () => {stopLoading();} })  
     }
 
     function markFunction(thread : string, task : "reply" | "read") {
@@ -73,6 +81,11 @@ const AnonymousChat = () => {
             }
         }});
         fetchData();
+    }
+
+    function handleModal(content: string, thread : string, read: boolean) {
+        openModal({content: content, opened: true});
+        if (!read) markFunction(thread, "read");
     }
 
     useEffect(() => {
@@ -93,6 +106,7 @@ const AnonymousChat = () => {
 
     return (
         <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
+            {modal.opened && <AnonymousPreview content={modal.content} onclick={() => openModal({content: "", opened: false})} />}
             <div>
                 <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>
                 <p className="md:text-[18px] text-[15px]">Messages sent to your anonymous link. Reply to start a conversation.</p>
@@ -112,7 +126,7 @@ const AnonymousChat = () => {
             </div>
             <div className="space-y-5 w-full">
                 {data.length !== 0 ? data.map(item => (
-                    <AnonymousBlock key={item.message_thread} read={item.read} content={item.content} time={timeFormat(item.sent_at)} replied={item.replied} reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} task={() => !item.read ? markFunction(item.message_thread, "read") : ""} />
+                    <AnonymousBlock key={item.message_thread} read={item.read} content={item.content} time={timeFormat(item.sent_at)} replied={item.replied} reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} task={() => handleModal(item.content, item.message_thread, item.read)} be_replied = {item.be_replied} />
                 )) : <p>No Data!</p>}
             </div>
         </div>

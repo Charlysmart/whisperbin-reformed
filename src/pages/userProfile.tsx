@@ -33,7 +33,7 @@ const UserProfile = () => {
         patchData({url: "/pages/update_preference", data: preference, onSuccess: (response) => alertBox({message: response.data.message, success: true, top: "0"}), onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}), navigate})
     }
     return (
-        <div className="bg-white w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-gray-600 font-medium overflow-y-auto border-t border-gray-100">
+        <div className="bg-white w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-gray-600 md:font-normal font-medium overflow-y-auto border-t border-gray-100">
             <b className="md:text-[30px] text-[20px]">Your Profile & Settings</b>
             <div className="flex flex-col gap-3 mt-5 border border-gray-100 md:p-5 px-2 py-5 rounded-xl">
                 <label htmlFor="messageLink" className="md:text-[20px] text-[18px] font-semibold">Your Anonymous Message Link</label>

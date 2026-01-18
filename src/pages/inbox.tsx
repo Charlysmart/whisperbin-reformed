@@ -25,9 +25,7 @@ const Inbox = () => {
 
         socket.current = connectSocket({
             url: "get_new_message",
-            onOpen: () => console.log("🟢 Inbox socket open"),
             onMessage: (payload) => {
-                console.log("📨 New inbox payload:", payload);
                 const newData = payload.data;
                 setData(prev => {
                     const index = prev.findIndex((item )=> item.message_thread === newData.message_thread)
@@ -42,7 +40,6 @@ const Inbox = () => {
         });
 
         return () => {
-            console.log("🧹 Inbox unmounted");
             socket.current?.close();
         }
 
@@ -56,7 +53,7 @@ const Inbox = () => {
         }
     }
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter font-medium overflow-y-auto space-y-5`}>
+        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter  md:font-normal font-mediumoverflow-y-auto space-y-5`}>
             <div>
                 <b className="text-[30px] ">Inbox</b>
             </div>

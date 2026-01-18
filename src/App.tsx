@@ -17,6 +17,7 @@ import AnonymousChat from "./pages/anonymous";
 import CreateRoom from "./pages/create_room";
 import JoinRoom from "./pages/join_room";
 import Whisperroom from "./pages/whisperroom";
+import { AnonymousPreview } from "./components/anonymousPreview";
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
             <Route path="/create_room"  element={<CreateRoom />} />
             <Route path="/join_room"  element={<JoinRoom />} />
             <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
-          </Route> 
+          </Route>
         </Route>
       </Routes>
     </Router>

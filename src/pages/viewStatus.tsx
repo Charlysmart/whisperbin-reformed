@@ -27,7 +27,7 @@ const Comment = ({ username, time, comment, likes, comments, liked, left } : Com
 }
 const ViewStatus = () => {
     return (
-        <div className={`bg-gray-50 w-full flex flex-col gap-10 text-gray-600 items-center md:px-0 px-2 py-5 h-[calc(100vh-60px)] font-inter font-medium overflow-y-auto border-t border-gray-100 *:md:w-[80%] *:w-full`}>
+        <div className={`bg-gray-50 w-full flex flex-col gap-10 text-gray-600 items-center md:px-0 px-2 py-5 h-[calc(100vh-60px)] font-inter md:font-normal font-medium overflow-y-auto border-t border-gray-100 *:md:w-[80%] *:w-full`}>
             <div className="flex text-gray-500 text-[16px] font-semibold hover:text-blue-500 cursor-pointer">
                 <ArrowLeft /> Back to Status Feed
             </div>

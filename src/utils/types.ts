@@ -62,7 +62,8 @@ export type AnonymousType = {
     time : string,
     replied : boolean,
     task : () => void,
-    reply : () => void
+    reply : () => void,
+    be_replied : boolean
 }
 
 export type CommentType = {
@@ -87,7 +88,8 @@ export type AnonymousDataType = {
     content : string,
     replied : boolean,
     read : boolean,
-    sent_at : string
+    sent_at : string,
+    be_replied : boolean
 }
 
 export type InboxDataType = {

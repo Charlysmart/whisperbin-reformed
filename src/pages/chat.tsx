@@ -167,7 +167,7 @@ const Chat = () => {
     }, []);
 
     return (
-        <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto font-medium`}>
+        <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
             <div className="h-15 flex justify-between items-center p-3 bg-white">
                 <div className="flex items-center gap-5">
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>

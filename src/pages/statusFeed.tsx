@@ -185,7 +185,7 @@ const StatusFeed = () => {
 
     /* ---------------- RENDER ---------------- */
     return (
-        <div className="bg-gray-50 w-full h-[calc(100vh-60px)] md:px-10 px-2 py-5 font-inter text-gray-600 font-medium overflow-hidden border-t flex">
+        <div className="bg-gray-50 w-full h-[calc(100vh-60px)] md:px-10 px-2 py-5 font-inter text-gray-600  md:font-normal font-mediumoverflow-hidden border-t flex">
             <div className="lg:w-[70%] w-full overflow-y-auto space-y-5 overflow-x-hidden no-scrollbar">
 
                 {/* POST BOX */}

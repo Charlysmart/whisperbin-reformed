@@ -3,14 +3,14 @@ import type { InboxChatType } from "../utils/types";
 
 const InboxChat = ({ user, time, content, read, task, image } : InboxChatType) => {
     return (
-        <div className="w-full md:h-fit h-fit p-3 bg-blue-100 flex items-center rounded-xl gap-3 shadow-xl overflow-hidden cursor-pointer" onClick={task}>
-            <div className="w-12 h-12 p-3 md:block hidden rounded-full avatar-gradient relative">
-                <User2Icon color="gray" fill="white" />
-                {!read && <div className="w-2.5 h-2.5 bg-red-500 rounded-full absolute top-1 right-0.5" />}
+        <div className="w-full md:h-fit h-fit md:p-3 p-1 py-3 bg-blue-100 flex md:items-center rounded-xl md:gap-3 gap-1 shadow-xl overflow-hidden cursor-pointer relative" onClick={task}>
+            <div className="lg:w-[5%] h-fit md:p-3 p-1 w-[15%] md:block rounded-full avatar-gradient relative">
+                <User2Icon color="gray" fill="white" className="w-full h-full" />
+                {!read && <div className="w-2.5 h-2.5 bg-red-500 rounded-full absolute lg:top-1 md:top-2 top-0 lg:right-0.5 md:right-1 right-0" />}
             </div>
-            <div className="px-2 space-y-2 w-full">
+            <div className="px-2 space-y-2 lg:w-[95%] w-[85%]">
                 <div className="flex flex-wrap w-full justify-between">
-                    <h2 className="md:w-[85%] w-[full] md:text-[16px] text-[15px] text-primary">{user}</h2>
+                    <h2 className="md:text-[16px] text-[15px] text-primary overflow-hidden whitespace-nowrap" style={{textOverflow: "ellipsis"}}>{user}</h2>
                     <p className="text-[12px] text-brand">{time}</p>
                 </div>
                 <div className="flex items-center">

@@ -9,16 +9,18 @@ import { WhisperroomType } from "@/utils/types";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { connectSocket } from "@/utils/socket";
+import { deleteData } from "@/api/delete_request";
 
 const Whisperroom = () => {
     const imagePicker = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const { room_thread } = useParams();
     const [data, setData] = useState<WhisperroomType[]>([]);
-    const [info, setInfo] = useState<{title : string, reply_content : string, count : number}>({
+    const [info, setInfo] = useState<{title : string, reply_content : string, count : number, is_admin: boolean}>({
         title: "",
         reply_content: "",
-        count: 0
+        count: 0,
+        is_admin: null
     });
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [showScrollBtn, setShowScrollBtn] = useState(false);
@@ -112,6 +114,24 @@ const Whisperroom = () => {
         }
     }
 
+    async function leaveRoom() {
+        await deleteData({
+            url: `pages/leave_room/${room_thread}`,
+            navigate,
+            onSuccess: () => navigate("../join_room", {replace: true}),
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
+        })
+    }
+    
+    async function dissolveRoom() {
+        await deleteData({
+            url: `pages/dissolve_room/${room_thread}`,
+            navigate,
+            onSuccess: () => navigate("../join_room", {replace: true}),
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
+        })
+    }
+
     async function sendMessage() {
         if (!formData.message.trim() && !formData.image) {
             alertBox({ message: "Can't send empty message", success: false, top: "0" });
@@ -147,14 +167,15 @@ const Whisperroom = () => {
         getData({
             url: `pages/whisperroom/${room_thread}`,
             navigate,
-            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count})); setData(response.data.messages)},
-            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../") })
+            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count, is_admin: response.data.is_admin})); setData(response.data.messages)},
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../join_room") })
         });
 
         websocket.current = connectSocket({
             url: `send_whisperroom/${room_thread}`,
             onMessage: (event) => {
-                setData(prev => {
+                if (event.type === "message") {
+                    setData(prev => {
                         const updated = [...prev, event.data];
 
                         if (isAtBottomRef.current) {
@@ -162,6 +183,20 @@ const Whisperroom = () => {
                         }
                         return updated;
                     });
+                }
+                else if (event.type === "update") {
+                    if (event.data) {
+                        setInfo(prev => ({...prev, count: prev.count + 1}));
+                    } else {
+                        setInfo(prev => ({...prev, count: prev.count - 1}));
+                    }
+                }
+                else if (event.type === "dissolve") {
+                    if (event.data) {
+                        alertBox({ message: `${info.title} dissolved`, success: false, top: "0", onClose: () => navigate("../join_room", {replace: true}) })
+                        setTimeout(() => navigate("../join_room", {replace: true}), 5000);
+                    }
+                }
             }
         });
 
@@ -171,7 +206,7 @@ const Whisperroom = () => {
     }, []);
     return (
         <div>
-            <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-semibold`}>
+            <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
             <div className="h-15 flex justify-between items-center p-3 bg-white">
                 <div className="flex items-center gap-5">
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>
@@ -180,8 +215,9 @@ const Whisperroom = () => {
                         <p className="text-[13px]">{info.count} members</p>
                     </div>
                 </div>
-                <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 md:flex hidden">
-                    <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full flex gap-2" />
+                <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 flex">
+                    <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full flex gap-2" onclick={leaveRoom} />
+                    {info.is_admin && <Button label="Dissolve Room" buttonType="outlined" extraClass="w-fit px-3 h-full flex gap-2" onclick={dissolveRoom} />}
                 </div>
             </div>
             <div className="h-[calc(100%-60px)] bg-white border-t border-gray-200 md:px-5 px-2 py-4 flex flex-col justify-between">
