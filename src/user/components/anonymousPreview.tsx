@@ -1,5 +1,5 @@
 import { Download, MessageSquareText, X } from "lucide-react";
-import Button from "./button";
+import Button from "../../components/button";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 

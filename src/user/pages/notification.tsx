@@ -5,7 +5,7 @@ import { usePreloader } from "@/context/loaderContext";
 import { alertBox } from "@/utils/alert";
 import { timeFormat } from "@/utils/time";
 import { NotificationBlockType } from "@/utils/types";
-import { Clock, Heart, Mail, MessageCircle, Reply, ReplyAll } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Heart, Mail, MessageCircle, Reply, ReplyAll } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connectSocket } from "@/utils/socket";
@@ -53,19 +53,44 @@ const NotificationBlock = ({ read, type, content, time, linkText, link, id } : N
 const Notification = () => {
     const navigate = useNavigate();
     const { startLoading, stopLoading } = usePreloader();
-    const [filter, setFilter] = useState<"all" | "unread">("all")
-    const [data, setData] = useState<{id: number, read: boolean, type: "message" | "like" | "reply" | "comment" | "comment-reply", content?: string, added: string, notify_id: string }[]>([]);
+    const [meta, setMeta] = useState<{filter : "all" | "unread", currentPage: number, pages: number}>({
+        filter : "all",
+        currentPage : 1,
+        pages: null
+    });
+    const [info, setInfo] = useState<{count: number, data: {id: number, read: boolean, type: "message" | "like" | "reply" | "comment" | "comment-reply", content?: string, added: string, notify_id: string }[]}>({
+        count : null,
+        data : []
+    });
     const websocket = useRef<any>(null);
+
+    const hasFetched = useRef(false);
     useEffect(() => {
+        
         startLoading();
-        getData({ url: `/pages/get_notification?filter=${filter}`, navigate, onSuccess: (response) => setData(response.data), onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading() })
-    }, [filter]);
+        getData({ 
+            url: `/pages/get_notification?filter=${meta.filter}&page=${meta.currentPage}`, 
+            navigate, 
+            onSuccess: (response) => setInfo({count: response.data.count, data: response.data.notification}), 
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading() })
+    }, [meta.filter, meta.currentPage]);
+
+    // To handle the pagination
+    useEffect(() => {
+        if (info.count) {
+            let total = info.count;
+            let limit = 10;
+            setMeta(prev => ({...prev, pages: Math.ceil(total / limit)}))
+        }
+    }, [info.count]);
+
+    // To initialize websocket
     useEffect(() => {
         websocket.current = connectSocket({
             url: "new_notification",
             onMessage: (event) => {
                 const payload = event.data;
-                setData(prev => ([payload, ...prev]));
+                setInfo(prev => ({count: prev.count + 1, data: [payload, ...prev.data]}));
             }
         })
     }, [])
@@ -77,13 +102,19 @@ const Notification = () => {
                 </div>
                 <div className="w-full flex flex-wrap gap-4">
                     <div className="flex md:gap-2 justify-between *:hover:bg-gray-100">
-                        <Button label="All" buttonType={filter === "all" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setFilter("all")} />
-                        <Button label="Unread" buttonType={filter === "unread" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setFilter("unread")} />
+                        <Button label="All" buttonType={meta.filter === "all" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
+                        <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "unread"}))} />
                     </div>
                 </div>
-                <div className="space-y-5 cursor-pointer">
-                    {data.length >= 1 ? data.map(item => (
-                        <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"}
+                <div className="space-y-5 cursor-pointer mb-5">
+                    {info.data.length >= 1 ? info.data.map(item => (
+                        <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"
+                    }
+                    <div className="flex justify-center items-center-safe gap-3">
+                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
+                        <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
+                    </div>
                 </div>
             </section>
         </div>

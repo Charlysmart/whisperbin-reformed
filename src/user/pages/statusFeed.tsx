@@ -1,6 +1,6 @@
 import { Image, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { InteractionStats, UserInfo } from "@/components/statusComponent";
+import { InteractionStats, UserInfo } from "@/user/components/statusComponent";
 import Button from "@/components/button";
 import { getData } from "@/api/get_request";
 import { useNavigate } from "react-router-dom";

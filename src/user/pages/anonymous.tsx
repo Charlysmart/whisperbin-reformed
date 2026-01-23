@@ -2,14 +2,15 @@ import { getData } from "@/api/get_request";
 import Button from "@/components/button";
 import { usePreloader } from "@/context/loaderContext";
 import { AnonymousDataType, AnonymousType } from "@/utils/types";
-import { Clock, Ghost, MessageSquare, Reply, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Ghost, MessageSquare, Reply, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { timeFormat } from "@/utils/time";
 import { patchData } from "@/api/patch_request";
 import { alertBox } from "@/utils/alert";
 import { connectSocket } from "@/utils/socket";
-import { AnonymousPreview } from "@/components/anonymousPreview";
+import { AnonymousPreview } from "@//user/components/anonymousPreview";
+import { count } from "console";
 
 const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied } : AnonymousType) => {
     const iconMap = {
@@ -45,8 +46,15 @@ const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied 
 }
 
 const AnonymousChat = () => {
-    const [data, setData] = useState<AnonymousDataType[]>([]);
-    const [filter, setFilter] = useState<"all" | "unread" | "replied">("all");
+    const [info, setInfo] = useState<{count: number, data: AnonymousDataType[]}>({
+        count: null,
+        data: []
+    });
+    const [meta, setMeta] = useState<{filter : "all" | "unread" | "replied", currentPage: number, pages: number}>({
+        filter : "all",
+        currentPage : 1,
+        pages: null
+    });
     const navigate = useNavigate();
     const { startLoading, stopLoading } = usePreloader();
     const websocket = useRef<any>(null);
@@ -61,9 +69,8 @@ const AnonymousChat = () => {
     }
     
     function fetchData() {
-        getData({url: `/pages/get_anonymous?filter=${filter}`, navigate, onSuccess: (response) => {
-            setData(response.data);
-            console.log(response.data)
+        getData({url: `/pages/get_anonymous?filter=${meta.filter}&page=${meta.currentPage}`, navigate, onSuccess: (response) => {
+            setInfo(prev => ({count: response.data.count, data: response.data.anonymous}));
         }, onError: (error) => {
             if (error.response) console.log(error.response.data.detail);            
         }, finallyCallback: () => {stopLoading();} })  
@@ -88,18 +95,26 @@ const AnonymousChat = () => {
         if (!read) markFunction(thread, "read");
     }
 
+    // To handle the pagination
+    useEffect(() => {
+        if (info.count) {
+            let total = info.count;
+            let limit = 10;
+            setMeta(prev => ({...prev, pages: Math.ceil(total / limit)}))
+        }
+    }, [info.count]);
+
     useEffect(() => {
         fetchAnonymous();
-    }, [filter]);
+    }, [meta.filter, meta.currentPage]);
 
+    // To connect my websocket
     useEffect(() => {
         websocket.current = connectSocket({
             url: "new_anonymous",
-            onOpen: () => console.log("started anonymous"),
             onMessage: (event) => {
                 const payload = event.data;
-                console.log(payload);
-                setData(prev => ([payload, ...prev]))
+                setInfo(prev => ({count: prev.count + 1, data: [payload, ...prev.data]}))
             }
         })
     })
@@ -113,9 +128,9 @@ const AnonymousChat = () => {
             </div>
             <div className="flex flex-wrap gap-3 justify-between bg-white p-5 rounded-2xl shadow-md">
                 <div className="md:w-1/3 w-full flex gap-4">
-                    <Button label="All Messages" buttonType={filter === "all" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setFilter("all")} />
-                    <Button label="Unread" buttonType={filter === "unread" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setFilter("unread")} />
-                    <Button label="Replied" buttonType={filter === "replied" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setFilter("replied")} />
+                    <Button label="All Messages" buttonType={meta.filter === "all" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
+                    <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
+                    <Button label="Replied" buttonType={meta.filter === "replied" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
                 </div>
                 <div className="flex lg:w-1/3 w-full h-11 border border-gray-200 overflow-hidden rounded-md">
                     <button className="h-full w-fit p-3">
@@ -125,9 +140,14 @@ const AnonymousChat = () => {
                 </div>
             </div>
             <div className="space-y-5 w-full">
-                {data.length !== 0 ? data.map(item => (
+                {info.data.length !== 0 ? info.data.map(item => (
                     <AnonymousBlock key={item.message_thread} read={item.read} content={item.content} time={timeFormat(item.sent_at)} replied={item.replied} reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} task={() => handleModal(item.content, item.message_thread, item.read)} be_replied = {item.be_replied} />
                 )) : <p>No Data!</p>}
+                <div className="flex justify-center items-center-safe gap-3">
+                    <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage -= 1 : prev.currentPage}))} />
+                    <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                    <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage += 1 : prev.currentPage}))} />
+                </div>
             </div>
         </div>
     );

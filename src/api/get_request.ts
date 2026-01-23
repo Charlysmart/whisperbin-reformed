@@ -4,6 +4,7 @@ import { refreshToken } from "./refresh_token";
 import { alertBox } from "@/utils/alert";
 
 export async function getData<T>({ url, onSuccess, onError, finallyCallback, navigate }: AxiosType<T>) {
+  const path = window.location.pathname;
   try {
     const response = await axiosClient.get(url);
     if (onSuccess) onSuccess(response);
@@ -34,13 +35,17 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
           message: "Login session expired! Kindly login again!",
           success: false,
           top: "0",
-          onClose: () => navigate("../login", { replace: true }),
+          onClose: () => navigate("../login", { replace: true, state: {} }),
         });
         setTimeout(() => {
-          if (navigate) navigate("../login", { replace: true });
+          if (navigate) navigate("../login", { replace: true, state: {path : path} });
         }, 3000);
         return;
       }
+    }
+
+    if (!error.response || error.code === "ECONNABORTED") {
+      navigate("../server_down", {replace: true, state: {previous: path}});
     }
 
     if (error.response?.data?.detail === "User not verified") {

@@ -91,10 +91,12 @@ const Whisperroom = () => {
         });
     }
 
+    // To make enter key send message
     function altSendMessage(e: React.KeyboardEvent) {
         if (e.key === "Enter") sendMessage();
     }
 
+    // Sending the image to the backend
     async function sendImage() {
         const formInput = new FormData();
         if (formData.image) formInput.append("image", formData.image);
@@ -114,6 +116,7 @@ const Whisperroom = () => {
         }
     }
 
+    // Leave chat room
     async function leaveRoom() {
         await deleteData({
             url: `pages/leave_room/${room_thread}`,
@@ -123,6 +126,7 @@ const Whisperroom = () => {
         })
     }
     
+    // delete chat room
     async function dissolveRoom() {
         await deleteData({
             url: `pages/dissolve_room/${room_thread}`,
@@ -132,6 +136,7 @@ const Whisperroom = () => {
         })
     }
 
+    // send message
     async function sendMessage() {
         if (!formData.message.trim() && !formData.image) {
             alertBox({ message: "Can't send empty message", success: false, top: "0" });

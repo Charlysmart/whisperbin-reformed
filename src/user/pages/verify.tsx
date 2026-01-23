@@ -1,4 +1,4 @@
-import Logo from "@/components/logo";
+import Logo from "@/user/components/logo";
 import { LucideInfo, RotateCwIcon, ShieldCheck } from "lucide-react";
 import "@/App.css";
 import Button from "@/components/button";

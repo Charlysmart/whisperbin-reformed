@@ -2,7 +2,7 @@ import { getData } from "@/api/get_request";
 import { postData } from "@/api/post_request";
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
-import { SuccessModal } from "@/components/success_modal";
+import { SuccessModal } from "@/user/components/success_modal";
 import useFormInput from "@/context/formChange";
 import { usePreloader } from "@/context/loaderContext";
 import { alertBox } from "@/utils/alert";

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Button from "@/components/button";
-import InboxChat from "@/components/inboxChat";
+import InboxChat from "@/user/components/inboxChat";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "@/api/get_request";
 import { alertBox } from "@/utils/alert";

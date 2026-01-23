@@ -9,18 +9,11 @@ const PreloaderProvider = () => {
     const startTime = useRef<number | null>(null);
 
     const startLoading = () => {
-        startTime.current = Date.now();
         setPreloader(true);
     }
 
     const stopLoading = () => {
-        const elapsed = Date.now() - (startTime.current ?? 0);
-        const remaining = Math.max(5000 - elapsed, 0);
-
-        setTimeout(() => {
             setPreloader(false);
-            startTime.current = null;
-        }, remaining);
     }
 
     return (

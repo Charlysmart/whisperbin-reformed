@@ -1,6 +1,6 @@
 import SidebarProvider from "@/context/sideBarContext";
-import Header from "@/components/header"
-import Sidebar from "@/components/sidebar";
+import Header from "@/user/components/header"
+import Sidebar from "@/user/components/sidebar";
 import { Outlet } from "react-router-dom";
 import MSidebarProvider from "@/context/mobileSideBarContext";
 

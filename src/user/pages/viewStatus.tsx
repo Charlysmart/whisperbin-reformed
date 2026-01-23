@@ -1,5 +1,5 @@
 import { ArrowLeft, Lock, User } from "lucide-react";
-import { InteractionStats, UserInfo } from "@/components/statusComponent";
+import { InteractionStats, UserInfo } from "@/user/components/statusComponent";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/button";
 import { CommentType } from "@/utils/types";

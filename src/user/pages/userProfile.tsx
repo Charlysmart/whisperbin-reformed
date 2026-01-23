@@ -1,5 +1,5 @@
 import { Copy } from "lucide-react";
-import InboxChat from "@/components/inboxChat";
+import InboxChat from "@/user/components/inboxChat";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/button";
 import { getData } from "@/api/get_request";
@@ -20,8 +20,10 @@ const UserProfile = () => {
     const { startLoading, stopLoading } = usePreloader();
 
     useEffect(() => {
-        const copy = navigator.clipboard.writeText(text);
-        if (copy) alertBox({message: "copied", success: true, top: "0"})
+        if (text.trim()) {
+            const copy = navigator.clipboard.writeText(text);
+            if (copy) alertBox({message: "copied", success: true, top: "0"})
+        }
     }, [text])
 
     useEffect(() => {

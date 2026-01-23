@@ -1,9 +1,9 @@
 import { ShieldCheck } from "lucide-react";
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
-import Logo from "@/components/logo";
+import Logo from "@/user/components/logo";
 import "@/App.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
@@ -19,7 +19,9 @@ const Login = () => {
     const { formData, handleRegisterInput } = useFormInput<LoginProps>({
         username: "",
         password: ""
-    })
+    });
+    const locate = useLocation()
+    const { path } = locate.state || {};
 
     const signIn = (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,9 +31,9 @@ const Login = () => {
             url: "/auth/login",
             data: formData,
             onSuccess: (response) => {
-                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate("../") })
+                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(path, {replace: true}) })
                 setTimeout(() => {
-                    navigate("../", {replace: true});
+                    navigate(path, {replace: true});
                 }, 5100)
             },
             onError: (error) => {
