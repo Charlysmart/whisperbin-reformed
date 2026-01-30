@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: "https://whisperbin-api-1.onrender.com/",
     withCredentials : true,
     timeout: 10000,
 });
