@@ -1,5 +1,5 @@
 import { Image, User2Icon } from "lucide-react";
-import type { InboxChatType } from "../utils/types";
+import type { InboxChatType } from "@/utils/types";
 
 const InboxChat = ({ user, time, content, read, task, image } : InboxChatType) => {
     return (

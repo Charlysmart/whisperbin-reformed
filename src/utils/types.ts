@@ -1,4 +1,3 @@
-import Whisperroom from "@/pages/whisperroom"
 import { NavigateFunction } from "react-router-dom"
 
 export type AuthInputTypes = {
