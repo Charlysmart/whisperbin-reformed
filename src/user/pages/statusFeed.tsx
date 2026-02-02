@@ -67,7 +67,7 @@ const StatusFeed = () => {
         try {
             startLoading();
             await getData({
-                url: "/pages/dashboard",
+                url: "/pages/general",
                 navigate,
                 onError: (err) => console.log(err),
             });
