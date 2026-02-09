@@ -240,7 +240,7 @@ const Whisperroom = () => {
                                 {item.admin && (
                                     <Crown size={14} className="text-white-500 ml-1 text-right" />
                                 )}
-                                {preview && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                {item.image && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                 <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
@@ -256,7 +256,7 @@ const Whisperroom = () => {
                                 {item.admin && (
                                     <Crown size={15} className="text-blue-500 ml-1" />
                                 )}
-                                {preview && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                {item.image && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                 <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
