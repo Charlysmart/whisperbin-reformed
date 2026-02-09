@@ -147,6 +147,7 @@ const Chat = () => {
 
         socketRef.current = connectSocket({
             url: "send_chat",
+            onOpen: () => console.log("Websocket message open"),
             onMessage: (data) => {
                 if (data.type === "message") {
                     setData(prev => {
