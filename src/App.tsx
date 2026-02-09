@@ -17,9 +17,8 @@ import CreateRoom from "@/user/pages/create_room";
 import JoinRoom from "@/user/pages/join_room";
 import Whisperroom from "@/user/pages/whisperroom";
 import NotFound from "@/not_found";
-import ServerDown from "@/components/server_down";
-import ServerCheck from "@/components/serverGate";
 import AdminDashboard from "./admin/dashboard";
+import ServerCheck from "./components/serverGate";
 
 
 function App() {
@@ -32,7 +31,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/server_down" element={<ServerDown />} />
           <Route element={<ServerCheck />} >
             <Route element={<SidebarLayout />}>
               <Route path="/" element={<StatusFeed />} />

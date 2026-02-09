@@ -1,9 +1,6 @@
-import Button from "@/components/button";
-import { FileSearch2, WifiOff } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { FileSearch2, WifiOff } from "lucide-react";
+import Button from "./button"
 const ServerDown = () => {
-    const navigate = useNavigate();
     return (
         <div className="w-full h-screen flex justify-center items-center font-inter">
             <div className="lg:w-[40%] md:w-[70%] w-[95%] shadow-xl rounded-2xl px-5 py-20 flex flex-col items-center gap-7">

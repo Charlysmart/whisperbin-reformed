@@ -44,10 +44,6 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
       }
     }
 
-    if (!error.response || error.code === "ECONNABORTED") {
-      navigate("../server_down", {replace: true, state: {previous: path}});
-    }
-
     if (error.response?.data?.detail === "User not verified") {
       navigate("../verify")
     }

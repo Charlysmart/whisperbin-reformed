@@ -1,18 +1,16 @@
 import axiosClient from "@/utils/axios";
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import ServerDown from "@/components/server_down";
+import { Outlet, useLocation } from "react-router-dom";
+import ServerDown from "./server_down"
 
 const ServerCheck = () => {
-  const navigate = useNavigate();
   const [ok, setOk] = useState(false);
-  const path = useLocation().pathname
 
   useEffect(() => {
     axiosClient
       .get("pages/health", { timeout: 3000 })
       .then(() => setOk(true))
-      .catch(() => <ServerCheck />);
+      .catch(() => <ServerDown />);
   }, []);
 
   // Page blocked here
