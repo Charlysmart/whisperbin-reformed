@@ -10,6 +10,7 @@ import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { connectSocket } from "@/utils/socket";
 import { deleteData } from "@/api/delete_request";
+import ReplyModal from "@/components/reply";
 
 const Whisperroom = () => {
     const imagePicker = useRef<HTMLInputElement>(null);
@@ -26,6 +27,11 @@ const Whisperroom = () => {
     const [showScrollBtn, setShowScrollBtn] = useState(false);
     const isAtBottomRef = useRef(true);
     const websocket = useRef<any>(null);
+    const [replyModal, setReplyModal] = useState<{state: boolean, id: number, sender: boolean}>({
+        state : false,
+        id: null,
+        sender: true
+    });
 
     const swipe = useSwipeable({
         onSwipedRight: () => console.log("Swiped right!"),
@@ -81,6 +87,19 @@ const Whisperroom = () => {
         });
     };
 
+    // reply logic and modal
+    let timer;
+
+    function startTimer(id: number, sender: boolean) {
+        timer = setTimeout(() => {
+            setReplyModal({id: id, state: true, sender: sender})
+        }, 3000);
+    }
+
+    function cancelTimer() {
+        clearTimeout(timer);
+    }
+
     function onReply(id: number) {
         setFormData(prev => ({...prev, reply: id}))
         getData({
@@ -88,6 +107,13 @@ const Whisperroom = () => {
             navigate,
             onSuccess: (response) => {setInfo(prev => ({...prev, reply_content: response.data}));},
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
+        });
+    }
+
+    async function onDelete(id: number) {
+        await websocket.current?.send({
+            type : "message",
+            data : id
         });
     }
 
@@ -189,6 +215,11 @@ const Whisperroom = () => {
                         return updated;
                     });
                 }
+                else if (event.type === "delete"){
+                    const msgId = event.data;
+                    const msgData = document.querySelector(`#id_${msgId}`);
+                    if (msgData) msgData.remove()
+                }
                 else if (event.type === "update") {
                     if (event.data) {
                         setInfo(prev => ({...prev, count: prev.count + 1}));
@@ -211,6 +242,12 @@ const Whisperroom = () => {
     }, []);
     return (
         <div>
+            {replyModal.state && 
+                <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal({id: null, state: false, sender: null})}>
+                    <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
+                </div>
+            }
+
             <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
             <div className="h-15 flex justify-between items-center p-3 bg-white">
                 <div className="flex items-center gap-5">
@@ -229,9 +266,8 @@ const Whisperroom = () => {
                 <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
                     {data.map(item => (
                         item.sender ? 
-                        <div className="flex justify-end items-center gap-2 w-full" key={item.id}>
-                            <Reply className="md:block hidden" onClick={() => onReply(item.id)} />
-                            <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white">
+                        <div className="flex justify-end items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                            <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: true})}>
                                 {item.reply_to && 
                                     <div className="border-l-4 border-l-white-600 bg-blue-600 p-2 rounded-lg">
                                         <p>{item.reply_to}</p>
@@ -246,8 +282,8 @@ const Whisperroom = () => {
                             </div>
                         </div> 
                         :
-                        <div className="flex justify-start items-center gap-2 w-full" key={item.id}>
-                            <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" {...swipe}>
+                        <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                            <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: false})}>
                                 {item.reply_to &&
                                     <div className="border border-l-4 border-l-blue-600 border-gray-200 bg-gray-200 p-2 rounded-lg">
                                         <p>{item.reply_to}</p>
