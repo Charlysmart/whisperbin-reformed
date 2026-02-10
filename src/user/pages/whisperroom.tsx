@@ -87,7 +87,7 @@ const Whisperroom = () => {
             url: `pages/reply_whisperroom?id=${id}`,
             navigate,
             onSuccess: (response) => {setInfo(prev => ({...prev, reply_content: response.data}));},
-            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../") })
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
         });
     }
 

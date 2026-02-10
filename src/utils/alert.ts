@@ -36,11 +36,14 @@ export const alertBox = ({ message, success, top, onClose } : AlertType) => {
         div.classList.add("hidden");
         if (onClose) onClose();
     }
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
         handleClick();
     }, 3000);
 
-    closeIcon.addEventListener("click", handleClick);
+    closeIcon.addEventListener("click", () => {
+        clearTimeout(timeout);
+        handleClick();
+    });
 }
 
 

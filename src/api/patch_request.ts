@@ -4,6 +4,7 @@ import { refreshToken } from "./refresh_token";
 import { alertBox } from "@/utils/alert";
 
 export async function patchData<T> ({ url, data, onSuccess, onError, finallyCallback, navigate } : AxiosType<T>) {
+  const path = window.location.pathname;
     try {
         const response = await axiosClient.patch(url, data);
         if (onSuccess) onSuccess(response);
@@ -33,10 +34,12 @@ export async function patchData<T> ({ url, data, onSuccess, onError, finallyCall
           message: "Login session expired! Kindly login again!",
           success: false,
           top: "0",
-          onClose: () => navigate("../login", { replace: true }),
+          onClose: () => {
+            if (navigate) navigate("../login", { replace: true, state: {path : path} });
+          },
         });
         setTimeout(() => {
-          if (navigate) navigate("../login", { replace: true });
+          if (navigate) navigate("../login", { replace: true, state: {path : path} });
         }, 3000);
         return;
       }

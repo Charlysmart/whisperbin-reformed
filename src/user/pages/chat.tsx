@@ -82,7 +82,6 @@ const Chat = () => {
         catch (error) {
             const message = error?.response?.data?.detail || "Something went wrong";
             alertBox({ message, success: false, top: "0" })
-            console.log(error.response);                
             return null; 
         }
     }

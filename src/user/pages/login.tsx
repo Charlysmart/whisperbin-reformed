@@ -32,10 +32,6 @@ const Login = () => {
             data: formData,
             onSuccess: (response) => {
                 alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(path, {replace: true}) })
-                setTimeout(() => {
-                    if (path !== "") navigate(path, {replace: true});
-                    navigate("/", {replace: true});
-                }, 5100)
             },
             onError: (error) => {
                 if (error.response) {

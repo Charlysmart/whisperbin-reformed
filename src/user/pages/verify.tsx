@@ -23,9 +23,6 @@ const Verify = () => {
 
         postData({url: `/auth/verify_email?token=${otpValue}`, onSuccess: (response) => {
             alertBox({message: response.data.message, success: true, top: "0", onClose: () => navigate("../")});
-            setTimeout(() => {
-                navigate("../");
-            }, 3000);
         }, onError: (error) => {
             if (error.response) {
                 if (error.response.status === 422) {
@@ -33,9 +30,6 @@ const Verify = () => {
                 }
                 else if (error.response.data.detail === "Access token missing") {
                     alertBox({message: "Login session expired! Kindly login again!", success: false, top: "0", onClose: () => navigate("../login")});
-                    setTimeout(() => {
-                        navigate("../login");
-                    }, 3000);
                 } else {
                     alertBox({message: error.response.data.detail, success: false, top: "0"});
                 }
@@ -119,9 +113,6 @@ const Verify = () => {
                 }
                 else if (error.response.data.detail === "Access token missing") {
                     alertBox({message: "Login session expired! Kindly login again!", success: false, top: "0", onClose: () => navigate("../login")});
-                    setTimeout(() => {
-                        navigate("../login");
-                    }, 3000);
                 } else {
                     alertBox({message: error.response.data.detail, success: false, top: "0"});
                 }

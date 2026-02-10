@@ -20,7 +20,11 @@ const Inbox = () => {
     useEffect(() => {
         console.log("📥 Inbox mounted");
         startLoading();
-        getData({url: "/pages/inbox", navigate, onSuccess: (response) => setData(response.data), onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
+        getData({
+            url: "/pages/inbox", 
+            navigate, 
+            onSuccess: (response) => setData(response.data), 
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
         });
 
         socket.current = connectSocket({
@@ -47,7 +51,15 @@ const Inbox = () => {
 
     function markAsRead(thread: string, read: boolean) {
         if (!read) {
-            patchData({ url: `pages/mark_inbox_read?thread=${thread}`, navigate, onSuccess: (response) => navigate(`../chat/${thread}`), onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}) })
+            patchData({ url: `pages/mark_inbox_read?thread=${thread}`, 
+                navigate, 
+                onSuccess: () => navigate(`../chat/${thread}`), 
+                onError: (error) => alertBox({
+                    message: error.response.data.detail, 
+                    success: false, 
+                    top: "0"
+                }) 
+            })
         } else {
             navigate(`../chat/${thread}`)
         }

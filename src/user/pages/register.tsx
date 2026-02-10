@@ -28,10 +28,7 @@ const Register = () => {
             url: "/auth/register", 
             data: formData, 
             onSuccess: (response) => {
-                alertBox({ message: response.data.message, success: true, top: "0"})
-                setTimeout(() => {
-                    navigate("../login", {replace: true})
-                }, 5100);
+                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate("../login", {replace: true})})
             },
             onError: (error) => {
                 if (error.response) {

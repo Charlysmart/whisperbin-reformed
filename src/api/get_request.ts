@@ -35,7 +35,9 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
           message: "Login session expired! Kindly login again!",
           success: false,
           top: "0",
-          onClose: () => navigate("../login", { replace: true, state: {} }),
+          onClose: () => {
+            if (navigate) navigate("../login", { replace: true, state: {path : path} });
+          },
         });
         setTimeout(() => {
           if (navigate) navigate("../login", { replace: true, state: {path : path} });
