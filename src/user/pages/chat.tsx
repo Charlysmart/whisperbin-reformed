@@ -146,6 +146,7 @@ const Chat = () => {
 
         socketRef.current = connectSocket({
             url: "send_chat",
+            onOpen: () => console.log("Websocket message open"),
             onMessage: (data) => {
                 if (data.type === "message") {
                     setData(prev => {
@@ -192,7 +193,7 @@ const Chat = () => {
                     {data.map(item => (item.sender ? 
                         <div className="flex justify-end w-full" key={item.id}>
                             <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white">
-                                {item.image && (<img src={`http://localhost:8000/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
+                                {item.image && (<img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
                                 {item.content !== "" && <p className="md:text-[16px] text-[16px]">{item.content}</p>}
                                 <p className="text-start text-[12px]">{timeFormat(item.sent_at)}</p>
                             </div>
@@ -200,7 +201,7 @@ const Chat = () => {
                         :
                         <div className="flex justify-start w-full" key={item.id}>
                             <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded -lg space-y-2">
-                                {item.image && (<img src={`http://localhost:8000/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
+                                {item.image && (<img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
                                 {item.content !== "" && <p className="md:text-[16px] text-[16px]">{item.content}</p>}
                                 <p className="text-start text-[12px]">{timeFormat(item.sent_at)}</p>
                             </div>
