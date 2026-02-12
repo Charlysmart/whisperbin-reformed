@@ -1,6 +1,6 @@
 import Button from "@/components/button";
 import { useSwipeable } from "react-swipeable";
-import { ArrowLeft, Crown, Image, Reply, SendIcon, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Crown, Image, Reply, SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "@/api/get_request";
@@ -93,7 +93,7 @@ const Whisperroom = () => {
     function startTimer(id: number, sender: boolean) {
         timer = setTimeout(() => {
             setReplyModal({id: id, state: true, sender: sender})
-        }, 3000);
+        }, 2000);
     }
 
     function cancelTimer() {
@@ -296,7 +296,6 @@ const Whisperroom = () => {
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                 <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
-                            <Reply className="md:block hidden" onClick={() => onReply(item.id)} />
                         </div>
                     ))} 
 
