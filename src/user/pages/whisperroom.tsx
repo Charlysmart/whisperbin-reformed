@@ -112,7 +112,7 @@ const Whisperroom = () => {
 
     async function onDelete(id: number) {
         await websocket.current?.send({
-            type : "message",
+            type : "delete",
             data : id
         });
     }
