@@ -107,7 +107,8 @@ export type ChatType = {
     image : string,
     sent_at : string | Date,
     id : number,
-    read : boolean
+    read : boolean,
+    reply_to : string
 }[]
 
 export type AxiosType<T> = {
@@ -124,7 +125,7 @@ export type WhisperroomType = {
     content : string,
     image : string,
     time : string,
-    reply_to : number,
+    reply_to : string,
     sender : boolean,
     admin : boolean,
     is_admin : boolean

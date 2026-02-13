@@ -128,9 +128,9 @@ const AnonymousChat = () => {
             </div>
             <div className="flex flex-wrap gap-3 justify-between bg-white p-5 rounded-2xl shadow-md">
                 <div className="md:w-1/3 w-full flex gap-4">
-                    <Button label="All Messages" buttonType={meta.filter === "all" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
-                    <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
-                    <Button label="Replied" buttonType={meta.filter === "replied" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 px-2 md:py-2 py-1 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
+                    <Button label="All Messages" buttonType={meta.filter === "all" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
+                    <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
+                    <Button label="Replied" buttonType={meta.filter === "replied" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
                 </div>
                 <div className="flex lg:w-1/3 w-full h-11 border border-gray-200 overflow-hidden rounded-md">
                     <button className="h-full w-fit p-3">

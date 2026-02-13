@@ -23,7 +23,7 @@ export const connectSocket = (options : SocketOptions) => {
     let shouldReconnect = true;
 
     const connect = () => {
-        socket = new WebSocket(`wss://whisperbin-api-1.onrender.com/pages/${url}`);
+        socket = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_SERVER_URL}/pages/${url}`);
 
         socket.onopen = () => {
             console.log("WebSocket connected");

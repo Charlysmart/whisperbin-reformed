@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-    baseURL: "https://whisperbin-api-1.onrender.com",
+    baseURL: import.meta.env.VITE_SERVER_URL,
     withCredentials : true,
     timeout: 10000,
 });

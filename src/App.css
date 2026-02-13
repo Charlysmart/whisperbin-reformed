@@ -1,5 +1,5 @@
 .body {
-  background-image: url(../public/images/pattren13.jpg);
+  background-image: url(/images/pattren13.jpg);
   height: 100vh;
   position: fixed;
 }

@@ -1,7 +1,7 @@
 import { getData } from "@/api/get_request";
 import { alertBox } from "@/utils/alert";
 import { ChatType } from "@/utils/types";
-import { ArrowLeft, CircleMinusIcon, Flag, Image, MoreVertical, Send } from "lucide-react";
+import { ArrowLeft, CircleMinusIcon, Flag, Image, MoreVertical, Send, SendIcon, X } from "lucide-react";
 import Button from "@/components/button";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import useFormInput from "@/context/formChange";
 import { postData } from "@/api/post_request";
 import { timeFormat } from "@/utils/time";
 import { connectSocket } from "@/utils/socket";
+import ReplyModal from "@/components/reply";
 
 type SocketMessage =
   | { type: "message"; data: { id: string; message: string; image?: string; message_thread: string; sender: boolean; read: boolean } }
@@ -21,10 +22,22 @@ const Chat = () => {
     const [data, setData] = useState<ChatType>([]);
     const [image, setImage] = useState<File | null>(null);
     const sentReadReceipts = useRef(new Set<number>());
-    const { formData, handleRegisterInput, setFormData } = useFormInput<{message: string, image: string | null, message_thread: string}>({
+    const { formData, handleRegisterInput, setFormData } = useFormInput<{
+        message: string, 
+        image: string | null, 
+        message_thread: string, 
+        reply_id: number
+    }>({
         message: "",
         image: null,
-        message_thread: thread
+        message_thread: thread,
+        reply_id: null
+    });
+    const [replyModal, setReplyModal] = useState<{state: boolean, id: number, sender: boolean, reply_content : string}>({
+        state : false,
+        id: null,
+        sender: true,
+        reply_content: ""
     });
     const body = useRef<HTMLDivElement | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -69,6 +82,41 @@ const Chat = () => {
         });
     };
 
+    // reply logic and modal
+    let timer;
+
+    function startTimer(id: number, sender: boolean) {
+        timer = setTimeout(() => {
+            setReplyModal(prev => ({...prev, id: id, state: true, sender: sender}))
+        }, 2000);
+    }
+
+    function cancelTimer() {
+        clearTimeout(timer);
+    }
+
+    function onReply(id: number) {
+        setFormData(prev => ({...prev, reply_id: id}))
+        getData({
+            url: `pages/reply_chat?id=${id}`,
+            navigate,
+            onSuccess: (response) => {setReplyModal(prev => ({...prev, reply_content: response.data}));},
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
+        });
+    }
+
+    async function onDelete(id: number) {
+        await socketRef.current?.send({
+            type : "delete",
+            message_id : id
+        });
+    }
+
+    // To make enter key send message
+    function altSendMessage(e: React.KeyboardEvent) {
+        if (e.key === "Enter") sendMessage();
+    }
+
     async function sendImage(): Promise<string> {
         const payLoad = new FormData();
         payLoad.append("image", image);
@@ -101,14 +149,16 @@ const Chat = () => {
         const payload = {
             message: formData.message,
             image: imageName,
-            message_thread: formData.message_thread
-        };
+            message_thread: formData.message_thread,
+            reply_to: formData.reply_id
+        };        
               
         await socketRef.current?.send({
             type: "message",
             data: payload
         });
-        setFormData((prev) => ({...prev, message: "", image: null})) 
+        setFormData((prev) => ({...prev, message: "", image: null}));
+        setReplyModal((prev) => ({...prev, reply_content: ""})) 
         setImage(null);
         setTimeout(() => scrollToBottom(), 50);
     }
@@ -126,13 +176,18 @@ const Chat = () => {
     };
 
     async function getChat() {
-        await getData({url: `/pages/chat/${thread}`, onSuccess: (response) => {
-            setData(response.data);
-        }, onError: (error) => {
-            const message = error?.response?.data?.detail || "Something went wrong";
-            alertBox({ message, success: false, top: "0" });
-            console.log(error.response);            
-        }, navigate});
+        await getData({
+            url: `/pages/chat/${thread}`, 
+            onSuccess: (response) => {
+                setData(response.data);
+            }, 
+            onError: (error) => {
+                const message = error?.response?.data?.detail || "Something went wrong";
+                alertBox({ message, success: false, top: "0" });
+                console.log(error.response);            
+            }, 
+            navigate
+        });
     }
 
     useEffect(() => {
@@ -146,7 +201,6 @@ const Chat = () => {
 
         socketRef.current = connectSocket({
             url: "send_chat",
-            onOpen: () => console.log("Websocket message open"),
             onMessage: (data) => {
                 if (data.type === "message") {
                     setData(prev => {
@@ -157,6 +211,10 @@ const Chat = () => {
                         }
                         return updated;
                     });
+                } 
+                else if (data.type === "delete") {
+                    let content = document.querySelector(`#id_${data.message_id}`);
+                    if (content) content.remove()
                 }
             }
         });
@@ -168,6 +226,11 @@ const Chat = () => {
 
     return (
         <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
+            {replyModal.state && 
+                <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal(prev => ({...prev, id: null, state: false, sender: null}))}>
+                    <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
+                </div>
+            }
             <div className="h-15 flex justify-between items-center p-3 bg-white">
                 <div className="flex items-center gap-5">
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>
@@ -190,23 +253,35 @@ const Chat = () => {
             </div>
             <div className="h-[calc(100%-60px)] bg-white border-t border-gray-200 md:px-5 px-2 py-4 flex flex-col justify-between" ref={body} onClick={() => setMore(false)}>
                 <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
-                    {data.map(item => (item.sender ? 
-                        <div className="flex justify-end w-full" key={item.id}>
-                            <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white">
-                                {item.image && (<img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
-                                {item.content !== "" && <p className="md:text-[16px] text-[16px]">{item.content}</p>}
-                                <p className="text-start text-[12px]">{timeFormat(item.sent_at)}</p>
+                    {data.map(item => (
+                        item.sender ? 
+                        <div className="flex justify-end items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                            <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal(prev => ({...prev, id: item.id, state: true, sender: item.sender}))}>
+                                {item.reply_to && 
+                                    <div className="border-l-4 border-l-white-600 bg-blue-600 p-2 rounded-lg">
+                                        <p>{item.reply_to}</p>
+                                    </div>
+                                }
+                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                <p className="md:text-[16px] text-[16px]">{item.content}</p>
+                                <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
-                        </div>
+                        </div> 
                         :
-                        <div className="flex justify-start w-full" key={item.id}>
-                            <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded -lg space-y-2">
-                                {item.image && (<img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt="chat image" className="max-w-full max-h-60 object-contain rounded-md mb-2"/> )}
-                                {item.content !== "" && <p className="md:text-[16px] text-[16px]">{item.content}</p>}
-                                <p className="text-start text-[12px]">{timeFormat(item.sent_at)}</p>
+                        <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                            <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal(prev => ({...prev, id: item.id, state: true, sender: item.sender}))}>
+                                {item.reply_to &&
+                                    <div className="border border-l-4 border-l-blue-600 border-gray-200 bg-gray-200 p-2 rounded-lg">
+                                        <p>{item.reply_to}</p>
+                                    </div>                                
+                                }
+                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                <p className="md:text-[16px] text-[16px]">{item.content}</p>
+                                <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
                         </div>
-                    ))}
+                    ))} 
+
                     {showScrollBtn && (
                         <button
                             onClick={() => scrollToBottom()}
@@ -217,18 +292,29 @@ const Chat = () => {
                     )}
                     <div ref={messagesEndRef} />
                 </div>
-                <div className="flex flex-col justify-end mb-5">
-                    {preview && (
-                        <img src={preview} className="w-30 h-25 object-contain" />
-                    )}
-                    <div className="flex gap-2 h-[10%] justify-center items-center mt-5">
-                        <div>
-                            <Image onClick={() => imagePicker.current.click()} />
-                            <input type="file" onChange={handleChange} className="hidden" ref={imagePicker} />
+                <div className="flex flex-col justify-end w-full mt-2">
+                    {replyModal.reply_content.trim() !== "" && 
+                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-blue-600 border-gray-200 md:w-[85%] w-[75%] bg-gray-200 p-2 rounded-lg">
+                        <div className="flex justify-end">
+                            <X size={16} onClick={() => {
+                                setReplyModal(prev => ({...prev, reply_content: ""}));
+                                setFormData(prev => ({...prev, reply_id: null}))}} />
                         </div>
-                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-[60px] border border-gray-100 w-[90%] rounded-md px-3 outline-0" value={formData.message} onChange={handleRegisterInput} onKeyDown={(e) => {if (e.key === "Enter") sendMessage();
-                        }} />
-                        <button className="bg-blue-500 text-white px-5 h-10 rounded-md w-[full] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}><Send size={20} /> <span className="md:block hidden">Send</span></button>
+                        <p>{replyModal.reply_content}</p>
+                    </div>}
+                    {preview && (
+                        <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
+                    )}
+                    <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
+                        <div className="md:w-[3%] w-[10%] flex justify-center">
+                            <Image onClick={() => imagePicker.current.click()} />
+                            <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
+                        </div>
+                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-gray-100 md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                        <button className="bg-blue-500 text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                            <SendIcon size={16} className="md:hidden block text-white" /> 
+                            <span className="md:block hidden">Send</span>
+                        </button>
                     </div>
                 </div>
             </div>

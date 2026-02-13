@@ -1,6 +1,5 @@
 import Button from "@/components/button";
-import { useSwipeable } from "react-swipeable";
-import { ArrowLeft, Crown, Image, Reply, SendIcon } from "lucide-react";
+import { ArrowLeft, CircleMinus, Crown, Image, LogOut, SendIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "@/api/get_request";
@@ -31,11 +30,6 @@ const Whisperroom = () => {
         state : false,
         id: null,
         sender: true
-    });
-
-    const swipe = useSwipeable({
-        onSwipedRight: () => console.log("Swiped right!"),
-        trackMouse: true,
     });
 
     const { formData, handleRegisterInput, setFormData } = useFormInput<{message: string, reply: number | null, image: File | null}>({
@@ -184,8 +178,6 @@ const Whisperroom = () => {
             image : imageName
         }
 
-        console.log(payload)
-
         await websocket.current?.send({
             type : "message",
             data : payload
@@ -198,7 +190,7 @@ const Whisperroom = () => {
         getData({
             url: `pages/whisperroom/${room_thread}`,
             navigate,
-            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count, is_admin: response.data.is_admin})); setData(response.data.messages)},
+            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count, is_admin: response.data.is_admin})); setData(response.data.messages); console.log(response.data.messages)},
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../join_room") })
         });
 
@@ -258,8 +250,16 @@ const Whisperroom = () => {
                     </div>
                 </div>
                 <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 flex">
-                    <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full flex gap-2" onclick={leaveRoom} />
-                    {info.is_admin && <Button label="Dissolve Room" buttonType="outlined" extraClass="w-fit px-3 h-full flex gap-2" onclick={dissolveRoom} />}
+                    <div className="w-fit flex" title="leave room" onClick={leaveRoom}>
+                        <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
+                        <Button label={<><LogOut /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                    </div>
+                    {info.is_admin && 
+                        <div className="w-fit flex" title="dissolve room" onClick={dissolveRoom}>
+                            <Button label="Dissolve Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
+                            <Button label={<><CircleMinus className="text-red-600" /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                        </div>
+                    }
                 </div>
             </div>
             <div className="h-[calc(100%-60px)] bg-white border-t border-gray-200 md:px-5 px-2 py-4 flex flex-col justify-between">
@@ -276,7 +276,7 @@ const Whisperroom = () => {
                                 {item.admin && (
                                     <Crown size={14} className="text-white-500 ml-1 text-right" />
                                 )}
-                                {item.image && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                 <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
@@ -292,7 +292,7 @@ const Whisperroom = () => {
                                 {item.admin && (
                                     <Crown size={15} className="text-blue-500 ml-1" />
                                 )}
-                                {item.image && <img src={`https://whisperbin-api-1.onrender.com/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                 <p className="text-start text-[12px]">10:05 PM</p>
                             </div>
@@ -309,21 +309,29 @@ const Whisperroom = () => {
                     )}
                     <div ref={messagesEndRef} />
                 </div>
-                <div className="flex flex-col justify-end mb-5">
+                <div className="flex flex-col justify-end w-full mt-2">
                     {info.reply_content.trim() !== "" && 
-                    <div className="border border-l-4 border-l-blue-600 border-gray-200 w-[90%] bg-gray-200 p-2 rounded-lg">
+                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-blue-600 border-gray-200 md:w-[85%] w-[75%] bg-gray-200 p-2 rounded-lg">
+                        <div className="flex justify-end">
+                            <X size={16} onClick={() => {
+                                setInfo(prev => ({...prev, reply_content: ""}));
+                                setFormData(prev => ({...prev, reply: null}))}} />
+                        </div>
                         <p>{info.reply_content}</p>
                     </div>}
                     {preview && (
-                        <img src={preview} className="w-30 h-25 object-contain" />
+                        <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
                     )}
-                    <div className="flex gap-2 h-[10%] justify-center items-center mt-5">
-                        <div>
+                    <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
+                        <div className="md:w-[3%] w-[10%] flex justify-center border">
                             <Image onClick={() => imagePicker.current.click()} />
                             <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                         </div>
-                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-[60px] border border-gray-100 w-[90%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                        <button className="bg-blue-500 text-white px-5 h-10 rounded-md w-[full] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}><SendIcon size={20} /> <span className="md:block hidden">Send</span></button>
+                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-gray-100 md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                        <button className="bg-blue-500 text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                            <SendIcon size={16} className="md:hidden block text-white" /> 
+                            <span className="md:block hidden">Send</span>
+                        </button>
                     </div>
                 </div>
             </div>

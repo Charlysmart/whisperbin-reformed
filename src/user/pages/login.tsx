@@ -3,7 +3,7 @@ import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
 import Logo from "@/user/components/logo";
 import "@/App.css";
-import { replace, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
