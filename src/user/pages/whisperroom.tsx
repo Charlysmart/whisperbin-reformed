@@ -190,7 +190,7 @@ const Whisperroom = () => {
         getData({
             url: `pages/whisperroom/${room_thread}`,
             navigate,
-            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count, is_admin: response.data.is_admin})); setData(response.data.messages); console.log(response.data.messages)},
+            onSuccess: (response) => {setInfo(prev => ({...prev, title: response.data.room_name, count: response.data.count, is_admin: response.data.is_admin})); setData(response.data.messages);},
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../join_room") })
         });
 

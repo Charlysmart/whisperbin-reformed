@@ -19,6 +19,7 @@ import Whisperroom from "@/user/pages/whisperroom";
 import NotFound from "@/not_found";
 import AdminDashboard from "./admin/dashboard";
 import ServerCheck from "./components/serverGate";
+import UserAuthentication from "./protected_routes/user_auth";
 
 
 function App() {
@@ -32,18 +33,20 @@ function App() {
           <Route path="/verify" element={<Verify />} />
           <Route path="*" element={<NotFound />} />
           <Route element={<ServerCheck />} >
-            <Route element={<SidebarLayout />}>
-              <Route path="/" element={<StatusFeed />} />
-              <Route path="/view_status" element={<ViewStatus />} />
-              <Route path="/user_profile" element={<UserProfile />} />
-              <Route path="/inbox" element={<Inbox />} />
-              <Route path="/send_message/:username?" element={<SendMessage />} />    
-              <Route path="/anonymous_messages" element={<AnonymousChat />} />
-              <Route path="/chat/:thread" element={<Chat />} />        
-              <Route path="/notifications" element={<Notification />} /> 
-              <Route path="/create_room"  element={<CreateRoom />} />
-              <Route path="/join_room"  element={<JoinRoom />} />
-              <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
+            <Route element={<UserAuthentication />}>
+              <Route element={<SidebarLayout />}>
+                <Route path="/" element={<StatusFeed />} />
+                <Route path="/view_status" element={<ViewStatus />} />
+                <Route path="/user_profile" element={<UserProfile />} />
+                <Route path="/inbox" element={<Inbox />} />
+                <Route path="/send_message/:username?" element={<SendMessage />} />    
+                <Route path="/anonymous_messages" element={<AnonymousChat />} />
+                <Route path="/chat/:thread" element={<Chat />} />        
+                <Route path="/notifications" element={<Notification />} /> 
+                <Route path="/create_room"  element={<CreateRoom />} />
+                <Route path="/join_room"  element={<JoinRoom />} />
+                <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/dashboard" element={<AdminDashboard />} />

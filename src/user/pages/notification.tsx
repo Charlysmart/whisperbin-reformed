@@ -63,8 +63,6 @@ const Notification = () => {
         data : []
     });
     const websocket = useRef<any>(null);
-
-    const hasFetched = useRef(false);
     useEffect(() => {
         
         startLoading();

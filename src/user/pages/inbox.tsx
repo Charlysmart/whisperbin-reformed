@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search } from "lucide-react";
 import Button from "@/components/button";
 import InboxChat from "@/user/components/inboxChat";
 import { useEffect, useRef, useState } from "react";
@@ -12,34 +12,45 @@ import { patchData } from "@/api/patch_request";
 import { connectSocket } from "@/utils/socket";
 
 const Inbox = () => {
-    const [data, setData] = useState<InboxDataType[]>([])
+    const [info, setInfo] = useState<{data: InboxDataType[], count: number}>({
+        data: [],
+        count: null
+    });
+    const [meta, setMeta] = useState<{pages: number, currentPage: number}>({
+        pages: null,
+        currentPage: 1
+    });
     const { startLoading, stopLoading } = usePreloader();
     const navigate = useNavigate();
-    const socket = useRef<any>(null)
+    const socket = useRef<any>(null);
 
-    useEffect(() => {
-        console.log("📥 Inbox mounted");
+    function fetchData() {
         startLoading();
         getData({
-            url: "/pages/inbox", 
+            url: `/pages/inbox?page=${meta.currentPage}`, 
             navigate, 
-            onSuccess: (response) => setData(response.data), 
+            onSuccess: (response) => setInfo({data: response.data.data, count: response.data.count}), 
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
         });
+    }
 
+    useEffect(() => {
+        const totalPages = Math.ceil(info.count / 10);
+        setMeta(prev => ({...prev, pages: totalPages}));
+    }, [info.count]);
+
+    useEffect(() => {
         socket.current = connectSocket({
             url: "get_new_message",
             onMessage: (payload) => {
                 const newData = payload.data;
-                setData(prev => {
-                    const index = prev.findIndex((item )=> item.message_thread === newData.message_thread)
-                    if (index !== -1) {
-                        const updated = [...prev]
-                        updated[index] = newData
-                        return updated
-                    }
-                    return [newData, ...prev]
-                });
+                if (meta.currentPage === 1){
+                    setInfo(prev => {
+                        const map = new Map(prev.data.map(item => [item.message_thread, item]));
+                        map.set(newData.message_thread, newData);
+                        return { ...prev, data: Array.from(map.values()), count: (prev.count ?? 0) + 1 };
+                    });
+                }
             }
         });
 
@@ -49,11 +60,23 @@ const Inbox = () => {
 
     }, []);
 
+    useEffect(() => {
+        fetchData();
+    }, [meta.currentPage])
+
     function markAsRead(thread: string, read: boolean) {
         if (!read) {
             patchData({ url: `pages/mark_inbox_read?thread=${thread}`, 
                 navigate, 
-                onSuccess: () => navigate(`../chat/${thread}`), 
+                onSuccess: () => {
+                    setInfo(prev => ({
+                        ...prev,
+                        data: prev.data.map(item =>
+                            item.message_thread === thread ? { ...item, read: true } : item
+                        )
+                    }));
+                    navigate(`../chat/${thread}`)
+                }, 
                 onError: (error) => alertBox({
                     message: error.response.data.detail, 
                     success: false, 
@@ -65,7 +88,7 @@ const Inbox = () => {
         }
     }
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter  md:font-normal font-mediumoverflow-y-auto space-y-5`}>
+        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto space-y-5`}>
             <div>
                 <b className="text-[30px] ">Inbox</b>
             </div>
@@ -82,8 +105,16 @@ const Inbox = () => {
                 </div>
             </div>
             <div className="space-y-5">
-                {data.length !== 0 ? data.map(item => (
-                    <InboxChat key={item.message_thread} user={item.message_thread} time={timeFormat(item.sent_at)} content={item.content} read={item.read} task = {() => markAsRead(item.message_thread, item.read)} image={item.image} />)) : "No Chat yet!"}
+                {info.data.length !== 0 ? info.data.map(item => (
+                    <InboxChat key={item.message_thread} user={item.message_thread} time={timeFormat(item.sent_at)} content={item.content} read={item.read} task = {() => markAsRead(item.message_thread, item.read)} image={item.image} />)) : "No Chat yet!"
+                }
+                {meta.pages > 0 && 
+                    <div className="flex justify-center items-center-safe gap-3">
+                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage - 1}))} />
+                        <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage + 1}))} />
+                    </div>
+                }
             </div>
         </div>
     );

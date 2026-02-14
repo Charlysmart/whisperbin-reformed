@@ -20,23 +20,25 @@ const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied 
 
     const Icon = replied ? iconMap["chat"] : iconMap["reply"];
     return (
-        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex md:gap-5 gap-1 hover:shadow-xl text-gray-600`} onClick={task}>
+        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex md:gap-5 gap-1 hover:shadow-xl text-gray-600`}>
             <div className="lg:w-[5%] md:w-[15%] md:block hidden">
                 <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
                     <Ghost color={read ? "gray" : "white"} />
                 </div>
             </div>
             <div className="space-y-3 lg:w-[95%] md:w-[85%] w-full">
-                <div className="flex items-center gap-5">
-                    <div>
-                        <h3 className="font-semibold md:text-[18px] text-[16px]">Anonymous</h3>
-                        <p className="inline-flex items-center gap-2 text-[13px] text-brand"><Clock size={13} /> {time}</p>
+                <div className="space-y-3" onClick={task}>
+                    <div className="flex items-center gap-5">
+                        <div>
+                            <h3 className="font-semibold md:text-[18px] text-[16px]">Anonymous</h3>
+                            <p className="inline-flex items-center gap-2 text-[13px] text-brand"><Clock size={13} /> {time}</p>
+                        </div>
+                        <div className={`${!read ? "bg-blue-200 text-blue-600" : replied ? "bg-green-100 text-green-800" : ""} px-4 py-1 rounded-full text-[14px] font-medium`}>{!read ? "New" : replied ? "Replied" : ""}</div>
                     </div>
-                    <div className={`${!read ? "bg-blue-200 text-blue-600" : replied ? "bg-green-100 text-green-800" : ""} px-4 py-1 rounded-full text-[14px] font-medium`}>{!read ? "New" : replied ? "Replied" : ""}</div>
+                    <p className="md:text-[16px] text-[15px] whitespace-nowrap overflow-hidden truncate">
+                            {content}
+                    </p>
                 </div>
-                <p className="md:text-[16px] text-[15px] whitespace-nowrap overflow-hidden" style={{textOverflow: "ellipsis"}}>
-                        {content}
-                </p>
                 {be_replied && <div className="flex justify-end-safe">
                     <Button label={<><Icon size={16} /> {replied ? "View Chat" : "Reply"}</>} buttonType={replied ? "grayed" : "colored"} onclick={reply} extraClass="w-fit h-full px-4 py-2 flex gap-1 items-center" type="button" />
                 </div>}
@@ -80,6 +82,9 @@ const AnonymousChat = () => {
         const url = task === "reply" ? "reply_anonymous" : "markRead"
         patchData({url: `/pages/${url}/${thread}`, onSuccess : () => {
             if (task === "reply") navigate(`../chat/${thread}`);
+            if (task === "read") {
+                setInfo(prev => ({...prev, data: prev.data.map(item => item.message_thread === thread ? {...item, replied: true} : item)}))
+            }
         }, onError: (error) => {
             if (error.response) {
                 alertBox({message: error.response.data.detail, success: false, top: "0"});
@@ -87,7 +92,6 @@ const AnonymousChat = () => {
                 console.log(error.message);                
             }
         }});
-        fetchData();
     }
 
     function handleModal(content: string, thread : string, read: boolean) {
@@ -143,11 +147,13 @@ const AnonymousChat = () => {
                 {info.data.length !== 0 ? info.data.map(item => (
                     <AnonymousBlock key={item.message_thread} read={item.read} content={item.content} time={timeFormat(item.sent_at)} replied={item.replied} reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} task={() => handleModal(item.content, item.message_thread, item.read)} be_replied = {item.be_replied} />
                 )) : <p>No Data!</p>}
-                <div className="flex justify-center items-center-safe gap-3">
-                    <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage -= 1 : prev.currentPage}))} />
-                    <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                    <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage += 1 : prev.currentPage}))} />
-                </div>
+                {meta.pages > 0 && 
+                    <div className="flex justify-center items-center-safe gap-3">
+                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage -= 1}))} />
+                        <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage += 1}))} />
+                    </div>
+                }
             </div>
         </div>
     );

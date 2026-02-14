@@ -108,7 +108,7 @@ const Chat = () => {
     async function onDelete(id: number) {
         await socketRef.current?.send({
             type : "delete",
-            message_id : id
+            data : id
         });
     }
 
@@ -157,7 +157,7 @@ const Chat = () => {
             type: "message",
             data: payload
         });
-        setFormData((prev) => ({...prev, message: "", image: null}));
+        setFormData((prev) => ({...prev, message: "", image: null, reply_id: null}));
         setReplyModal((prev) => ({...prev, reply_content: ""})) 
         setImage(null);
         setTimeout(() => scrollToBottom(), 50);
@@ -213,8 +213,9 @@ const Chat = () => {
                     });
                 } 
                 else if (data.type === "delete") {
-                    let content = document.querySelector(`#id_${data.message_id}`);
-                    if (content) content.remove()
+                    let content = document.querySelector(`#id_${data.data}`);
+                    console.log(content);
+                    if (content) content.remove();
                 }
             }
         });
@@ -264,7 +265,7 @@ const Chat = () => {
                                 }
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">10:05 PM</p>
+                                <p className="text-start text-[12px]">{item.sent_at}</p>
                             </div>
                         </div> 
                         :
@@ -277,7 +278,7 @@ const Chat = () => {
                                 }
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">10:05 PM</p>
+                                <p className="text-start text-[12px]">{item.sent_at}</p>
                             </div>
                         </div>
                     ))} 
@@ -294,13 +295,13 @@ const Chat = () => {
                 </div>
                 <div className="flex flex-col justify-end w-full mt-2">
                     {replyModal.reply_content.trim() !== "" && 
-                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-blue-600 border-gray-200 md:w-[85%] w-[75%] bg-gray-200 p-2 rounded-lg">
-                        <div className="flex justify-end">
-                            <X size={16} onClick={() => {
+                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-blue-600 border-gray-200 md:w-[85%] w-[75%] max-h-18 bg-gray-200 p-2 rounded-lg">
+                        <div className="flex justify-between items-start">
+                            <p className="w-[95%] line-clamp-2">{replyModal.reply_content}</p>
+                            <X size={16} className="md:w-[3%] w-[5%]" onClick={() => {
                                 setReplyModal(prev => ({...prev, reply_content: ""}));
                                 setFormData(prev => ({...prev, reply_id: null}))}} />
                         </div>
-                        <p>{replyModal.reply_content}</p>
                     </div>}
                     {preview && (
                         <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
@@ -310,9 +311,9 @@ const Chat = () => {
                             <Image onClick={() => imagePicker.current.click()} />
                             <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                         </div>
-                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-gray-100 md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                        <textarea name="message" id="message" placeholder="Write an anonymous message..." className="h-full max-h-20 border border-gray-100 md:w-[85%] w-[75%] rounded-md resize-none p-2 outline-0 no-scrollbar" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
                         <button className="bg-blue-500 text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                            <SendIcon size={16} className="md:hidden block text-white" /> 
+                            <SendIcon size={16} className="text-white" /> 
                             <span className="md:block hidden">Send</span>
                         </button>
                     </div>

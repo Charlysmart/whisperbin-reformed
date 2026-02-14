@@ -27,7 +27,6 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
           return retry;
         } catch (retryError) {
           if (onError) onError(retryError);
-          else console.error(retryError);
           return;
         }
       } else {
@@ -39,9 +38,6 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
             if (navigate) navigate("../login", { replace: true, state: {path : path} });
           },
         });
-        setTimeout(() => {
-          if (navigate) navigate("../login", { replace: true, state: {path : path} });
-        }, 3000);
         return;
       }
     }
@@ -51,7 +47,6 @@ export async function getData<T>({ url, onSuccess, onError, finallyCallback, nav
     }
 
     if (onError) onError(error);
-    else console.error(error);
 
     throw error;
   } finally {

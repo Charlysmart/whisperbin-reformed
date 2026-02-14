@@ -105,7 +105,7 @@ export type ChatType = {
     message_thread : string,
     content : string,
     image : string,
-    sent_at : string | Date,
+    sent_at : string,
     id : number,
     read : boolean,
     reply_to : string

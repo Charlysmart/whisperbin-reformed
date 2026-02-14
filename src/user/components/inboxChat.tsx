@@ -15,7 +15,7 @@ const InboxChat = ({ user, time, content, read, task, image } : InboxChatType) =
                 </div>
                 <div className="flex items-center">
                     {!image && <Image size={16} />}
-                    <p className="md:text-[14px] text-[15px] text-brand">{content}</p>
+                    <p className="md:text-[14px] text-[15px] text-brand truncate">{content}</p>
                 </div>
             </div>
         </div>

@@ -47,15 +47,6 @@ const CreateRoom = () => {
         });
     }
 
-    useEffect(() => {
-        startLoading();
-        getData({ 
-            url: "/pages/general",
-            navigate,
-            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
-        });
-    }, []);
-
     return (
         <div className="flex flex-col gap-5 items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-15vh)]">
             {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
