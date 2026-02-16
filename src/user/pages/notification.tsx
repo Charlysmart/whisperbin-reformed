@@ -63,6 +63,7 @@ const Notification = () => {
         data : []
     });
     const websocket = useRef<any>(null);
+    const pageRef = useRef(meta.currentPage);
     useEffect(() => {
         
         startLoading();
@@ -71,6 +72,7 @@ const Notification = () => {
             navigate, 
             onSuccess: (response) => setInfo({count: response.data.count, data: response.data.notification}), 
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading() })
+            pageRef.current = meta.currentPage;
     }, [meta.filter, meta.currentPage]);
 
     // To handle the pagination
@@ -88,9 +90,16 @@ const Notification = () => {
             url: "new_notification",
             onMessage: (event) => {
                 const payload = event.data;
-                setInfo(prev => ({count: prev.count + 1, data: [payload, ...prev.data]}));
+                if (pageRef.current === 1) {
+                    setInfo(prev => ({count: (prev.count ?? 0) + 1, data: [payload, ...prev.data]}));
+                }
             }
-        })
+        });
+
+        return () => {
+            websocket.current?.close();
+        }
+
     }, [])
     return (
         <div className="bg-gray-50 w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">

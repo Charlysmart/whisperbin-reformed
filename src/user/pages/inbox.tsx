@@ -104,9 +104,11 @@ const Inbox = () => {
                     <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" />
                 </div>
             </div>
-            <div className="space-y-5">
+            <div className="space-y-5 border-red-700">
                 {info.data.length !== 0 ? info.data.map(item => (
-                    <InboxChat key={item.message_thread} user={item.message_thread} time={timeFormat(item.sent_at)} content={item.content} read={item.read} task = {() => markAsRead(item.message_thread, item.read)} image={item.image} />)) : "No Chat yet!"
+                    <div className="w-full">
+                        <InboxChat key={item.message_thread} user={item.message_thread} time={timeFormat(item.sent_at)} content={item.content} read={item.read} task = {() => markAsRead(item.message_thread, item.read)} image={item.image} />
+                    </div>))  : "No Chat yet!"
                 }
                 {meta.pages > 0 && 
                     <div className="flex justify-center items-center-safe gap-3">

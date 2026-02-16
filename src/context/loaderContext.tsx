@@ -6,7 +6,6 @@ const preloaderContext = createContext<any>(null);
 
 const PreloaderProvider = () => {
     const [preloader, setPreloader] = useState<boolean>(false);
-    const startTime = useRef<number | null>(null);
 
     const startLoading = () => {
         setPreloader(true);

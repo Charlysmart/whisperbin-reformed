@@ -3,8 +3,8 @@ import type { InboxChatType } from "@/utils/types";
 
 const InboxChat = ({ user, time, content, read, task, image } : InboxChatType) => {
     return (
-        <div className="w-full md:h-fit h-fit md:p-3 p-1 py-3 bg-blue-100 flex md:items-center rounded-xl md:gap-3 gap-1 shadow-xl overflow-hidden cursor-pointer relative" onClick={task}>
-            <div className="lg:w-[5%] h-fit md:p-3 p-1 w-[15%] md:block rounded-full avatar-gradient relative">
+        <div className="w-full md:h-fit h-fit md:p-3 p-1 py-3 bg-blue-100 flex md:items-center rounded-xl md:gap-3 gap-1 shadow-xl overflow-hidden cursor-pointer z-1000" onClick={task}>
+            <div className="lg:w-[5%] h-fit md:p-3 p-1 w-[15%] md:block rounded-full avatar-gradient">
                 <User2Icon color="gray" fill="white" className="w-full h-full" />
                 {!read && <div className="w-2.5 h-2.5 bg-red-500 rounded-full absolute lg:top-1 md:top-2 top-0 lg:right-0.5 md:right-1 right-0" />}
             </div>

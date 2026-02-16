@@ -214,7 +214,6 @@ const Chat = () => {
                 } 
                 else if (data.type === "delete") {
                     let content = document.querySelector(`#id_${data.data}`);
-                    console.log(content);
                     if (content) content.remove();
                 }
             }

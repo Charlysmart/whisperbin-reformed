@@ -323,7 +323,7 @@ const Whisperroom = () => {
                         <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
                     )}
                     <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
-                        <div className="md:w-[3%] w-[10%] flex justify-center border">
+                        <div className="md:w-[3%] w-[10%] flex justify-center">
                             <Image onClick={() => imagePicker.current.click()} />
                             <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                         </div>

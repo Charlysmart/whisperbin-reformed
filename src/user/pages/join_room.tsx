@@ -48,7 +48,9 @@ const JoinRoom = () => {
         getData({ 
             url: "/pages/joined_rooms",
             navigate,
-            onSuccess: (response) => setRooms(response.data.rooms),
+            onSuccess: (response) => {
+                if (response.data) setRooms(response.data.rooms)
+            },
             onError: (error) => alertBox({ message: error?.response?.data?.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
         });
     }, []);
@@ -65,17 +67,22 @@ const JoinRoom = () => {
                         <Link size={16} color="gray" />
                         <input type="text" name="roomId" placeholder="Room ID" id="roomId" className="w-full outline-0" onChange={handleRoomChange} />
                     </div>
-                    <div className="flex w-full gap-3">
-                        <Button buttonType="brand" type="button"  label={loading ? <div className="flex justify-center items-center gap-1">Joining Room...<span className="spinner"/></div> :"Join Room"} disable={formData !== "" ? false : true} onclick={JoinRoom} extraClass="px-3 py-2 w-full" />
+                    <div className="w-full gap-3">
+                        <button type="button" disabled={formData !== "" ? false : true} onClick={JoinRoom} className="disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed bg-blue-400 text-white font-medium rounded-md px-3 py-2 w-full">
+                            {loading ? <div className="flex justify-center items-center gap-1">Joining Room...<span className="spinner"/></div> :"Join Room"}
+                        </button>
+                                
                     </div>
-                    <div className="border space-y-3 p-2 rounded-2xl border-gray-200">
-                        {rooms && rooms.map(item => (
-                            <div className="flex justify-between items-center-safe" key={item.room_thread}>
-                            <p className="text-gray-800">{item.room_name}</p>
-                            <Button label="Enter Room" type="button" buttonType="outlined" extraClass="px-3 py-2 text-gray-800" onclick={() => navigate(`../whisperroom/${item.room_thread}`)} />
+                        {rooms.length >= 1 && 
+                            <div className="border space-y-3 p-2 rounded-2xl border-gray-200">
+                                {rooms.map(item => (
+                                    <div className="flex justify-between items-center-safe" key={item.room_thread}>
+                                        <p className="text-gray-800">{item.room_name}</p>
+                                        <Button label="Enter Room" type="button" buttonType="outlined" extraClass="px-3 py-2 text-gray-800" onclick={() => navigate(`../whisperroom/${item.room_thread}`)} />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        }
                     <div className="w-full flex justify-center">
                         <p className="text-[12px] md:w-[80%] w-full text-center text-gray-500">WhisperBin rooms are temporary. They dissolve after a period of inactivity or when last user leaves. All messages are deleted, ensuring complete anonymity.</p>
                     </div>
