@@ -16,9 +16,10 @@ const Inbox = () => {
         data: [],
         count: null
     });
-    const [meta, setMeta] = useState<{pages: number, currentPage: number}>({
+    const [meta, setMeta] = useState<{pages: number, currentPage: number, filter: "all" | "unread"}>({
         pages: null,
-        currentPage: 1
+        currentPage: 1,
+        filter: "all"
     });
     const { startLoading, stopLoading } = usePreloader();
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Inbox = () => {
     function fetchData() {
         startLoading();
         getData({
-            url: `/pages/inbox?page=${meta.currentPage}`, 
+            url: `/pages/inbox?page=${meta.currentPage}&filter=${meta.filter}`, 
             navigate, 
             onSuccess: (response) => setInfo({data: response.data.data, count: response.data.count}), 
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
@@ -62,7 +63,7 @@ const Inbox = () => {
 
     useEffect(() => {
         fetchData();
-    }, [meta.currentPage])
+    }, [meta.currentPage, meta.filter])
 
     function markAsRead(thread: string, read: boolean) {
         if (!read) {
@@ -100,8 +101,8 @@ const Inbox = () => {
                     <input type="search" placeholder="Search messages..." className="border-none w-full outline-none" />
                 </div>
                 <div className="flex w-[10%] gap-2 justify-between *:hover:bg-gray-100">
-                    <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" />
-                    <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" />
+                    <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
+                    <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" onclick={() => setMeta(prev => ({...prev, filter: "unread"}))} />
                 </div>
             </div>
             <div className="space-y-5 border-red-700">

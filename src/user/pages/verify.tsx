@@ -156,7 +156,7 @@ const Verify = () => {
                             ))}
                         </div>
                         <div className="px-10 space-y-6">
-                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Verifying...<span className="spinner"/></div> :"Verify"} disable={loading || otpValue.length !== 6}buttonType="colored" extraClass={`w-full md:text-[20px] font-medium shadow-2xl shadow-blue-200 ${otpValue.length !== 6 ? "cursor-not-allowed" : "cursor-pointer"} `} />
+                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Verifying...<span className="spinner"/></div> :"Verify"} disable={loading || otpValue.length !== 6}buttonType="colored" extraClass={`w-full md:text-[20px] font-medium shadow-2xl py-2 shadow-blue-200 ${otpValue.length !== 6 ? "cursor-not-allowed" : "cursor-pointer"} `} />
                             <hr className="border-gray-200" />
                         </div>
                     </form>

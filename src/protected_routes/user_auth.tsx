@@ -31,9 +31,17 @@ const UserAuthentication = () => {
                         } catch (retryError) {
                             setLoggedIn(false);
                         }
+                    } else {
+                        setLoggedIn(false);
                     }
                 }
-                setLoggedIn(false);
+                else if (error.response?.data?.detail === "User not verified") {
+                    console.log("hello")
+                    navigate("../verify", {replace: true, state: {"path" : path}});
+                }
+                else {
+                    setLoggedIn(false);
+                }
             }
             finally {
                 stopLoading();
@@ -47,7 +55,6 @@ const UserAuthentication = () => {
     }
 
     if (loggedIn === false) {
-        console.log("Logged in: ", loggedIn)
         return <Navigate to="../login" replace state={{path: path}} />
     }
     return <Outlet />

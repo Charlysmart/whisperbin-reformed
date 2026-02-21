@@ -10,9 +10,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const SendMessage = () => {
     const { username } = useParams();
-    const { formData, handleRegisterInput, setFormData } = useFormInput<{username: string, message: string, be_replied: boolean} >({
+    const { formData, handleRegisterInput, setFormData } = useFormInput<{username: string, content: string, be_replied: boolean} >({
         username : "",
-        message : "",
+        content : "",
         be_replied : true
     });
     const { startLoading, stopLoading } = usePreloader();
@@ -33,7 +33,7 @@ const SendMessage = () => {
             alertBox({ message: response.data.message, success: true, top: "0" });
             setFormData({
                 username : "",
-                message : "",
+                content : "",
                 be_replied : true
             });
         }, onError: (error) => {
@@ -54,7 +54,7 @@ const SendMessage = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="message" className="text-[14px] font-medium">Your Message</label>
-                        <textarea name="message" id="message" placeholder="Type your anonymous Message here..." className="w-full border border-gray-300 h-20 rounded-md px-2 text-[14px] focus:border-gray-400 resize-none" onChange={handleRegisterInput} value={formData.message} />
+                        <textarea name="content" id="content" placeholder="Type your anonymous Message here..." className="w-full border border-gray-300 h-20 rounded-md px-2 text-[14px] focus:border-gray-400 resize-none" onChange={handleRegisterInput} value={formData.content} />
                     </div>
                     <div className="flex gap-2 items-center-safe">
                         <label htmlFor="message" className="text-[14px] font-medium">Do you wish to be replied?</label>

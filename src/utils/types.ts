@@ -10,7 +10,7 @@ export type AuthInputTypes = {
 }
 
 export type SignUpTypes = {
-    custom_username: string,
+    username: string,
     email: string,
     password: string,
     confirm_password: string

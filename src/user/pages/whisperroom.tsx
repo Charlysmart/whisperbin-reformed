@@ -10,6 +10,7 @@ import useFormInput from "@/context/formChange";
 import { connectSocket } from "@/utils/socket";
 import { deleteData } from "@/api/delete_request";
 import ReplyModal from "@/components/reply";
+import { timeFormat } from "@/utils/time";
 
 const Whisperroom = () => {
     const imagePicker = useRef<HTMLInputElement>(null);
@@ -197,7 +198,14 @@ const Whisperroom = () => {
         websocket.current = connectSocket({
             url: `send_whisperroom/${room_thread}`,
             onMessage: (event) => {
-                if (event.type === "message") {
+                if (event.type === "error") {
+                    alertBox({
+                        message: event.data,
+                        success: false,
+                        top: "0"
+                    })
+                }
+                else if (event.type === "message") {
                     setData(prev => {
                         const updated = [...prev, event.data];
 
@@ -278,7 +286,7 @@ const Whisperroom = () => {
                                 )}
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">10:05 PM</p>
+                                <p className="text-start text-[12px]">{timeFormat(item.time)}</p>
                             </div>
                         </div> 
                         :
@@ -294,7 +302,7 @@ const Whisperroom = () => {
                                 )}
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">10:05 PM</p>
+                                <p className="text-start text-[12px]">{timeFormat(item.time)}</p>
                             </div>
                         </div>
                     ))} 

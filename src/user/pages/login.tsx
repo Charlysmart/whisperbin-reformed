@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { Eye, EyeClosed, ShieldCheck } from "lucide-react";
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
 import Logo from "@/user/components/logo";
@@ -16,6 +16,7 @@ type LoginProps = {
 const Login = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);
+    const [viewPwd, setPwd] = useState<boolean>(false);
     const { formData, handleRegisterInput } = useFormInput<LoginProps>({
         username: "",
         password: ""
@@ -60,7 +61,13 @@ const Login = () => {
 
                     <form className="flex flex-col gap-5" onSubmit={signIn}>
                         <AuthInputs label="Username" type="text" attribute="username" placeholder="Enter Your unique username" onchange={handleRegisterInput} value={formData.username} />
-                        <AuthInputs label="Password" type="password" attribute="password"  onchange={handleRegisterInput}  value={formData.password} placeholder="Enter Your password" />
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="password" className="text-[15px] font-semibold">Password</label>
+                            <div className="flex gap-2 w-full border border-gray-300 h-10 rounded-md focus:outline-blue-400 focus:outline-1">
+                                <input type={viewPwd ? "text" : "password"} name="password" id="password" placeholder="Enter Your password" className="w-[90%] h-10 rounded-md p-2 text-[14px] outline-none" onChange={handleRegisterInput} value={formData.password} required />
+                                <button type="button" className="w-[10%] flex justify-center items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
+                            </div>
+                        </div>
                         <p className="text-[15px] mt-7 text-end text-blue-500 font-bold">Forgot password?</p>
                         <div className="mt-5 mb-5 flex flex-col gap-4">
                             <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />

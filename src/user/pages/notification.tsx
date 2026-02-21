@@ -117,11 +117,11 @@ const Notification = () => {
                     {info.data.length >= 1 ? info.data.map(item => (
                         <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"
                     }
-                    <div className="flex justify-center items-center-safe gap-3">
+                    {info.count > 0 && <div className="flex justify-center items-center-safe gap-3">
                         <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
                         <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
                         <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
-                    </div>
+                    </div>}
                 </div>
             </section>
         </div>

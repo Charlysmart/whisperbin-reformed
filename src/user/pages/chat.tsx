@@ -202,7 +202,10 @@ const Chat = () => {
         socketRef.current = connectSocket({
             url: "send_chat",
             onMessage: (data) => {
-                if (data.type === "message") {
+                if (data.type === "error") {
+                    alertBox({ message: data.data, success: false, top: "0" });
+                }
+                else if (data.type === "message") {
                     setData(prev => {
                         const updated = [...prev, data.data];
 
