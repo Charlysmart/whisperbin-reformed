@@ -16,7 +16,7 @@ import AnonymousChat from "@/user/pages/anonymous";
 import CreateRoom from "@/user/pages/create_room";
 import JoinRoom from "@/user/pages/join_room";
 import Whisperroom from "@/user/pages/whisperroom";
-import NotFound from "@/not_found";
+import NotFound from "@/components/not_found";
 import AdminDashboard from "./admin/dashboard";
 import ServerCheck from "./components/serverGate";
 import UserAuthentication from "./protected_routes/user_auth";

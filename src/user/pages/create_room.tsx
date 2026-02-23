@@ -22,7 +22,6 @@ const CreateRoom = () => {
         title : "",
         modal : false
     });
-    const { startLoading, stopLoading } = usePreloader();
 
     const handleRoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, checked } = e.target;
@@ -48,18 +47,18 @@ const CreateRoom = () => {
     }
 
     return (
-        <div className="flex flex-col gap-5 items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-15vh)]">
+        <div className="bg-void flex flex-col gap-5 text-ash items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-60px)]">
             {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
-            <div className="px-5 py-7 shadow-xl shadow-gray-200 rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
+            <div className="px-5 py-7 bg-surface shadow-xl drop-shadow-alpha-primary-shadow-hover border border-alpha-card-border rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
                 <section className="flex flex-col items-center">
                     <h1 className="font-bold lg:text-[30px] md:text-[25px] text-[18px] text-gray-00">Create New Whisperroom</h1>
-                    <p className="text-gray-500 lg:text-[15px] md:text-[14px] text-[12px]">Start an anonymous room conversation instantly.</p>
+                    <p className="text-muted lg:text-[15px] md:text-[14px] text-[12px]">Start an anonymous room conversation instantly.</p>
                 </section>
                 <section className="space-y-5">
                     <AuthInputs label="Whisperroom Name" type="text" attribute="title" placeholder="e.g: Class Bash" value={formData.title} onchange={handleRoomChange} />
                     <div className="flex gap-2">
                         <label htmlFor="admin">I would like to show as admin</label>
-                        <input type="checkbox" name="display_admin" id="admin" checked={formData.display_admin} onChange={handleRoomChange} />
+                        <input type="checkbox" name="display_admin" id="admin" className="checked:accent-scarlet" checked={formData.display_admin} onChange={handleRoomChange} />
                     </div>                 
                     <div className="flex justify-end gap-3">
                         <Button buttonType="outlined" type="reset" label="Clear" onclick={() => setFormData({ title : "", display_admin : false})} extraClass="px-5 py-2 text-gray-600" />
@@ -67,8 +66,8 @@ const CreateRoom = () => {
                     </div>
                 </section>
             </div>
-            <div className="px-5 py-7 lg:w-[45%] md:w-[70%] w-full bg-gray-50 rounded-2xl text-gray-500">
-                <h2 className="flex gap-2 mb-5 font-medium"><Shield /> Your Privacy Matters</h2>
+            <div className="px-5 py-7 lg:w-[45%] md:w-[70%] w-full bg-alpha-overlay rounded-2xl text-muted">
+                <h2 className="flex gap-2 mb-5 font-medium"><Shield className="text-ember" /> Your Privacy Matters</h2>
                 <ul className="list-disc text-[14px] space-y-1">
                     <li>Anonymous conversations.</li>
                     <li>No user accounts or identity tracking.</li>

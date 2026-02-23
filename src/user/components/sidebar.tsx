@@ -3,6 +3,7 @@ import { useSidebar } from "@/context/sideBarContext";
 import { useMSidebar } from "@/context/mobileSideBarContext";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "@/assets.css"
 
 const Sidebar = () => {
     const {sideBar, toggleSidebar} = useSidebar();
@@ -23,13 +24,13 @@ const Sidebar = () => {
     return (
         <>
             <div className={sideBarUse ? "lg:w-[15%] md:w-[30%] w-[60%] md:relative fixed" : "lg:w-[5%] w-[12%]"}>
-                {sideBarUse && <div className="border-r border-gray-300 bg-secondary z-10000 w-full h-screen px-2 cursor-pointer">
+                {sideBarUse && <div className="border-r border-ember bg-surface z-10000 w-full h-screen px-2 cursor-pointer text-ash">
                     <div className="h-15 flex justify-end items-center">
                         <button className="px-3" onClick={() => toggle(false)}>
                             <ChevronLeft />
                         </button>
                     </div>
-                    <div className="space-y-4 **:flex **:items-center **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-gray-200 *:hover:rounded-md">
+                    <div className="space-y-4 **:flex **:items-center **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-ember *:hover:rounded-md">
                         <NavLink to="/inbox"><li><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
                         <NavLink to="/send_message"><li><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
                         <NavLink to="/anonymous_messages"><li><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
@@ -39,13 +40,13 @@ const Sidebar = () => {
                         <NavLink to="/join_room"><li><DoorOpen size={20} /> <span className="text-[16px]">Join Room</span></li></NavLink>
                     </div>
                 </div>}
-                {!sideBarUse && <div className="border-r border-gray-300 w-full h-screen px-2 cursor-pointer">
+                {!sideBarUse && <div className="border-r border-ember bg-surface text-ash w-full h-screen px-2 cursor-pointer">
                     <div className="h-15 border-b border-gray-300 flex justify-center items-center">
                         <button className="px-3" onClick={() => toggle(true)}>
                             <ChevronRight />
                         </button>
                     </div>
-                    <div className="space-y-4 mt-2 flex flex-col items-center list-none *:p-2 font-inter *:hover:bg-gray-200 *:hover:rounded-md">
+                    <div className="space-y-4 mt-2 flex flex-col items-center list-none *:p-2 font-inter *:hover:bg-ember *:hover:rounded-md">
                         <NavLink to="/inbox"><li><Inbox size={20} /></li></NavLink>
                         <NavLink to="/send_message"><li><Send size={20} /></li></NavLink>
                         <NavLink to="/anonymous_messages"><li><GhostIcon size={20} /></li></NavLink>

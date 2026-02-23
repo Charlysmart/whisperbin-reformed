@@ -9,7 +9,7 @@ import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { connectSocket } from "@/utils/socket";
 import { deleteData } from "@/api/delete_request";
-import ReplyModal from "@/components/reply";
+import ReplyModal from "@/user/components/reply";
 import { timeFormat } from "@/utils/time";
 
 const Whisperroom = () => {
@@ -248,8 +248,8 @@ const Whisperroom = () => {
                 </div>
             }
 
-            <div className={`bg-blue-50 w-full text-gray-600 h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
-            <div className="h-15 flex justify-between items-center p-3 bg-white">
+            <div className={`bg-surface w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
+            <div className="h-15 flex justify-between items-center p-3 bg-void">
                 <div className="flex items-center gap-5">
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>
                     <div>
@@ -270,39 +270,39 @@ const Whisperroom = () => {
                     }
                 </div>
             </div>
-            <div className="h-[calc(100%-60px)] bg-white border-t border-gray-200 md:px-5 px-2 py-4 flex flex-col justify-between">
+            <div className="h-[calc(100%-60px)] bg-surface-alt  border-t border-alpha-divider md:px-5 px-2 py-4 flex flex-col justify-between">
                 <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
                     {data.map(item => (
                         item.sender ? 
                         <div className="flex justify-end items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
-                            <div className="bg-blue-500 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2 text-white" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: true})}>
+                            <div className="bg-gradient-btn md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: true})}>
                                 {item.reply_to && 
-                                    <div className="border-l-4 border-l-white-600 bg-blue-600 p-2 rounded-lg">
+                                    <div className="border-l-4 border-l-ash text-ash-alt bg-alpha-overlay p-2 rounded-lg">
                                         <p>{item.reply_to}</p>
                                     </div>
                                 }
                                 {item.admin && (
-                                    <Crown size={14} className="text-white-500 ml-1 text-right" />
+                                    <Crown size={14} className="text-ash ml-1 text-right" />
                                 )}
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">{timeFormat(item.time)}</p>
+                                <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                             </div>
                         </div> 
                         :
                         <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
-                            <div className="bg-gray-100 md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: false})}>
+                            <div className="bg-surface border border-alpha-card-border md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-r-xl rounded-bl-xl space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: false})}>
                                 {item.reply_to &&
-                                    <div className="border border-l-4 border-l-blue-600 border-gray-200 bg-gray-200 p-2 rounded-lg">
+                                    <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt p-2 rounded-lg">
                                         <p>{item.reply_to}</p>
                                     </div>                                
                                 }
                                 {item.admin && (
-                                    <Crown size={15} className="text-blue-500 ml-1" />
+                                    <Crown size={15} className="text-ember ml-1" />
                                 )}
                                 {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                 <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px]">{timeFormat(item.time)}</p>
+                                <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                             </div>
                         </div>
                     ))} 
@@ -310,7 +310,7 @@ const Whisperroom = () => {
                     {showScrollBtn && (
                         <button
                             onClick={() => scrollToBottom()}
-                            className="fixed bottom-28 right-6 bg-blue-500 text-white px-3 py-2 rounded-full shadow-lg hover:bg-blue-600 transition"
+                            className="fixed bottom-28 right-6 bg-scarlet text-white px-3 py-2 rounded-full shadow-lg hover:bg-ember transition"
                         >
                             ↓
                         </button>
@@ -319,8 +319,8 @@ const Whisperroom = () => {
                 </div>
                 <div className="flex flex-col justify-end w-full mt-2">
                     {info.reply_content.trim() !== "" && 
-                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-blue-600 border-gray-200 md:w-[85%] w-[75%] bg-gray-200 p-2 rounded-lg">
-                        <div className="flex justify-end">
+                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-ember border-alpha-card-border bg-surface-alt md:w-[85%] w-[75%] p-2 rounded-lg">
+                        <div className="flex justify-end text-muted">
                             <X size={16} onClick={() => {
                                 setInfo(prev => ({...prev, reply_content: ""}));
                                 setFormData(prev => ({...prev, reply: null}))}} />
@@ -335,8 +335,8 @@ const Whisperroom = () => {
                             <Image onClick={() => imagePicker.current.click()} />
                             <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                         </div>
-                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-gray-100 md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                        <button className="bg-blue-500 text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                        <button className="bg-gradient-btn text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
                             <SendIcon size={16} className="md:hidden block text-white" /> 
                             <span className="md:block hidden">Send</span>
                         </button>

@@ -10,7 +10,7 @@ import { patchData } from "@/api/patch_request";
 import { alertBox } from "@/utils/alert";
 import { connectSocket } from "@/utils/socket";
 import { AnonymousPreview } from "@//user/components/anonymousPreview";
-import { count } from "console";
+import "@/assets.css";
 
 const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied } : AnonymousType) => {
     const iconMap = {
@@ -20,27 +20,27 @@ const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied 
 
     const Icon = replied ? iconMap["chat"] : iconMap["reply"];
     return (
-        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex md:gap-5 gap-1 hover:shadow-xl text-gray-600`}>
+        <div className={`md:px-5 px-3 py-3 border-l-4 bg-gradient-card border-l-ember w-full h-fit rounded-2xl flex md:gap-5 gap-1 hover:shadow-xl text-gray-600`}>
             <div className="lg:w-[5%] md:w-[15%] md:block hidden">
-                <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
+                <div className={`${read ? "bg-gradient-card" : "bg-ember"} h-fit w-fit md:p-3 p-2 rounded-full`}>
                     <Ghost color={read ? "gray" : "white"} />
                 </div>
             </div>
             <div className="space-y-3 lg:w-[95%] md:w-[85%] w-full">
-                <div className="space-y-3" onClick={task}>
+                <div className="space-y-3 text-ash" onClick={task}>
                     <div className="flex items-center gap-5">
                         <div>
                             <h3 className="font-semibold md:text-[18px] text-[16px]">Anonymous</h3>
-                            <p className="inline-flex items-center gap-2 text-[13px] text-brand"><Clock size={13} /> {time}</p>
+                            <p className="inline-flex items-center gap-2 text-[13px] text-muted"><Clock size={13} /> {time}</p>
                         </div>
-                        <div className={`${!read ? "bg-blue-200 text-blue-600" : replied ? "bg-green-100 text-green-800" : ""} px-4 py-1 rounded-full text-[14px] font-medium`}>{!read ? "New" : replied ? "Replied" : ""}</div>
+                        <div className={`${!read ? "bg-primary-glow text-scarlet" : replied && "text-blaze bg-alpha-secondary-bg"} px-4 py-1 rounded-full text-[14px] font-medium`}>{!read ? "New" : replied && "Replied"}</div>
                     </div>
                     <p className="md:text-[16px] text-[15px] whitespace-nowrap overflow-hidden truncate">
                             {content}
                     </p>
                 </div>
                 {be_replied && <div className="flex justify-end-safe">
-                    <Button label={<><Icon size={16} /> {replied ? "View Chat" : "Reply"}</>} buttonType={replied ? "grayed" : "colored"} onclick={reply} extraClass="w-fit h-full px-4 py-2 flex gap-1 items-center" type="button" />
+                    <Button label={<><Icon size={16} /> {replied ? "View Chat" : "Reply"}</>} buttonType={replied ? "muted" : "colored"} onclick={reply} extraClass="w-fit h-full px-4 py-2 flex gap-1 items-center" type="button" />
                 </div>}
             </div>
         </div>
@@ -52,6 +52,7 @@ const AnonymousChat = () => {
         count: null,
         data: []
     });
+    const divFocus = useRef<HTMLDivElement>(null);
     const [meta, setMeta] = useState<{filter : "all" | "unread" | "replied", currentPage: number, pages: number}>({
         filter : "all",
         currentPage : 1,
@@ -64,6 +65,11 @@ const AnonymousChat = () => {
         content: "",
         opened: false
     });
+
+    // for focusing div
+    const focusDiv = () => {
+        divFocus.current?.focus()
+    }
 
     function fetchAnonymous() {
         startLoading();
@@ -124,19 +130,19 @@ const AnonymousChat = () => {
     })
 
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
+        <div className={`bg-void w-full h-[calc(100vh-60px)] transition duration-500 text-ash md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
             {modal.opened && <AnonymousPreview content={modal.content} onclick={() => openModal({content: "", opened: false})} />}
             <div>
                 <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>
                 <p className="md:text-[18px] text-[15px]">Messages sent to your anonymous link. Reply to start a conversation.</p>
             </div>
-            <div className="flex flex-wrap gap-3 justify-between bg-white p-5 rounded-2xl shadow-md">
+            <div className="flex flex-wrap gap-3 justify-between bg-transparent border border-alpha-secondary-bg backdrop-blur-2xl p-5 rounded-2xl shadow-md">
                 <div className="md:w-1/3 w-full flex gap-4">
-                    <Button label="All Messages" buttonType={meta.filter === "all" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
-                    <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
-                    <Button label="Replied" buttonType={meta.filter === "replied" ? "colored" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
+                    <Button label="All Messages" buttonType={meta.filter === "all" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
+                    <Button label="Unread" buttonType={meta.filter === "unread" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
+                    <Button label="Replied" buttonType={meta.filter === "replied" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
                 </div>
-                <div className="flex lg:w-1/3 w-full h-11 border border-gray-200 overflow-hidden rounded-md">
+                <div className="flex lg:w-1/3 w-full h-11 border border-alpha-input-border bg-surface focus:border-scarlet overflow-hidden rounded-md" tabIndex={0} ref={divFocus} onClick={focusDiv}>
                     <button className="h-full w-fit p-3">
                         <Search size={16} />
                     </button>

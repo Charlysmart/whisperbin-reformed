@@ -4,7 +4,7 @@ import "@/App.css";
 
 export const alertBox = ({ message, success, top, onClose } : AlertType) => {
     const div = document.createElement("div");
-    div.classList.add("md:max-w-[35%]", "max-w-[70%]", "h-fit", "shadow-lg", "shadow-blue-100", "rounded-lg", "bg-white", "p-3", "overflow-hidden", "absolute", "right-2", `top-${top}`);
+    div.classList.add("md:max-w-[35%]", "max-w-[70%]", "h-fit", "shadow-md", "shadow-alpha-primary-shadow", "rounded-lg", "bg-surface", "border", "border-alpha-card-border", "p-3", "overflow-hidden", "absolute", "right-2", `top-${top}`);
     const close = document.createElement("div");
     close.classList.add("flex", "justify-end");
     const closeIcon = createElement(X, {
@@ -24,11 +24,11 @@ export const alertBox = ({ message, success, top, onClose } : AlertType) => {
     });
     successIconContainer.appendChild(success ? successIcon : failureIcon)
     const text = document.createElement("div");
-    text.classList.add("font-inter", "font-medium");
+    text.classList.add("font-inter","text-ash", "font-medium");
     text.textContent = message;
     textContainer.append(successIconContainer, text)
     const slider = document.createElement("div");
-    slider.classList.add("absolute", "bottom-0", "bg-blue-500", "alert-box");
+    slider.classList.add("absolute", "bottom-0", "bg-gradient-btn-alt", "alert-box");
     div.append(close, textContainer, slider);
     document.body.appendChild(div);
 

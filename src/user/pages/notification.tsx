@@ -27,8 +27,8 @@ const NotificationBlock = ({ read, type, content, time, linkText, link, id } : N
 
     const Icon = iconMap[type] || iconMap.default;
     return (
-        <div className={`md:px-5 px-3 py-3 border-l-4 ${read ? "border-gray-400 bg-white" : "border-blue-500 bg-blue-50"} w-full h-fit rounded-2xl flex gap-5 hover:shadow-xl text-gray-600`}>
-            <div className={`${read ? "bg-gray-200" : "avatar-gradient"} h-fit w-fit md:p-3 p-2 rounded-full`}>
+        <div className={`md:px-5 px-3 py-3 border-l-4 border-l-ember bg-gradient-card w-full h-fit rounded-2xl flex gap-5 hover:shadow-xl text-ash`}>
+            <div className={`${read ? "bg-gradient-card" : "bg-ember"} h-fit w-fit md:p-3 p-2 rounded-full`}>
                 <Icon color={read ? "gray" : "white"} />
             </div>
             <div className="space-y-3">
@@ -44,7 +44,7 @@ const NotificationBlock = ({ read, type, content, time, linkText, link, id } : N
                     : type === "reply" ? "Check your messages to continue the conversation" 
                     : content}
                 </p>
-                <p className="md:text-[14px] text-[13px] flex items-center flex-wrap gap-2" onClick={() => markRead(id, link)}><Clock size={16} /> {time} <span className="text-blue-500">{linkText}</span></p>
+                <p className="md:text-[14px] text-[13px] text-muted flex items-center flex-wrap gap-2" onClick={() => markRead(id, link)}><Clock size={16} /> {time} <span className="text-blaze">{linkText}</span></p>
             </div>
         </div>
     )
@@ -102,7 +102,7 @@ const Notification = () => {
 
     }, [])
     return (
-        <div className="bg-gray-50 w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
+        <div className="bg-void text-ash w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
             <section className="md:w-[80%] w-full space-y-5">
                 <div>
                     <b className="text-[30px] ">Notifications</b>
@@ -118,9 +118,9 @@ const Notification = () => {
                         <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"
                     }
                     {info.count > 0 && <div className="flex justify-center items-center-safe gap-3">
-                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
+                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
                         <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
+                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
                     </div>}
                 </div>
             </section>

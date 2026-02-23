@@ -1,0 +1,88 @@
+/* ── CSS Variables (base tokens) ───────────── */
+:root {
+  --void:            #280905;
+  --ember:           #740a03;
+  --scarlet:         #c31100;
+  --blaze:           #ce4e1b;
+  --surface:         #1a0604;
+  --surface-alt:     #2e0a07;
+  --ash:             #f5e6e3;
+  --muted:           #a07068;
+  --danger-hover:    #8a0d04;
+
+  --alpha-primary-glow:         #c3110022;
+  --alpha-primary-overlay:      #c3110033;
+  --alpha-primary-shadow:       #c3110044;
+  --alpha-primary-shadow-hover: #c3110066;
+  --alpha-secondary-bg:         #ce4e1b18;
+  --alpha-secondary-border:     #ce4e1b33;
+  --alpha-subtle-border:        #ffffff0a;
+  --alpha-card-border:          #ffffff0d;
+  --alpha-input-border:         #ffffff12;
+  --alpha-ghost-border:         #ffffff1a;
+  --alpha-ghost-border-hover:   #ffffff33;
+  --alpha-divider:              #ffffff08;
+  --alpha-overlay:              #00000033;
+  --alpha-ash-alt:              #f5e6e388;
+
+  --gradient-hero:         linear-gradient(135deg, #280905 0%, #740a03 45%, #c31100 75%, #ce4e1b 100%);
+  --gradient-btn:          linear-gradient(135deg, #c31100, #ce4e1b);
+  --gradient-btn-alt:      linear-gradient(90deg,  #c31100, #ce4e1b);
+  --gradient-card:         linear-gradient(160deg, #1a0604 0%, #2e0a07 100%);
+  --gradient-card-alt:     linear-gradient(180deg, #280905, #740a03);
+  --gradient-glow:         radial-gradient(ellipse at 30% 50%, #c31100, #280905);
+  --gradient-glow-overlay: radial-gradient(ellipse at 60% 40%, #c3110033 0%, transparent 65%);
+  --gradient-pulse:        radial-gradient(circle, #ce4e1b22, transparent 70%);
+  --gradient-bg:           radial-gradient(ellipse at center, #740a03 0%, #280905 60%, #1a0604 100%);
+}
+
+
+/* ══════════════════════════════════════════════
+   BACKGROUND COLORS
+   ══════════════════════════════════════════════ */
+.bg-void            { background-color: var(--void) !important; }
+.bg-ember           { background-color: var(--ember) !important; }
+.bg-scarlet         { background-color: var(--scarlet) !important; }
+.bg-blaze           { background-color: var(--blaze) !important; }
+.bg-surface         { background-color: var(--surface) !important; }
+.bg-surface-alt     { background-color: var(--surface-alt) !important; }
+.bg-ash             { background-color: var(--ash) !important; }
+.bg-muted           { background-color: var(--muted) !important; }
+.bg-primary-glow    { background-color: var(--alpha-primary-glow) !important; }
+.bg-primary-overlay { background-color: var(--alpha-primary-overlay) !important; }
+.bg-secondary-soft  { background-color: var(--alpha-secondary-bg) !important; }
+
+
+/* ══════════════════════════════════════════════
+   BACKGROUND GRADIENTS
+   ══════════════════════════════════════════════ */
+.bg-gradient-hero         { background: var(--gradient-hero) !important; }
+.bg-gradient-btn          { background: var(--gradient-btn) !important; }
+.bg-gradient-btn:hover          { background: var(--gradient-btn-alt) !important; }
+.bg-gradient-btn-alt      { background: var(--gradient-btn-alt) !important; }
+.bg-gradient-btn-alt:hover      { background: var(--gradient-btn) !important; }
+.bg-gradient-card         { background: var(--gradient-card) !important; }
+.bg-gradient-card:hover         { background: var(--gradient-card-alt) !important; }
+.bg-gradient-card-alt     { background: var(--gradient-card-alt) !important; }
+.bg-gradient-card-alt:hover     { background: var(--gradient-card) !important; }
+.bg-gradient-glow         { background: var(--gradient-glow) !important; }
+.bg-gradient-glow-overlay { background: var(--gradient-glow-overlay) !important; }
+.bg-gradient-pulse        { background: var(--gradient-pulse) !important; }
+.bg-gradient-body        { background: var(--gradient-bg) !important; }
+
+
+/* ══════════════════════════════════════════════
+   TEXT COLORS
+   ══════════════════════════════════════════════ */
+.text-void    { color: var(--void) !important; }
+.text-ember   { color: var(--ember) !important; }
+.text-scarlet { color: var(--scarlet) !important; }
+.text-blaze   { color: var(--blaze) !important; }
+.text-ash     { color: var(--ash) !important; }
+.text-muted   { color: var(--muted) !important; }
+.text-gradient {
+  background: var(--gradient-btn);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

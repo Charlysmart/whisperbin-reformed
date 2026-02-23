@@ -58,7 +58,6 @@ input[type="number"] {
 .dot {
   width: 10px;
   height: 10px;
-  background-color: rgb(6, 64, 190);
   border-radius: 50%;
   animation: pulse 1.4s infinite ease-in-out;
 }

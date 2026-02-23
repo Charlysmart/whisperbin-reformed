@@ -21,9 +21,15 @@ const Inbox = () => {
         currentPage: 1,
         filter: "all"
     });
+    const divFocus = useRef<HTMLDivElement>(null);
     const { startLoading, stopLoading } = usePreloader();
     const navigate = useNavigate();
     const socket = useRef<any>(null);
+
+    // for focusing div
+    const focusDiv = () => {
+        divFocus.current?.focus()
+    }
 
     function fetchData() {
         startLoading();
@@ -89,16 +95,16 @@ const Inbox = () => {
         }
     }
     return (
-        <div className={`bg-blue-50 w-full h-[calc(100vh-60px)] text-gray-600 md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto space-y-5`}>
+        <div className={`bg-void w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto space-y-5`}>
             <div>
-                <b className="text-[30px] ">Inbox</b>
+                <b className="text-[30px]">Inbox</b>
             </div>
             <div className="w-full flex flex-wrap gap-4">
-                <div className="flex lg:w-[85%] w-full h-11 border border-gray-200 overflow-hidden rounded-md">
+                <div className="flex lg:w-[85%] w-full h-11 border border-alpha-input-border text-ash overflow-hidden rounded-md focus:border-scarlet" tabIndex={0} onClick={focusDiv} ref={divFocus}>
                     <button className="h-full w-fit p-3">
                         <Search size={16} />
                     </button>
-                    <input type="search" placeholder="Search messages..." className="border-none w-full outline-none" />
+                    <input type="search" placeholder="Search messages..." className="border-none w-full outline-none placeholder:text-muted" />
                 </div>
                 <div className="flex w-[10%] gap-2 justify-between *:hover:bg-gray-100">
                     <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
@@ -113,9 +119,9 @@ const Inbox = () => {
                 }
                 {meta.pages > 0 && 
                     <div className="flex justify-center items-center-safe gap-3">
-                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage - 1}))} />
+                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage > 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage - 1}))} />
                         <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage + 1}))} />
+                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage + 1}))} />
                     </div>
                 }
             </div>

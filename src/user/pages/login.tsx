@@ -45,37 +45,37 @@ const Login = () => {
         });
     }
     return (
-        <div className="w-full lg:block md:flex overflow-y-auto body">
+        <div className="w-full lg:block md:flex overflow-y-auto bg-gradient-body">
             <section className="flex w-full justify-center items-center py-5">
-                <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-gray-200 bg-white hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium text-gray-600">
+                <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border bg-surface hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
                     <div className="flex justify-center items-center flex-col mb-3 gap-5">
                         <Logo />
-                        <div className="bg-blue-100 p-3 text-blue-500 font-bold rounded-full">
+                        <div className="bg-ember p-3 text-scarlet font-bold rounded-full">
                             <ShieldCheck size={28} /> 
                         </div>
                     </div>
                     <div className=" mb-4 text-center flex flex-col gap-3">
-                        <p className="md:text-[30px] text-[20px] font-bold">Login to AnonyText</p>
-                        <p className="text-[16px]">Securely access your anonymous messaging platform.</p>
+                        <p className="md:text-[30px] text-[20px] font-bold text-ash">Login to AnonyText</p>
+                        <p className="text-[16px] text-muted">Securely access your anonymous messaging platform.</p>
                     </div>
 
                     <form className="flex flex-col gap-5" onSubmit={signIn}>
                         <AuthInputs label="Username" type="text" attribute="username" placeholder="Enter Your unique username" onchange={handleRegisterInput} value={formData.username} />
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="password" className="text-[15px] font-semibold">Password</label>
-                            <div className="flex gap-2 w-full border border-gray-300 h-10 rounded-md focus:outline-blue-400 focus:outline-1">
-                                <input type={viewPwd ? "text" : "password"} name="password" id="password" placeholder="Enter Your password" className="w-[90%] h-10 rounded-md p-2 text-[14px] outline-none" onChange={handleRegisterInput} value={formData.password} required />
-                                <button type="button" className="w-[10%] flex justify-center items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
+                            <label htmlFor="password" className="text-[15px] font-semibold text-muted">Password</label>
+                            <div className="flex gap-2 w-full border border-alpha-input-border h-10 rounded-md focus:outline-blue-400 focus:outline-1">
+                                <input type={viewPwd ? "text" : "password"} name="password" id="password" placeholder="Enter Your password" className="w-[90%] h-10 rounded-md p-2 text-[14px] outline-none text-ash" onChange={handleRegisterInput} value={formData.password} required />
+                                <button type="button" className="w-[10%] flex justify-center text-muted items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
                             </div>
                         </div>
-                        <p className="text-[15px] mt-7 text-end text-blue-500 font-bold">Forgot password?</p>
+                        <p className="text-[15px] mt-7 text-end text-blaze font-bold">Forgot password?</p>
                         <div className="mt-5 mb-5 flex flex-col gap-4">
                             <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
                         </div>
                     </form>
                     <div className="text-[14px] space-y-3">
-                        <p>Don't have an account yet? <span className="text-blue-500 font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
-                        <p>Your privacy is our priority. Read our <span className="text-blue-500 font-bold">Privacy Policy.</span></p>
+                        <p className="text-muted">Don't have an account yet? <span className="text-blaze font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
+                        <p className="text-muted">Your privacy is our priority. Read our <span className="text-blaze font-bold">Privacy Policy.</span></p>
                     </div>
                 </div>
             </section>

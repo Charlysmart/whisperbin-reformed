@@ -9,12 +9,30 @@
 
 @theme {
     --font-inter: "Inter", sans-serif;
-    --color-secondary: #f8fafc;
-    --color-card: #f1f5f9;
-    --color-primary: #1a1a1a;
-    --color-brand: #666666;
-    --color-accent: #2563eb;
-    --color-border: #e5e7eb;
+    --color-void:            #280905;
+    --color-ember:           #740a03;
+    --color-scarlet:         #c31100;
+    --color-blaze:           #ce4e1b;
+    --color-surface:         #1a0604;
+    --color-surface-alt:     #2e0a07;
+    --color-ash:             #f5e6e3;
+    --color-muted:           #a07068;
+    --color-danger-hover:    #8a0d04;
+
+    --color-alpha-primary-glow:         #c3110022;
+    --color-alpha-primary-overlay:      #c3110033;
+    --color-alpha-primary-shadow:       #c3110044;
+    --color-alpha-primary-shadow-hover: #c3110066;
+    --color-alpha-secondary-bg:         #ce4e1b18;
+    --color-alpha-secondary-border:     #ce4e1b33;
+    --color-alpha-subtle-border:        #ffffff0a;
+    --color-alpha-card-border:          #ffffff0d;
+    --color-alpha-input-border:         #ffffff12;
+    --color-alpha-ghost-border:         #ffffff1a;
+    --color-alpha-ghost-border-hover:   #ffffff33;
+    --color-alpha-divider:              #ffffff08;
+    --color-alpha-overlay:              #00000033;
+    --color-alpha-ash-alt:              #f5e6e388;
 }
 
 @layer utility {

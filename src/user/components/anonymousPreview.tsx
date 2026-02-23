@@ -29,20 +29,16 @@ export const AnonymousPreview = ({ content, onclick } : PreviewType) => {
                 <button className="p-2 w-fit h-fit" onClick={onclick}><X className="font-semibold text-gray-500"/></button>
             </div>
             <div className="flex flex-col space-y-5 justify-center h-[calc(100vh-50px)] backdrop-blur-2xl items-center">
-                <div className="lg:w-[35%] md:w-[60%] w-[95%] flex justify-center-safe rounded-2xl p-5" ref={captureRef} style={{
-                    color: '#000000',
-                    backgroundColor: 'rgba(212, 209, 209, 0.205)',
-                }}
-                >
-                <div className="w-[95%] rounded-2xl overflow-hidden" style={{ color: '#000', backgroundColor: '#fff', boxShadow: "2px 2px 15px rgba(0, 0, 0, 0.226)" }}>
-                        <section className="header-gradient px-5 py-2 space-y-2">
+                <div className="lg:w-[35%] md:w-[60%] w-[95%] flex justify-center-safe rounded-2xl p-5" ref={captureRef}>
+                    <div className="w-[95%] rounded-2xl overflow-hidden" style={{ color: '#000', backgroundColor: '#2e0a07', boxShadow: "2px 2px 15px rgba(0, 0, 0, 0.226)" }}>
+                        <section className="bg-gradient-hero px-5 py-2 space-y-2 text-ash">
                             <div className="flex gap-2 items-center">
                                 <MessageSquareText color="white" className="w-4 h-4" />
-                                <h2 className="text-white font-semibold md:text-[15px] text-[14px] font-inter">WhisperBin</h2>
+                                <h2 className="font-semibold md:text-[15px] text-[14px] font-inter">WhisperBin</h2>
                             </div>
-                            <h2 className="text-center font-bold text-[18px] text-white">Anonymous Message</h2>
+                            <h2 className="text-center font-bold text-[18px]">Anonymous Message</h2>
                         </section>
-                        <section className="p-5 h-fit bg-white text-brand">
+                        <section className="p-5 h-fit bg-ash text-muted">
                             {content}
                         </section>
                     </div>

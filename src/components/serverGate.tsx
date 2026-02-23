@@ -1,20 +1,35 @@
 import axiosClient from "@/utils/axios";
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import ServerDown from "./server_down"
+import { Outlet } from "react-router-dom";
+import ServerDown from "./server_down";
+import { usePreloader } from "@/context/loaderContext";
 
 const ServerCheck = () => {
-  const [ok, setOk] = useState(false);
+  const [ok, setOk] = useState(null);
+  const { startLoading, stopLoading } = usePreloader();
 
   useEffect(() => {
-    axiosClient
-      .get("pages/health", { timeout: 3000 })
-      .then(() => setOk(true))
-      .catch(() => <ServerDown />);
+    startLoading();
+    const checkServer = async () => {
+      startLoading();
+      try {
+        await axiosClient.get("pages/health", { timeout: 3000 });
+        setOk(true);
+      } catch (error) {
+        setOk(false);
+        console.log(error);
+      } finally {
+        stopLoading();
+      }
+  };
+
+  checkServer();
   }, []);
 
   // Page blocked here
-  if (!ok) {
+  if (ok === null) return null;
+  
+  if (ok === false) {
     return <ServerDown />; // nothing else renders
   }
 
