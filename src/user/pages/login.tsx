@@ -33,7 +33,7 @@ const Login = () => {
             url: "/auth/login",
             data: formData,
             onSuccess: (response) => {
-                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(path ? path : "../", {replace: true}) })
+                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(path ? path : "../anonymous_messages", {replace: true}) })
             },
             onError: (error) => {
                 if (error.response) {
