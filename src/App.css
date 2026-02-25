@@ -55,6 +55,14 @@ input[type="number"] {
   animation: translate 3s linear;
 }
 
+.no-copy {
+  -webkit-user-select: none; /* Chrome, Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE */
+  user-select: none;         /* Standard */
+  -webkit-touch-callout: none;
+}
+
 .dot {
   width: 10px;
   height: 10px;

@@ -9,6 +9,7 @@ import useFormInput from "@/context/formChange";
 import { postData } from "@/api/post_request";
 import { connectSocket } from "@/utils/socket";
 import ReplyModal from "@/user/components/reply";
+import { handleRightClick } from "@/utils/contextMenu";
 
 type SocketMessage =
   | { type: "message"; data: { id: string; message: string; image?: string; message_thread: string; sender: boolean; read: boolean } }
@@ -19,6 +20,10 @@ const Chat = () => {
     const [more, setMore] = useState<boolean>(false);
     const imagePicker = useRef<HTMLInputElement | null>(null);
     const [data, setData] = useState<ChatType>([]);
+    const [block, setBlocked] = useState<{blocked : boolean, blocked_by: boolean | null}>({
+        blocked : null,
+        blocked_by : null
+    })
     const [image, setImage] = useState<File | null>(null);
     const sentReadReceipts = useRef(new Set<number>());
     const { formData, handleRegisterInput, setFormData } = useFormInput<{
@@ -174,16 +179,24 @@ const Chat = () => {
         });
     };
 
+    const blockChat = async (thread: string) => {
+        await getData({
+            url: `/pages/block_chat?thread=${thread}`,
+            onSuccess: (response) => setBlocked(response.data),
+            onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" })
+        });
+    }
+
     async function getChat() {
         await getData({
             url: `/pages/chat/${thread}`, 
             onSuccess: (response) => {
-                setData(response.data);
+                setData(response.data.chat);
+                setBlocked(response.data.block)
             }, 
             onError: (error) => {
                 const message = error?.response?.data?.detail || "Something went wrong";
                 alertBox({ message, success: false, top: "0" });
-                console.log(error.response);            
             }, 
             navigate
         });
@@ -197,6 +210,7 @@ const Chat = () => {
 
     useEffect(() => {
         getChat();
+        document.addEventListener("contextmenu", handleRightClick);
 
         socketRef.current = connectSocket({
             url: "send_chat",
@@ -218,16 +232,20 @@ const Chat = () => {
                     let content = document.querySelector(`#id_${data.data}`);
                     if (content) content.remove();
                 }
+                else if (data.type === "block") {
+                    setBlocked(data.payload);
+                }
             }
         });
 
         return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
             socketRef.current?.close();
         };
     }, []);
 
     return (
-        <div className={`bg-surface w-full h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal  text-ash font-medium`}>
+        <div className={`bg-surface w-full h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal no-copy text-ash font-medium`}>
             {replyModal.state && 
                 <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal(prev => ({...prev, id: null, state: false, sender: null}))}>
                     <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
@@ -238,21 +256,24 @@ const Chat = () => {
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>
                     <b>Anonymous Chat</b>
                 </div>
-                <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 md:flex hidden">
-                    <Button label={<><Flag /> Report</>} extraClass="w-fit px-3 h-full flex gap-2 border-alpha-ghost-border text-muted" />
-                    <Button label={<><CircleMinusIcon /> Block</>} extraClass="w-fit px-3 h-full bg-ember text-ash flex gap-2" />
-                </div>
-                <div className="md:hidden">
-                    <button onClick={() => setMore(!more)}>
-                        <MoreVertical />
-                    </button>
-                </div>
+                {((!block.blocked) || block.blocked && block.blocked_by) &&  
+                    <div>
+                        <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 md:flex hidden">
+                            <Button label={<><CircleMinusIcon /> {block.blocked && block.blocked_by ? "Unblock" : "Block"}</>} extraClass="w-fit p-2 h-full bg-ember text-ash flex gap-2" onclick={() => blockChat(thread)} />
+                        </div>
+                        <div className="md:hidden">
+                            <button onClick={() => setMore(!more)}>
+                                <MoreVertical />
+                            </button>
+                        </div>
+                    </div>
+                }
             </div>
-            <div className={`*:flex *:gap-2 space-y-5 bg-ember p-3 w-1/2 absolute top-[130px] right-2 md:hidden ${more ? "block" : "hidden"}`}>
-                <li><Flag /> Report</li>
-                <hr className="border-alpha-divider" />
-                <li><CircleMinusIcon /> Block</li>
-            </div>
+            {((!block.blocked) || block.blocked && block.blocked_by) &&  
+                <div className={`*:flex *:gap-2 space-y-5 bg-ember p-3 w-1/2 absolute top-[130px] right-2 md:hidden ${more ? "block" : "hidden"}`}>
+                    <li onClick={() => blockChat(thread)}><CircleMinusIcon /> {block.blocked && block.blocked_by ? "Unblock" : "Block"}</li>
+                </div>
+            }
             <div className="h-[calc(100%-60px)] bg-surface-alt border-t border-alpha-divider md:px-5 px-2 py-4 flex flex-col justify-between" ref={body} onClick={() => setMore(false)}>
                 <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
                     {data.map(item => (
@@ -271,7 +292,7 @@ const Chat = () => {
                         </div> 
                         :
                         <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
-                            <div className="bg-surface border border-alpha-card-border md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-r-xl rounded-bl-xl space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal(prev => ({...prev, id: item.id, state: true, sender: item.sender}))}>
+                            <div className="bg-surface border border-alpha-card-border md:max-w-[70%] wrap-break-word max-w-[80%] w-fit p-2 rounded-r-xl rounded-bl-xl space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal(prev => ({...prev, id: item.id, state: true, sender: item.sender}))}>
                                 {item.reply_to &&
                                     <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt p-2 rounded-lg">
                                         <p>{item.reply_to}</p>
@@ -295,29 +316,38 @@ const Chat = () => {
                     <div ref={messagesEndRef} />
                 </div>
                 <div className="flex flex-col justify-end w-full mt-2">
-                    {replyModal.reply_content.trim() !== "" && 
-                    <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt md:ml-[4%] ml-[11%] md:w-[85%] w-[75%] max-h-18 p-2 rounded-lg">
-                        <div className="flex justify-between items-start">
-                            <p className="w-[95%] line-clamp-2">{replyModal.reply_content}</p>
-                            <X size={16} className="md:w-[3%] w-[5%] text-muted" onClick={() => {
-                                setReplyModal(prev => ({...prev, reply_content: ""}));
-                                setFormData(prev => ({...prev, reply_id: null}))}} />
+                    {block.blocked ? 
+                        <div className="flex justify-center text-ash">
+                            <p>This chat can't be continued.</p>
+                        </div> 
+                        : 
+                        <div>
+                            {replyModal.reply_content.trim() !== "" && 
+                            <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt md:ml-[4%] ml-[11%] md:w-[85%] w-[75%] max-h-18 p-2 rounded-lg">
+                                <div className="flex justify-between items-start">
+                                    <p className="w-[95%] line-clamp-2">{replyModal.reply_content}</p>
+                                    <X size={16} className="md:w-[3%] w-[5%] text-muted" onClick={() => {
+                                        setReplyModal(prev => ({...prev, reply_content: ""}));
+                                        setFormData(prev => ({...prev, reply_id: null}))}
+                                    } />
+                                </div>
+                            </div>}
+                            {preview && (
+                                <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
+                            )}
+                            <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
+                                <div className="md:w-[3%] w-[10%] flex justify-center">
+                                    <Image onClick={() => imagePicker.current.click()} />
+                                    <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
+                                </div>
+                                <textarea name="message" id="message" placeholder="Write an anonymous message..." className="h-full max-h-20 border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md resize-none p-2 outline-0 no-scrollbar" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                                <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                                    <SendIcon size={18} className="text-white" /> 
+                                    <span className="md:block hidden">Send</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>}
-                    {preview && (
-                        <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
-                    )}
-                    <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
-                        <div className="md:w-[3%] w-[10%] flex justify-center">
-                            <Image onClick={() => imagePicker.current.click()} />
-                            <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
-                        </div>
-                        <textarea name="message" id="message" placeholder="Write an anonymous message..." className="h-full max-h-20 border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md resize-none p-2 outline-0 no-scrollbar" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                        <button className="bg-gradient-btn text-white px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                            <SendIcon size={16} className="text-white" /> 
-                            <span className="md:block hidden">Send</span>
-                        </button>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import { postData } from "@/api/post_request";
 import { getData } from "@/api/get_request";
 import { alertBox } from "@/utils/alert";
 import { useNavigate } from "react-router-dom";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const Verify = () => {
     const navigate = useNavigate();
@@ -121,9 +122,17 @@ const Verify = () => {
             }
         }});
     }
+
+    useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
+    }, []);
     
     return (
-        <div className="w-full lg:block md:flex overflow-y-auto body">
+        <div className="w-full no-copy lg:block md:flex overflow-y-auto body">
             <section className="flex w-full justify-center items-center py-5">
                 <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit text-gray-600 border border-gray-200 bg-white hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
                     <div className="flex justify-center items-center flex-col mb-3 gap-5">

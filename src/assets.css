@@ -86,3 +86,5 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.active {background: var(--scarlet); border-radius: 10px;}

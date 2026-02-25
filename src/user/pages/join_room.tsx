@@ -4,6 +4,7 @@ import Button from "@/components/button";
 import useFormInput from "@/context/formChange";
 import { usePreloader } from "@/context/loaderContext";
 import { alertBox } from "@/utils/alert";
+import { handleRightClick } from "@/utils/contextMenu";
 import { Link } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -44,6 +45,7 @@ const JoinRoom = () => {
 
     useEffect(() => {
         startLoading();
+        document.addEventListener("contextmenu", handleRightClick);
         getData({ 
             url: "/pages/joined_rooms",
             navigate,
@@ -52,10 +54,14 @@ const JoinRoom = () => {
             },
             onError: (error) => alertBox({ message: error?.response?.data?.detail, success: false, top: "0" }), finallyCallback: () => stopLoading()
         });
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
     }, []);
 
     return (
-        <div className="bg-void text-ash flex justify-center h-[calc(100vh-60px)] gap-5 items-center w-full font-inter md:font-normal font-medium py-10">
+        <div className="bg-void no-copy text-ash flex justify-center h-[calc(100vh-60px)] gap-5 items-center w-full font-inter md:font-normal font-medium py-10">
             <div className="bg-surface border border-alpha-card-border px-5 py-7 shadow-xl shadow-alpha-secondary rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
                 <section className="flex flex-col items-center">
                     <h1 className="font-bold lg:text-[30px] md:text-[25px] text-[18px] text-gray-00">Join Whisperroom</h1>

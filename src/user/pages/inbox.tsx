@@ -10,6 +10,7 @@ import { InboxDataType } from "@/utils/types";
 import { timeFormat } from "@/utils/time";
 import { patchData } from "@/api/patch_request";
 import { connectSocket } from "@/utils/socket";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const Inbox = () => {
     const [info, setInfo] = useState<{data: InboxDataType[], count: number}>({
@@ -47,6 +48,7 @@ const Inbox = () => {
     }, [info.count]);
 
     useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
         socket.current = connectSocket({
             url: "get_new_message",
             onMessage: (payload) => {
@@ -62,6 +64,7 @@ const Inbox = () => {
         });
 
         return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
             socket.current?.close();
         }
 
@@ -95,7 +98,7 @@ const Inbox = () => {
         }
     }
     return (
-        <div className={`bg-void w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto space-y-5`}>
+        <div className={`bg-void no-copy w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto space-y-5`}>
             <div>
                 <b className="text-[30px]">Inbox</b>
             </div>

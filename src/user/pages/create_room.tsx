@@ -9,6 +9,7 @@ import { alertBox } from "@/utils/alert";
 import { Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const CreateRoom = () => {
     const { formData, setFormData } = useFormInput<{title : string, display_admin : boolean}>({
@@ -46,8 +47,16 @@ const CreateRoom = () => {
         });
     }
 
+    useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
+    }, []);
+
     return (
-        <div className="bg-void flex flex-col gap-5 text-ash items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-60px)]">
+        <div className="bg-void no-copy flex flex-col gap-5 text-ash items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-60px)]">
             {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
             <div className="px-5 py-7 bg-surface shadow-xl drop-shadow-alpha-primary-shadow-hover border border-alpha-card-border rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
                 <section className="flex flex-col items-center">

@@ -4,10 +4,11 @@ import Button from "@/components/button";
 import Logo from "@/user/components/logo";
 import "@/App.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { alertBox } from "@/utils/alert";
+import { handleRightClick } from "@/utils/contextMenu";
 
 type LoginProps = {
     username: string,
@@ -44,8 +45,17 @@ const Login = () => {
             finallyCallback: () => setLoading(false),
         });
     }
+
+    useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
+    }, []);
+    
     return (
-        <div className="w-full lg:block md:flex overflow-y-auto bg-gradient-body">
+        <div className="w-full no-copy lg:block md:flex overflow-y-auto bg-gradient-body h-screen">
             <section className="flex w-full justify-center items-center py-5">
                 <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border bg-surface hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
                     <div className="flex justify-center items-center flex-col mb-3 gap-5">

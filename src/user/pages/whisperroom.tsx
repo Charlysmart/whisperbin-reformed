@@ -11,6 +11,7 @@ import { connectSocket } from "@/utils/socket";
 import { deleteData } from "@/api/delete_request";
 import ReplyModal from "@/user/components/reply";
 import { timeFormat } from "@/utils/time";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const Whisperroom = () => {
     const imagePicker = useRef<HTMLInputElement>(null);
@@ -195,6 +196,8 @@ const Whisperroom = () => {
             onError: (error) => alertBox({ message: error.response.data.detail, success: false, top: "0", onClose: () => navigate("../join_room") })
         });
 
+        document.addEventListener("contextmenu", handleRightClick);
+
         websocket.current = connectSocket({
             url: `send_whisperroom/${room_thread}`,
             onMessage: (event) => {
@@ -237,18 +240,19 @@ const Whisperroom = () => {
         });
 
         return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
             websocket.current?.close();
         }
     }, []);
     return (
         <div>
             {replyModal.state && 
-                <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal({id: null, state: false, sender: null})}>
+                <div className="w-full no-copy h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal({id: null, state: false, sender: null})}>
                     <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
                 </div>
             }
 
-            <div className={`bg-surface w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
+            <div className={`bg-surface no-copy w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
             <div className="h-15 flex justify-between items-center p-3 bg-void">
                 <div className="flex items-center gap-5">
                     <button onClick={() => navigate(-1)}><ArrowLeft /></button>
@@ -336,8 +340,8 @@ const Whisperroom = () => {
                             <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                         </div>
                         <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                        <button className="bg-gradient-btn text-white px-5 border h-10 rounded-md md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                            <SendIcon size={16} className="md:hidden block text-white" /> 
+                        <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                            <SendIcon size={18} className="text-white" /> 
                             <span className="md:block hidden">Send</span>
                         </button>
                     </div>

@@ -9,6 +9,7 @@ import { ArrowLeft, ArrowRight, Clock, Heart, Mail, MessageCircle, Reply, ReplyA
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connectSocket } from "@/utils/socket";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const NotificationBlock = ({ read, type, content, time, linkText, link, id } : NotificationBlockType) => {
     const iconMap = {
@@ -86,6 +87,7 @@ const Notification = () => {
 
     // To initialize websocket
     useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
         websocket.current = connectSocket({
             url: "new_notification",
             onMessage: (event) => {
@@ -97,12 +99,12 @@ const Notification = () => {
         });
 
         return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
             websocket.current?.close();
         }
-
-    }, [])
+    }, []);
     return (
-        <div className="bg-void text-ash w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
+        <div className="bg-void no-copy text-ash w-full h-[calc(100vh-60px)] flex justify-center md:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
             <section className="md:w-[80%] w-full space-y-5">
                 <div>
                     <b className="text-[30px] ">Notifications</b>

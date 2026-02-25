@@ -7,6 +7,7 @@ import { alertBox } from "@/utils/alert";
 import { useNavigate } from "react-router-dom";
 import { patchData } from "@/api/patch_request";
 import { usePreloader } from "@/context/loaderContext";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const UserProfile = () => {
     const [text, setText] = useState<string>("");
@@ -28,14 +29,20 @@ const UserProfile = () => {
 
     useEffect(() => {
         startLoading();
-        getData({url: "/pages/user_setting", onSuccess: (response) => {setPreferences({email: response.data.result.email, push: response.data.result.push}); setUsername(response.data.user)}, onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}), navigate, finallyCallback: () => stopLoading()})
+        getData({url: "/pages/user_setting", onSuccess: (response) => {setPreferences({email: response.data.result.email, push: response.data.result.push}); setUsername(response.data.user)}, onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}), navigate, finallyCallback: () => stopLoading()});
+
+        document.addEventListener("contextmenu", handleRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
     }, []);
 
     function updateData () {
         patchData({url: "/pages/update_preference", data: preference, onSuccess: (response) => alertBox({message: response.data.message, success: true, top: "0"}), onError: (error) => alertBox({message: error.response.data.detail, success: false, top: "0"}), navigate})
     }
     return (
-        <div className="bg-void w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto border-t border-alpha-subtle-border">
+        <div className="bg-void no-copy w-full h-[calc(100vh-60px)] md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto border-t border-alpha-subtle-border">
             <b className="md:text-[30px] text-[20px]">Your Profile & Settings</b>
             <div className="flex flex-col gap-3 mt-5 border border-alpha-card-border bg-surface md:p-5 px-2 py-5 rounded-xl">
                 <label htmlFor="messageLink" className="md:text-[20px] text-[18px] font-semibold">Your Anonymous Message Link</label>

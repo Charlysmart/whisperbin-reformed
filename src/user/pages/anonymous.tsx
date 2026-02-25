@@ -11,6 +11,7 @@ import { alertBox } from "@/utils/alert";
 import { connectSocket } from "@/utils/socket";
 import { AnonymousPreview } from "@//user/components/anonymousPreview";
 import "@/assets.css";
+import { handleRightClick } from "@/utils/contextMenu";
 
 const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied } : AnonymousType) => {
     const iconMap = {
@@ -120,17 +121,23 @@ const AnonymousChat = () => {
 
     // To connect my websocket
     useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
         websocket.current = connectSocket({
             url: "new_anonymous",
             onMessage: (event) => {
                 const payload = event.data;
                 setInfo(prev => ({count: prev.count + 1, data: [payload, ...prev.data]}))
             }
-        })
-    })
+        });
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+            websocket.current?.close();
+        }
+    }, [])
 
     return (
-        <div className={`bg-void w-full h-[calc(100vh-60px)] transition duration-500 text-ash md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
+        <div className={`bg-void w-full h-[calc(100vh-60px)] no-copy transition duration-500 text-ash md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
             {modal.opened && <AnonymousPreview content={modal.content} onclick={() => openModal({content: "", opened: false})} />}
             <div>
                 <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>

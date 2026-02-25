@@ -24,7 +24,7 @@ export const AnonymousPreview = ({ content, onclick } : PreviewType) => {
         link.click();
     }
     return (
-        <div className="h-screen backdrop-blur-md overflow-hidden absolute w-full top-0 left-0 z-9999">
+        <div className="h-screen backdrop-blur-md overflow-y-auto absolute w-full top-0 left-0 z-9999">
             <div className="w-full h-[50px] flex justify-end-safe">
                 <button className="p-2 w-fit h-fit" onClick={onclick}><X className="font-semibold text-gray-500"/></button>
             </div>

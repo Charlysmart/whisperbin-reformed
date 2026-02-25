@@ -1,13 +1,14 @@
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
 import Logo from "@/user/components/logo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignUpTypes } from "@/utils/types";
 import { alertBox } from "@/utils/alert";
 import { useNavigate } from "react-router-dom";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { Eye, EyeClosed } from "lucide-react";
+import { handleRightClick } from "@/utils/contextMenu";
 
 
 const Register = () => {
@@ -51,8 +52,16 @@ const Register = () => {
         });
     }
 
+    useEffect(() => {
+        document.addEventListener("contextmenu", handleRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", handleRightClick);
+        }
+    }, []);
+
     return (
-        <div className="w-full lg:block md:flex overflow-y-auto bg-gradient-body">
+        <div className="w-full no-copy lg:block md:flex overflow-y-auto h-screen bg-gradient-body">
             <section className="flex w-full justify-center items-center py-5">
                 <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border bg-surface hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
                     <div className="flex justify-center mb-3">
