@@ -1,0 +1,783 @@
+<div
+  class="export-wrapper"
+  style="
+    width: 1440px;
+    min-height: 812px;
+    position: relative;
+    font-family: var(--font-family-body);
+    background-color: var(--background);
+  "
+>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:wght@200;300;400;500;600;700;800;900&family=PT+Serif:wght@400;700&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Shantell+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <html>
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>WhisperBin - Anonymous Messaging</title>
+
+      <style id="theme">
+        :root {
+          --background: #ffffff;
+          --foreground: #280905;
+          --primary: #c31100;
+          --primary-foreground: #f5e6e3;
+          --secondary: #fafafa;
+          --secondary-foreground: #280905;
+          --muted: #f4f4f5;
+          --muted-foreground: #6b6b70;
+          --border: #f0f0f0;
+          --radius-sm: 8px;
+          --radius-md: 16px;
+          --radius-lg: 24px;
+          --radius-xl: 9999px;
+          --font-family-body:
+            system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            sans-serif;
+        }
+        * {
+          box-sizing: border-box;
+        }
+        .export-wrapper {
+          margin: 0;
+          font-family: var(--font-family-body);
+          background-color: var(--background);
+          color: var(--foreground);
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+          margin: 0;
+        }
+        .container {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 0 80px;
+        }
+        .gradient-text {
+          background: linear-gradient(135deg, #740a03, #c31100, #ce4e1b);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+          background: linear-gradient(135deg, #740a03, #c31100, #ce4e1b);
+          color: var(--primary-foreground);
+        }
+      </style>
+
+      <style id="components">
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px 32px;
+          font-size: 16px;
+          font-weight: 600;
+          border-radius: var(--radius-xl);
+          border: none;
+          cursor: pointer;
+          white-space: nowrap;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
+        }
+        .btn-primary {
+          background: linear-gradient(135deg, #740a03, #c31100, #ce4e1b);
+          color: var(--primary-foreground);
+          box-shadow: 0 8px 24px #c3110033;
+        }
+        .btn-outline {
+          background: transparent;
+          border: 2px solid var(--border);
+          color: var(--foreground);
+        }
+        .btn-ghost {
+          background: transparent;
+          color: var(--foreground);
+          padding: 12px 24px;
+        }
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 8px 16px;
+          background: #c311000d;
+          color: #c31100;
+          border-radius: var(--radius-xl);
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 24px;
+          border: 1px solid rgba(195, 17, 0, 0.1);
+        }
+      </style>
+
+      <style id="navbar">
+        .nav-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 32px 80px;
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+        }
+        .nav-logo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 24px;
+          font-weight: 700;
+          color: var(--foreground);
+          text-decoration: none;
+          letter-spacing: -0.5px;
+        }
+        .nav-logo-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, #740a03, #c31100, #ce4e1b);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--primary-foreground);
+        }
+        .nav-actions {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+      </style>
+
+      <style id="hero-section">
+        .hero {
+          padding: 80px 0 120px;
+          display: flex;
+          align-items: center;
+          gap: 64px;
+          min-height: 80vh;
+        }
+        .hero-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .hero-title {
+          font-size: 72px;
+          line-height: 1.1;
+          font-weight: 800;
+          letter-spacing: -2px;
+          margin-bottom: 24px;
+          color: var(--foreground);
+        }
+        .hero-subtitle {
+          font-size: 20px;
+          line-height: 1.6;
+          color: var(--muted-foreground);
+          margin-bottom: 40px;
+          max-width: 560px;
+        }
+        .hero-actions {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        .hero-image-wrapper {
+          flex: 1;
+          position: relative;
+        }
+        .hero-image-glow {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 120%;
+          height: 120%;
+          background: radial-gradient(
+            circle,
+            rgba(195, 17, 0, 0.15) 0%,
+            rgba(255, 255, 255, 0) 70%
+          );
+          transform: translate(-50%, -50%);
+          z-index: 0;
+        }
+        .hero-image {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          border-radius: var(--radius-lg);
+          box-shadow: 0 24px 80px rgba(40, 9, 5, 0.08);
+          object-fit: cover;
+        }
+      </style>
+
+      <style id="features-section">
+        .features {
+          background-color: var(--secondary);
+          padding: 120px 0;
+        }
+        .section-header {
+          text-align: center;
+          margin-bottom: 80px;
+        }
+        .section-title {
+          font-size: 48px;
+          font-weight: 700;
+          letter-spacing: -1px;
+          margin-bottom: 24px;
+        }
+        .section-subtitle {
+          font-size: 18px;
+          color: var(--muted-foreground);
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 32px;
+        }
+        .feature-card {
+          background: var(--background);
+          padding: 48px 40px;
+          border-radius: var(--radius-lg);
+          box-shadow: 0 12px 48px rgba(40, 9, 5, 0.04);
+          position: relative;
+          overflow: hidden;
+          border: 1px solid var(--border);
+        }
+        .feature-card::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #740a03, #c31100, #ce4e1b);
+          opacity: 0.8;
+        }
+        .feature-icon-wrapper {
+          width: 64px;
+          height: 64px;
+          border-radius: 16px;
+          background: rgba(195, 17, 0, 0.05);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 32px;
+        }
+        .feature-title {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 16px;
+          color: var(--foreground);
+        }
+        .feature-desc {
+          font-size: 16px;
+          line-height: 1.6;
+          color: var(--muted-foreground);
+        }
+      </style>
+
+      <style id="split-section">
+        .split-section {
+          padding: 160px 0;
+          display: flex;
+          align-items: center;
+          gap: 80px;
+        }
+        .split-image {
+          flex: 1;
+          border-radius: var(--radius-lg);
+          box-shadow: 0 32px 100px rgba(40, 9, 5, 0.08);
+          object-fit: cover;
+        }
+        .split-content {
+          flex: 1;
+        }
+        .split-list {
+          margin-top: 40px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+        .split-list-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+        }
+        .list-icon {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: var(--background);
+          border: 2px solid var(--border);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .list-text-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+        .list-text-desc {
+          font-size: 15px;
+          color: var(--muted-foreground);
+          line-height: 1.5;
+        }
+      </style>
+
+      <style id="cta-section">
+        .cta-block {
+          margin: 80px 80px 120px;
+          border-radius: 32px;
+          padding: 100px 80px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 32px 80px rgba(195, 17, 0, 0.15);
+        }
+        .cta-title {
+          font-size: 48px;
+          font-weight: 800;
+          letter-spacing: -1px;
+          margin-bottom: 24px;
+          position: relative;
+          z-index: 2;
+        }
+        .cta-subtitle {
+          font-size: 18px;
+          color: rgba(245, 230, 227, 0.8);
+          max-width: 500px;
+          margin: 0 auto 48px;
+          position: relative;
+          z-index: 2;
+        }
+        .cta-actions {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          position: relative;
+          z-index: 2;
+        }
+        .btn-white {
+          background: #ffffff;
+          color: var(--primary);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .btn-outline-white {
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          color: #ffffff;
+        }
+      </style>
+
+      <style id="footer-section">
+        .footer {
+          padding: 40px 80px;
+          border-top: 1px solid var(--border);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .footer-trust {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          color: var(--muted-foreground);
+        }
+        .footer-links {
+          display: flex;
+          gap: 32px;
+          font-size: 14px;
+          color: var(--muted-foreground);
+        }
+        .footer-link {
+          color: inherit;
+          text-decoration: none;
+        }
+      </style>
+    </head>
+    <body>
+      <!-- Navigation -->
+      <header class="nav-header">
+        <a href="#" class="nav-logo" data-media-type="banani-button">
+          <div class="nav-logo-icon">
+            <div
+              style="
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <iconify-icon
+                icon="lucide:venetian-mask"
+                style="font-size: 20px; color: #f5e6e3"
+              ></iconify-icon>
+            </div>
+          </div>
+          WhisperBin
+        </a>
+        <div class="nav-actions">
+          <button class="btn btn-ghost" data-media-type="banani-button">
+            Log In
+          </button>
+          <button
+            class="btn btn-primary"
+            style="padding: 12px 24px"
+            data-media-type="banani-button"
+          >
+            Create Account
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="container hero">
+        <div class="hero-content">
+          <div class="badge">
+            <div
+              style="
+                width: 16px;
+                height: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 6px;
+              "
+            >
+              <iconify-icon
+                icon="lucide:shield-check"
+                style="font-size: 16px; color: #c31100"
+              ></iconify-icon>
+            </div>
+            100% Anonymous &amp; Secure
+          </div>
+          <h1 class="hero-title">
+            Speak freely.<br />
+            Stay <span class="gradient-text">anonymous.</span>
+          </h1>
+          <p class="hero-subtitle">
+            WhisperBin is the secure platform to send private messages and join
+            real-time temporary chat rooms without ever revealing your identity.
+            No traces left behind.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-media-type="banani-button">
+              Start Messaging
+            </button>
+            <button class="btn btn-outline" data-media-type="banani-button">
+              Explore Features
+            </button>
+          </div>
+        </div>
+        <div class="hero-image-wrapper">
+          <div class="hero-image-glow"></div>
+          <img
+            src="https://storage.googleapis.com/banani-generated-images/generated-images/df0784ca-5af4-45f8-a500-bb1723d542f7.jpg"
+            data-aspect-ratio="4:3"
+            data-query="Abstract 3D illustration of a sleek modern lock icon and floating chat bubbles, clean white background, soft ember red gradient highlights, premium minimalist aesthetic"
+            class="hero-image"
+            alt="WhisperBin App Preview"
+          />
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Privacy at its core</h2>
+            <p class="section-subtitle">
+              Everything you need to communicate confidently, wrapped in an
+              interface designed to protect your identity from start to finish.
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card" data-media-type="banani-button">
+              <div class="feature-icon-wrapper">
+                <div
+                  style="
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:message-square-dashed"
+                    style="font-size: 32px; color: #c31100"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <h3 class="feature-title">Anonymous Messaging</h3>
+              <p class="feature-desc">
+                Send and receive messages with complete peace of mind. Your
+                identity is permanently masked, protecting you from tracking or
+                unwanted exposure.
+              </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card" data-media-type="banani-button">
+              <div class="feature-icon-wrapper">
+                <div
+                  style="
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:inbox"
+                    style="font-size: 32px; color: #c31100"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <h3 class="feature-title">Private Inbox</h3>
+              <p class="feature-desc">
+                Manage your conversations in a secure, isolated inbox. Only you
+                have access, and messages can be set to self-destruct after they
+                are read.
+              </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card" data-media-type="banani-button">
+              <div class="feature-icon-wrapper">
+                <div
+                  style="
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:radio-tower"
+                    style="font-size: 32px; color: #c31100"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <h3 class="feature-title">Real-Time Chat Rooms</h3>
+              <p class="feature-desc">
+                Join or create temporary rooms for instant group conversations.
+                When the room closes, all data vanishes into the void
+                immediately.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Optional Split Section -->
+      <section class="container split-section">
+        <img
+          src="https://storage.googleapis.com/banani-generated-images/generated-images/b985e3a7-8a0d-4bbf-9b0f-e256dc74264f.jpg"
+          data-aspect-ratio="1:1"
+          data-query="Abstract minimalist 3D rendering of interconnected safe communication nodes, bright airy environment, soft shadows, ember red lighting accents"
+          class="split-image"
+          alt="Secure Communications"
+        />
+        <div class="split-content">
+          <h2 class="section-title" style="font-size: 40px">
+            Human verified. Bot free.
+          </h2>
+          <p class="section-subtitle" style="margin-left: 0">
+            We believe in anonymity, but we also believe in genuine human
+            connection. WhisperBin uses innovative, privacy-preserving checks to
+            keep the network pure.
+          </p>
+
+          <div class="split-list">
+            <div class="split-list-item">
+              <div class="list-icon">
+                <div
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:check"
+                    style="font-size: 16px; color: #280905"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <div>
+                <div class="list-text-title">Zero-Knowledge Proofs</div>
+                <div class="list-text-desc">
+                  Prove you are human without ever sharing personal data or
+                  identifiable tracking metrics.
+                </div>
+              </div>
+            </div>
+            <div class="split-list-item">
+              <div class="list-icon">
+                <div
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:shield"
+                    style="font-size: 16px; color: #280905"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <div>
+                <div class="list-text-title">End-to-End Encryption</div>
+                <div class="list-text-desc">
+                  The content of your messages is unreadable by anyone but the
+                  intended recipient.
+                </div>
+              </div>
+            </div>
+            <div class="split-list-item">
+              <div class="list-icon">
+                <div
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <iconify-icon
+                    icon="lucide:flame"
+                    style="font-size: 16px; color: #280905"
+                  ></iconify-icon>
+                </div>
+              </div>
+              <div>
+                <div class="list-text-title">Automatic Purging</div>
+                <div class="list-text-desc">
+                  Chat room histories are permanently scrubbed from our servers
+                  when the session ends.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="gradient-bg cta-block">
+        <h2 class="cta-title">Ready to disappear?</h2>
+        <p class="cta-subtitle">
+          Join thousands of users who are already enjoying secure, anonymous
+          communication. Create your private alias today.
+        </p>
+        <div class="cta-actions">
+          <button class="btn btn-white" data-media-type="banani-button">
+            Create Anonymous Account
+          </button>
+          <button class="btn btn-outline-white" data-media-type="banani-button">
+            Log In to Inbox
+          </button>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-trust">
+          <div
+            style="
+              width: 16px;
+              height: 16px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <iconify-icon
+              icon="lucide:lock"
+              style="font-size: 16px; color: #6b6b70"
+            ></iconify-icon>
+          </div>
+          Privacy First. No logs. No tracking.
+        </div>
+        <div class="footer-links">
+          <a href="#" class="footer-link" data-media-type="banani-button"
+            >Terms of Service</a
+          >
+          <a href="#" class="footer-link" data-media-type="banani-button"
+            >Privacy Policy</a
+          >
+          <a href="#" class="footer-link" data-media-type="banani-button"
+            >Security Protocol</a
+          >
+          <a href="#" class="footer-link" data-media-type="banani-button"
+            >Contact Support</a
+          >
+        </div>
+      </footer>
+
+      <!-- Required scripts for Icons -->
+      <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    </body>
+  </html>
+  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --background: #ffffff;
+      --foreground: #280905;
+      --border: #00000014;
+      --input: #fff8f6;
+      --primary: #c31100;
+      --primary-foreground: #ffffff;
+      --secondary: #f5e6e3;
+      --secondary-foreground: #280905;
+      --muted: #fff1ef;
+      --muted-foreground: #b77a6f;
+      --success: #1fa15a;
+      --success-foreground: #ffffff;
+      --accent: #ce4e1b;
+      --accent-foreground: #ffffff;
+      --destructive: #740a03;
+      --destructive-foreground: #ffffff;
+      --warning: #f2a36d;
+      --warning-foreground: #280905;
+      --card: #fff9f8;
+      --card-foreground: #280905;
+      --sidebar: #fff6f5;
+      --sidebar-foreground: #280905;
+      --sidebar-primary: #740a03;
+      --sidebar-primary-foreground: #ffffff;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      --font-family-body: Inter;
+    }
+  </style>
+</div>

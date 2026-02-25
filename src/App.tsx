@@ -20,6 +20,7 @@ import NotFound from "@/components/not_found";
 import AdminDashboard from "./admin/dashboard";
 import ServerCheck from "./components/serverGate";
 import UserAuthentication from "./protected_routes/user_auth";
+import Home from "./home";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <GradientProvider />
       <Routes>
         <Route element={<PreloaderProvider />}>
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<Verify />} />

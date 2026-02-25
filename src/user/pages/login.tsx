@@ -1,7 +1,7 @@
 import { Eye, EyeClosed, ShieldCheck } from "lucide-react";
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
-import Logo from "@/user/components/logo";
+import Logo from "@/components/logo";
 import "@/App.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";

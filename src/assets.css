@@ -2,6 +2,7 @@
 :root {
   --void:            #280905;
   --ember:           #740a03;
+  --secondary:       #f5d0d079;
   --scarlet:         #c31100;
   --blaze:           #ce4e1b;
   --surface:         #1a0604;
@@ -25,9 +26,11 @@
   --alpha-overlay:              #00000033;
   --alpha-ash-alt:              #f5e6e388;
 
+
   --gradient-hero:         linear-gradient(135deg, #280905 0%, #740a03 45%, #c31100 75%, #ce4e1b 100%);
   --gradient-btn:          linear-gradient(135deg, #c31100, #ce4e1b);
   --gradient-btn-alt:      linear-gradient(90deg,  #c31100, #ce4e1b);
+  --gradient-primary:      linear-gradient(135deg, #740a03, #c31100, #ce4e1b);
   --gradient-card:         linear-gradient(160deg, #1a0604 0%, #2e0a07 100%);
   --gradient-card-alt:     linear-gradient(180deg, #280905, #740a03);
   --gradient-glow:         radial-gradient(ellipse at 30% 50%, #c31100, #280905);
@@ -68,7 +71,8 @@
 .bg-gradient-glow         { background: var(--gradient-glow) !important; }
 .bg-gradient-glow-overlay { background: var(--gradient-glow-overlay) !important; }
 .bg-gradient-pulse        { background: var(--gradient-pulse) !important; }
-.bg-gradient-body        { background: var(--gradient-bg) !important; }
+.bg-gradient-body         { background: var(--gradient-bg) !important; }
+.bg-gradient-primary      { background: var(--gradient-primary) !important; }
 
 
 /* ══════════════════════════════════════════════
@@ -81,10 +85,20 @@
 .text-ash     { color: var(--ash) !important; }
 .text-muted   { color: var(--muted) !important; }
 .text-gradient {
-  background: var(--gradient-btn);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .active {background: var(--scarlet); border-radius: 10px;}
+
+.features::before{
+   content: "";
+   height: 4px;
+   width: 100%;
+   background: var(--gradient-primary);
+   position: absolute;
+   top: 0;
+   left: 0;
+}

@@ -1,6 +1,6 @@
 import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
-import Logo from "@/user/components/logo";
+import Logo from "@/components/logo";
 import { useEffect, useState } from "react";
 import { SignUpTypes } from "@/utils/types";
 import { alertBox } from "@/utils/alert";

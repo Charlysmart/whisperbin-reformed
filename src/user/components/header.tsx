@@ -1,5 +1,5 @@
 import { User2, ChevronDown, Link, LogOut } from "lucide-react";
-import Logo from "./logo";
+import Logo from "../../components/logo";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/button";
 import user from "@/assets/image/user.png";
