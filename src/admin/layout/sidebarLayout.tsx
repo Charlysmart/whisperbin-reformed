@@ -1,10 +1,10 @@
 import SidebarProvider from "@/context/sideBarContext";
-import Header from "@/components/header"
-import Sidebar from "@/user/components/sidebar";
+import Header from "@/components/header";
 import { Outlet } from "react-router-dom";
 import MSidebarProvider from "@/context/mobileSideBarContext";
+import Sidebar from "../component/sidebar";
 
-const SidebarLayout = () => {
+const AdminSidebarLayout = () => {
     return (
         <SidebarProvider>
             <MSidebarProvider>
@@ -20,4 +20,4 @@ const SidebarLayout = () => {
     );
 }
 
-export default SidebarLayout;
+export default AdminSidebarLayout;

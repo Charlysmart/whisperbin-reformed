@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const Inbox = lazy(() => import("@/user/pages/inbox"));
-const Login = lazy(() => import("@/user/pages/login"));
+const Login = lazy(() => import("@/login"));
 const Chat = lazy(() => import("@/user/pages/chat"));
 const UserProfile = lazy(() => import("@/user/pages/userProfile"));
 const SendMessage = lazy(() => import("@/user/pages/sendMessage"));
@@ -13,7 +13,7 @@ const CreateRoom = lazy(() => import("@/user/pages/create_room"));
 const JoinRoom = lazy(() => import("@/user/pages/join_room"));
 const Whisperroom = lazy(() => import("@/user/pages/whisperroom"));
 const NotFound = lazy(() => import("@/components/not_found"));
-const AdminDashboard = lazy(() => import("@/admin/dashboard"));
+const AdminDashboard = lazy(() => import("@/admin/pages/dashboard"));
 const Home = lazy(() => import("@/home"));
 import SidebarLayout from "@/user/layout/sidebarLayout";
 import { GradientProvider } from "@/user/components/gradient";
@@ -21,6 +21,9 @@ import PreloaderProvider from "@/context/loaderContext";
 import ServerCheck from "./components/serverGate";
 import UserAuthentication from "./protected_routes/user_auth";
 import Preloader from "./components/preloader";
+import AdminRegister from "./admin/pages/register";
+import AdminSidebarLayout from "./admin/layout/sidebarLayout";
+import Users from "./admin/pages/users";
 
 
 function App() {
@@ -33,6 +36,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/admin_register" element={<AdminRegister />} />
             <Route path="/verify" element={<Verify />} />
             <Route path="*" element={<NotFound />} />
             <Route element={<ServerCheck />} >
@@ -50,7 +54,11 @@ function App() {
                 </Route>
               </Route>
             </Route>
-            <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route element={<AdminSidebarLayout />} >
+              <Route path="/ad_create_room"  element={<CreateRoom />} />
+              <Route path="/users"  element={<Users />} />
+              <Route path="/dashboard" element={<AdminDashboard />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>
