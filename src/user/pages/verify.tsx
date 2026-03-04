@@ -23,7 +23,7 @@ const Verify = () => {
         setLoading(true);
 
         postData({url: `/auth/verify_email?token=${otpValue}`, onSuccess: (response) => {
-            alertBox({message: response.data.message, success: true, top: "0", onClose: () => navigate("../")});
+            alertBox({message: response.data.message, success: true, top: "0", onClose: () => navigate("../anonymous_mssages")});
         }, onError: (error) => {
             if (error.response) {
                 if (error.response.status === 422) {
@@ -107,6 +107,7 @@ const Verify = () => {
     const resend_verification = () => {
         getData({url: "/auth/resend_verification", navigate, onSuccess: (response) => {
             alertBox({ message: response.data.message, success: true, top: "0"});
+            setTimeLeft(300);
         }, onError: (error) => {
             if (error.response) {
                 if (error.response.status === 422) {

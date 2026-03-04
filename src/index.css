@@ -34,6 +34,7 @@
     --color-alpha-divider:              #ffffff08;
     --color-alpha-overlay:              #00000033;
     --color-alpha-ash-alt:              #f5e6e388;
+    --color-faded-white:                #c551510e;
 }
 
 @layer utility {

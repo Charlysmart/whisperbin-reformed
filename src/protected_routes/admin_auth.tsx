@@ -1,11 +1,12 @@
 import { refreshToken } from "@/api/refresh_token";
 import Forbidden from "@/components/forbidden";
 import { usePreloader } from "@/context/loaderContext";
-import axiosClient from "@/utils/axios";
+import axiosClient from "@/utils/axios"
+import { log } from "console";
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const UserAuthentication = () => {
+const AdminAuthentication = () => {
     const [loggedIn, setLoggedIn] = useState<boolean | 403 | null>(null);
     const { startLoading, stopLoading } = usePreloader();
     const path = useLocation().pathname;
@@ -16,7 +17,7 @@ const UserAuthentication = () => {
             startLoading();
             let url;
             try {
-                url = await axiosClient.get("/pages/general?role=user");
+                url = await axiosClient.get("/pages/general?role=admin");
                 setLoggedIn(true);
             }
             catch (error) {
@@ -41,7 +42,7 @@ const UserAuthentication = () => {
                     navigate("../verify", {replace: true, state: {"path" : path}});
                 }
                 else if (error.response?.data?.detail === "You do not have access to this page") {
-                    setLoggedIn(403)                    
+                    setLoggedIn(403);                    
                 }
                 else {
                     setLoggedIn(false);
@@ -68,4 +69,4 @@ const UserAuthentication = () => {
     return <Outlet />
 }
 
-export default UserAuthentication;
+export default AdminAuthentication;

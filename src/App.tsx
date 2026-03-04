@@ -24,6 +24,7 @@ import Preloader from "./components/preloader";
 import AdminRegister from "./admin/pages/register";
 import AdminSidebarLayout from "./admin/layout/sidebarLayout";
 import Users from "./admin/pages/users";
+import Forbidden from "./components/forbidden";
 
 
 function App() {
@@ -53,11 +54,11 @@ function App() {
                   <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
                 </Route>
               </Route>
-            </Route>
-            <Route element={<AdminSidebarLayout />} >
-              <Route path="/ad_create_room"  element={<CreateRoom />} />
-              <Route path="/users"  element={<Users />} />
-              <Route path="/dashboard" element={<AdminDashboard />} />
+              <Route element={<AdminSidebarLayout />} >
+                <Route path="/ad_create_room"  element={<CreateRoom />} />
+                <Route path="/users"  element={<Users />} />
+                <Route path="/dashboard" element={<AdminDashboard />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

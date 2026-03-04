@@ -17,7 +17,6 @@ const ServerCheck = () => {
         setOk(true);
       } catch (error) {
         setOk(false);
-        console.log(error);
       } finally {
         stopLoading();
       }

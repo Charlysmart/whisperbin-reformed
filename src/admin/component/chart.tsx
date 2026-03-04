@@ -29,7 +29,7 @@ const MessagesChart = ({ data, type, label }) => {
   // 1️⃣ Prepare chart data
   const chartData = {
     // X-axis labels
-    labels: data.map((item) => item.date), 
+    labels: data.map((item) => item.day), 
     // Datasets array (can have multiple lines)
     datasets: [
       {
@@ -53,11 +53,11 @@ const MessagesChart = ({ data, type, label }) => {
     plugins: {
       legend: {
         display: true,          // Show legend
-        position: "top",
+        position: "top" as const,
       },
       tooltip: {
         enabled: true,          // Enable tooltips
-        mode: "index",           // Show all points at same X on hover
+        mode: "index" as const,           // Show all points at same X on hover
       },
     },
     scales: {
@@ -78,7 +78,9 @@ const MessagesChart = ({ data, type, label }) => {
   // 3️⃣ Render chart inside a fixed-height container
   return (
     <>
-      {type === "bar" ? <Bar data={chartData} /> : type === "line" && <Line data={chartData} />}
+    <div style={{ height: "300px", width: "100%" }}>
+      {type === "bar" ? <Bar data={chartData} options={options} /> : type === "line" && <Line data={chartData} options={options} />}
+    </div>
     </>
   );
 };

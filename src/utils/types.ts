@@ -82,6 +82,13 @@ export type AlertType = {
     onClose? : () => void
 }
 
+export type UserType = {
+    username: string,
+    anonymous_id: string,
+    verified: boolean,
+    joined_date: string
+}
+
 export type AnonymousDataType = {
     message_thread : string,
     content : string,
