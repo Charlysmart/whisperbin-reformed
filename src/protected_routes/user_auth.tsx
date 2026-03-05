@@ -16,7 +16,7 @@ const UserAuthentication = () => {
             startLoading();
             let url;
             try {
-                url = await axiosClient.get("/pages/general?role=user");
+                url = await axiosClient.get("/pages/general");
                 setLoggedIn(true);
             }
             catch (error) {
@@ -40,9 +40,6 @@ const UserAuthentication = () => {
                     console.log("hello")
                     navigate("../verify", {replace: true, state: {"path" : path}});
                 }
-                else if (error.response?.data?.detail === "You do not have access to this page") {
-                    setLoggedIn(403)                    
-                }
                 else {
                     setLoggedIn(false);
                 }
@@ -56,10 +53,6 @@ const UserAuthentication = () => {
 
     if (loggedIn === null) {
         return null;
-    }
-
-    if (loggedIn === 403) {
-        return <Forbidden />
     }
 
     if (loggedIn === false) {

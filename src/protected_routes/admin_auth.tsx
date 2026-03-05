@@ -17,7 +17,7 @@ const AdminAuthentication = () => {
             startLoading();
             let url;
             try {
-                url = await axiosClient.get("/pages/general?role=admin");
+                url = await axiosClient.get("/pages/protected_route");
                 setLoggedIn(true);
             }
             catch (error) {

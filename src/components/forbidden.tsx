@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Forbidden = () => {
     const navigate = useNavigate();
     return (
-        <div className="w-full h-screen fixed bg-void flex justify-center items-center font-inter">
+        <div className="w-full h-screen absolute top-0 left-0 bg-void flex justify-center items-center font-inter">
             <div className="lg:w-[50%] md:w-[80%] w-[90%] md:h-fit h-[90%] overflow-auto shadow-2xl shadow-alpha-primary-glow p-10 bg-surface flex flex-col items-center gap-5 text-ash rounded-2xl">
                 <span className="border flex items-center bg-faded-white font-semibold border-scarlet rounded-full px-10 py-1 text-scarlet md:text-[13px] text-[10px]">Security Protocol: Active</span>
                 <div className="border p-3 flex justify-center items-center border-alpha-ghost-border bg-surface rounded-lg">

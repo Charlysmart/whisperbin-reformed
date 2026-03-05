@@ -22,9 +22,7 @@ import ServerCheck from "./components/serverGate";
 import UserAuthentication from "./protected_routes/user_auth";
 import Preloader from "./components/preloader";
 import AdminRegister from "./admin/pages/register";
-import AdminSidebarLayout from "./admin/layout/sidebarLayout";
 import Users from "./admin/pages/users";
-import Forbidden from "./components/forbidden";
 import AdminAuthentication from "./protected_routes/admin_auth";
 
 
@@ -53,13 +51,10 @@ function App() {
                   <Route path="/create_room"  element={<CreateRoom />} />
                   <Route path="/join_room"  element={<JoinRoom />} />
                   <Route path="whisperroom/:room_thread" element={<Whisperroom />} />
-                </Route>
-              </Route>
-              <Route element={<AdminAuthentication />}>
-                <Route element={<AdminSidebarLayout />} >
-                  <Route path="/ad_create_room"  element={<CreateRoom />} />
-                  <Route path="/users"  element={<Users />} />
-                  <Route path="/dashboard" element={<AdminDashboard />} />
+                  <Route element={<AdminAuthentication />}>
+                    <Route path="/users"  element={<Users />} />
+                    <Route path="/dashboard" element={<AdminDashboard />} />
+                  </Route>
                 </Route>
               </Route>
             </Route>

@@ -1,10 +1,11 @@
-import { ActivityIcon, Bell, ChevronLeft, ChevronRight, DoorOpen, GhostIcon, Inbox, LogIn, PlusCircle, Send, User } from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight, DoorOpen, GhostIcon, Home, Inbox, LogIn, PlusCircle, Send, User, User2 } from "lucide-react";
 import { useSidebar } from "@/context/sideBarContext";
 import { useMSidebar } from "@/context/mobileSideBarContext";
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "@/App.css"
 import "@/assets.css"
+import { useUser } from "@/context/data";
 
 const Sidebar = () => {
     const {sideBar, toggleSidebar} = useSidebar();
@@ -15,6 +16,8 @@ const Sidebar = () => {
 
     const sideBarUse = isDesktop ? sideBar : mSideBar;
     const toggle = isDesktop ? toggleSidebar : toggleMSidebar;
+
+    const userDetail = useUser();
 
 
     useEffect(() => {
@@ -33,9 +36,10 @@ const Sidebar = () => {
                         </button>
                     </div>
                     <div className="space-y-4 **:flex **:items-center **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-ember *:hover:rounded-md">
+                        <NavLink to="/anonymous_messages"><li className={path === "anonymous_messages" && "active"}><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
+                        {userDetail.role === "admin" && <NavLink to="/dashboard"><li className={path === "dashboard" && "active"}><Home size={20} /> <span className="text-[16px]">Dashboard</span></li></NavLink>}
                         <NavLink to="/inbox"><li className={path === "inbox" && "active"}><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
                         <NavLink to="/send_message"><li className={path === "send_message" && "active"}><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
-                        <NavLink to="/anonymous_messages"><li className={path === "anonymous_messages" && "active"}><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
                         <NavLink to="/user_profile"><li className={path === "user_profile" && "active"}><User size={20} /> <span className="text-[16px]">User Profile</span></li></NavLink>
                         <NavLink to="/notifications"><li className={path === "notifications" && "active"}><Bell size={20} /> <span className="text-[16px]">Notifications</span></li></NavLink>
                         <NavLink to="/create_room"><li className={path === "create_room" && "active"}><PlusCircle size={20} /> <span className="text-[16px]">Create Room</span></li></NavLink>
@@ -56,6 +60,7 @@ const Sidebar = () => {
                         <NavLink to="/notifications"><li className={path === "notifications" && "active"}><Bell size={20} /></li></NavLink>
                         <NavLink to="/create_room"><li className={path === "create_room" && "active"}><PlusCircle size={20} /></li></NavLink>
                         <NavLink to="/join_room"><li className={path === "join_room" && "active"}><DoorOpen size={20} /></li></NavLink>
+                        {userDetail.role === "admin" && <NavLink to="/users"><li className={path === "users" && "active"}><User2 size={20} /></li></NavLink>}
                     </div>
                 </div>}
             </div>        

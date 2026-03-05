@@ -3,10 +3,10 @@ import Logo from "./logo";
 import { useNavigate } from "react-router-dom";
 import Button from "./button";
 import user from "@/assets/image/user.png";
-import { getData } from "@/api/get_request";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { deleteData } from "@/api/delete_request";
 import { alertBox } from "@/utils/alert";
+import { useUser } from "@/context/data";
 
 const ProfileModal = ({ username, site_username, close, logout }) => {
     const navigate = useNavigate()
@@ -32,12 +32,10 @@ const ProfileModal = ({ username, site_username, close, logout }) => {
     )
 }
 const Header = () => {
-    const [data, setData] = useState<{username: string, whisper_username: string}>({
-        username : "",
-        whisper_username : ""
-    });
     const [modal, openModal] = useState<boolean>(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const userDetail = useUser();
 
     const logout = () => {
         deleteData({
@@ -47,13 +45,6 @@ const Header = () => {
         })
     }
 
-    useEffect(() => {
-        getData({
-            url: "pages/user",
-            onSuccess: (response) => setData(response.data),
-            onError: (error) => console.log(error.response.data.detail)            
-        });
-    }, [])
     return (
         <header className="md:px-10 px-5 w-full h-15 bg-surface">
             <div className="flex justify-between h-full items-center">
@@ -67,7 +58,7 @@ const Header = () => {
                     <ChevronDown onClick={() => openModal(!modal)} className="text-ash" />
                 </div>
             </div>
-            {modal && <ProfileModal username={data.username} site_username={data.whisper_username} close={() => openModal(false)} logout={logout} />}
+            {modal && <ProfileModal username={userDetail.username} site_username={userDetail.custom_username} close={() => openModal(false)} logout={logout} />}
         </header>
     );
 }

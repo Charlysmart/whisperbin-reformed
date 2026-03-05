@@ -14,7 +14,7 @@ const Verify = () => {
     const inputsRef = useRef<HTMLInputElement[]>([]);
     const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
     const [loading, setLoading] = useState<boolean>(false);
-    const [timeLeft, setTimeLeft] = useState(300);
+    const [timeLeft, setTimeLeft] = useState(600);
 
     const otpValue = otp.join("");
 
@@ -23,7 +23,7 @@ const Verify = () => {
         setLoading(true);
 
         postData({url: `/auth/verify_email?token=${otpValue}`, onSuccess: (response) => {
-            alertBox({message: response.data.message, success: true, top: "0", onClose: () => navigate("../anonymous_mssages")});
+            alertBox({message: response.data.message, success: true, top: "0", onClose: () => navigate("../anonymous_messages")});
         }, onError: (error) => {
             if (error.response) {
                 if (error.response.status === 422) {
