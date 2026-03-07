@@ -84,17 +84,17 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </section>
-            <section className="flex flex-col w-full items-center justify-center shadow-2xl rounded-2xl p-5">
+            {(stat?.new_signups?.length > 0 || stat?.new_messages?.length > 0) && <section className="flex flex-col w-full items-center justify-center shadow-2xl rounded-2xl p-5">
                 <h1 className="text-ember font-bold text-[30px]">Statistics Chart</h1>
                 <div className="flex lg:flex-row flex-col gap-5 justify-between w-full">
-                    <div className="lg:w-[48%] w-full">
+                    {stat?.new_signups?.length > 0 && <div className="lg:w-[48%] w-full">
                         <MessagesChart key="signup-chart" data={stat.new_signups} type="bar" label="New Signups" />
-                    </div>
-                    <div className="lg:w-[48%] w-full">
+                    </div>}
+                    {stat?.new_messages?.length > 0 && <div className="lg:w-[48%] w-full">
                         <MessagesChart key="message-chart" data={stat.new_messages} type="line" label="Anonymous Messages" />
-                    </div>
+                    </div>}
                 </div>
-            </section>
+            </section>}
 
             <section className="shadow shadow-alpha-primary-shadow p-5">
                 <h2 className="text-center font-bold text-[30px] text-ember">Recent Signups</h2>
