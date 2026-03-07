@@ -16,8 +16,9 @@ const Home = () => {
                     <Logo />
                 </div>
                 <div className="flex gap-5">
-                    <Button label="Login" type="button" extraClass="p-2 md:block hidden" onclick={() => navigate("../login")} />
-                    <Button label="Get Started" type="button" extraClass="py-2 px-3 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033]"  onclick={() => navigate("../register")} />
+                    <Button label="Login" type="button" extraClass="p-2 md:block hidden rounded-xl transition duration-700 hover:shadow-lg" onclick={() => navigate("../login")} />
+                    <Button label="Get Started" type="button" extraClass="py-2 px-3 md:block hidden transition-all duration-700 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033] hover:transform hover:scale-[1.03]" onclick={() => navigate("../register")} />
+                    <Button label="Get Started" type="button" extraClass="py-2 px-3 md:hidden transition-all duration-700 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033] hover:transform hover:scale-[1.03]" onclick={() => navigate("../login")} />
                 </div>
             </header>
             <section className="flex md:flex-row flex-col md:gap-0 gap-10 justify-between items-center w-full h-fit p-5">
@@ -34,7 +35,7 @@ const Home = () => {
                             <p>WhisperBin is the secure platform to send private messages and join real-time temporary chat rooms without ever revealing your identity. No traces left behind.</p>
                         </div>
                         <div className="flex gap-5">
-                            <Button label="Start Messaging" type="button" extraClass="py-2 px-3 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033]" />
+                            <Button label="Start Messaging" type="button" extraClass="py-2 px-3 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033] transition duration-1000 hover:transform hover:rotate-360" onclick={() => navigate("../send_message")} />
                         </div>
                     </div>
                 </div>
@@ -103,8 +104,8 @@ const Home = () => {
                     <h2 className="font-bold lg:text-[40px] md:text-[35px] text-[20px]">Ready to step into the shadows?</h2>
                     <p className="md:text-[14px] text-[12px] text-gray-400">Join thousands of users who are already communicating securely and anonymously on WhisperBin. Your secrets, identity, and freedom are safe with us.</p>
                     <div className="flex gap-5 justify-center">
-                        <Button label="Create Anonymous Account" type="button" extraClass="py-2 px-3 bg-gradient-btn-alt text-ash rounded-md shadow-lg shadow-[#c3110033] text-[12px]" />
-                        <Button label="Login" type="button" extraClass="py-2 px-5 backdrop-blur-2xl border border-alpha-ghost-border bg-[#ffffff1f] text-[12px]" />
+                        <Button label="Create Anonymous Account" type="button" extraClass="py-2 px-3 bg-gradient-btn-alt text-ash rounded-md shadow-lg shadow-[#c3110033] transition duration-700 hover:transform hover:-translate-y-2 text-[12px]" onclick={() => navigate("../register")} />
+                        <Button label="Login" type="button" extraClass="py-2 px-5 backdrop-blur-2xl border border-alpha-ghost-border bg-[#ffffff1f] transition duration-700 hover:transform hover:-translate-y-2 text-[12px]" onclick={() => navigate("../login")} />
                     </div>
                     <p className="flex justify-center items-center gap-2 text-gray-400 md:text-[14px] text-[12px]"><ShieldCheck size={14} /> All personal details are kept secret.</p>
                 </div>

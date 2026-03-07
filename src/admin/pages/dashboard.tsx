@@ -1,6 +1,5 @@
 import { GhostIcon, MessageSquareIcon, User, UserPlus } from "lucide-react";
 import MessagesChart from "../component/chart";
-import { dashboardData } from "../utils/dataset";
 import { useEffect, useState } from "react";
 import { getData } from "@/api/get_request";
 import { timeFormat } from "@/utils/time";
