@@ -12,7 +12,7 @@ const SidebarLayout = () => {
                 <MSidebarProvider>
                     <main className="flex w-full">
                         <Sidebar />
-                        <div className="flex-1 w-[87%]">
+                        <div className="flex-1 w-[80%]">
                             <Header />
                             <Outlet />
                         </div>

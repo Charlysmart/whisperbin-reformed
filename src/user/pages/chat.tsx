@@ -11,15 +11,13 @@ import { connectSocket } from "@/utils/socket";
 import ReplyModal from "@/user/components/reply";
 import { handleRightClick } from "@/utils/contextMenu";
 
-type SocketMessage =
-  | { type: "message"; data: { id: string; message: string; image?: string; message_thread: string; sender: boolean; read: boolean } }
-  | { type: "read"; data: { message_id: string } }
 const Chat = () => {
     const navigate = useNavigate();
     const { thread } = useParams();
     const [more, setMore] = useState<boolean>(false);
     const imagePicker = useRef<HTMLInputElement | null>(null);
     const [data, setData] = useState<ChatType>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [block, setBlocked] = useState<{blocked : boolean, blocked_by: boolean | null}>({
         blocked : null,
         blocked_by : null
@@ -139,33 +137,48 @@ const Chat = () => {
     }
 
     async function sendMessage() {
-        let imageName: string | null = null;
-
-        if (image) {
-            try {
-                imageName = await sendImage();
-                if (!imageName) return
-            } catch {
-                return; // stop if upload fails
-            }
+        if (!formData.message.trim() && !image) {
+            alertBox({ message: "Can't send empty message", success: false, top: "0" });
+            return
         }
 
-        const payload = {
-            message: formData.message,
-            image: imageName,
-            message_thread: formData.message_thread,
-            reply_to: formData.reply_id
-        };        
-              
-        await socketRef.current?.send({
-            type: "message",
-            data: payload
-        });
-        setFormData((prev) => ({...prev, message: "", image: null, reply_id: null}));
-        setReplyModal((prev) => ({...prev, reply_content: ""})) 
-        setImage(null);
-        setTimeout(() => scrollToBottom(), 50);
+        let imageName: string | null = null;
+
+        try {
+            setLoading(true);
+            if (image) {
+                try {
+                    imageName = await sendImage();
+                    if (!imageName) return
+                } catch {
+                    return; // stop if upload fails
+                }
+            }
+    
+            const payload = {
+                message: formData.message,
+                image: imageName,
+                message_thread: formData.message_thread,
+                reply_to: formData.reply_id
+            };        
+                  
+            await socketRef.current?.send({
+                type: "message",
+                data: payload
+            });
+            setFormData((prev) => ({...prev, message: "", image: null, reply_id: null}));
+            setReplyModal((prev) => ({...prev, reply_content: ""})) 
+            setImage(null);
+            setTimeout(() => scrollToBottom(), 50);
+        }            
+        catch (error) {
+            return error;
+        }
+        finally {
+            setLoading(false);
+        }
     }
+
 
     const markMessagesAsRead = () => {
         data.forEach(msg => {
@@ -341,9 +354,15 @@ const Chat = () => {
                                     <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
                                 </div>
                                 <textarea name="message" id="message" placeholder="Write an anonymous message..." className="h-full max-h-20 border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md resize-none p-2 outline-0 no-scrollbar" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                                <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                                    <SendIcon size={18} className="text-white" /> 
-                                    <span className="md:block hidden">Send</span>
+                                <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" disabled={loading ? true : false} onClick={sendMessage}>
+                                    {!loading ?
+                                        <>
+                                            <SendIcon size={18} className="text-white" /> 
+                                            <span className="md:block hidden">Send</span>
+                                        </>
+                                    :
+                                        <span className="spinner"></span>
+                                    }
                                 </button>
                             </div>
                         </div>

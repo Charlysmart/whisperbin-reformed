@@ -145,7 +145,6 @@ const Verify = () => {
                     <div className="md:mb-4 text-center flex flex-col gap-3">
                         <h1 className="md:text-[30px] text-[20px] font-bold text-gray-800">Verify Your Account</h1>
                         <p className="md:text-[18px] text-gray-600 text-[16px]">We've sent a 6-digit verification code to your email</p>
-                        <p className="text-blue-500 md:text-[16px] text-[15px]">example@mail.com</p>
                     </div>
                     <form className="flex flex-col md:gap-10 gap-5" onSubmit={handleVerification}>
                         <div className="flex justify-between mt-10 md:px-0 px-1" onPaste={handlePaste}>

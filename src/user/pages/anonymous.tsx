@@ -158,7 +158,17 @@ const AnonymousChat = () => {
             </div>
             <div className="space-y-5 w-full">
                 {info.data.length !== 0 ? info.data.map(item => (
-                    <AnonymousBlock key={item.message_thread} read={item.read} content={item.content} time={timeFormat(item.sent_at)} replied={item.replied} reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} task={() => handleModal(item.content, item.message_thread, item.read)} be_replied = {item.be_replied} />
+                    <AnonymousBlock key={item.message_thread} 
+                        read={item.read} 
+                        content={item.content} 
+                        time={timeFormat(item.sent_at)} 
+                        replied={item.replied} 
+                        reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} 
+                        task={() => {
+                            handleModal(item.content, item.message_thread, item.read);
+                            !item.read && markFunction(item.message_thread, "read")
+                        }} 
+                        be_replied = {item.be_replied} />
                 )) : <p>No Data!</p>}
                 {meta.pages > 0 && 
                     <div className="flex justify-center items-center-safe gap-3">

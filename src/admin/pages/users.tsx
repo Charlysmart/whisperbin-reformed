@@ -1,3 +1,4 @@
+import { deleteData } from "@/api/delete_request"
 import { getData } from "@/api/get_request"
 import { usePreloader } from "@/context/loaderContext"
 import { alertBox } from "@/utils/alert"
@@ -71,7 +72,7 @@ const Users = () => {
                     </thead>
                     <tbody>
                         {data.users.length > 0 ? data.users.map((user, index) => (
-                            <tr className="not-last:border-b border-alpha-secondary-border mb-5 h-12 hover:bg-amber-50" key={user.anonymous_id}>
+                            <tr className="not-last:border-b border-alpha-secondary-border mb-5 h-12 hover:bg-amber-50" key={user.anonymous_id} id={user.anonymous_id}>
                                 <td>{index + 1}</td>
                                 <td>{user.username}</td>
                                 <td className="md:table-cell hidden">{user.anonymous_id}</td>
@@ -86,7 +87,7 @@ const Users = () => {
                 </table>
             </section>
         </div>
-    )
+    );
 }
 
 export default Users

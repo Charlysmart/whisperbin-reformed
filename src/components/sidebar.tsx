@@ -28,7 +28,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className={sideBarUse ? "lg:w-[15%] md:w-[30%] w-[60%] md:relative fixed" : "lg:w-[5%] w-[12%]"}>
+            <div className={sideBarUse ? "lg:w-[20%] md:w-[30%] w-[60%] md:relative fixed" : "lg:w-[5%] w-[12%]"}>
                 {sideBarUse && <div className="border-r border-ember bg-surface z-10000 w-full h-screen px-2 cursor-pointer text-ash">
                     <div className="h-15 flex justify-end items-center">
                         <button className="px-3" onClick={() => toggle(false)}>

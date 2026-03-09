@@ -10,8 +10,8 @@ export const timeFormat = (time: string | Date): string => {
   if (seconds < 5) return "just now";
 
   const units: { limit: number; unit: string }[] = [
-    { limit: 60, unit: "second" },
-    { limit: 3600, unit: "minute" },
+    { limit: 60, unit: "sec" },
+    { limit: 3600, unit: "min" },
     { limit: 86400, unit: "hour" },
     { limit: Infinity, unit: "day" },
   ];

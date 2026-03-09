@@ -102,7 +102,7 @@ const Inbox = () => {
             <div>
                 <b className="text-[30px]">Inbox</b>
             </div>
-            <div className="w-full flex flex-wrap gap-4">
+            <div className="w-[90%] flex flex-wrap gap-4">
                 <div className="flex lg:w-[85%] w-full h-11 border border-alpha-input-border text-ash overflow-hidden rounded-md focus:border-scarlet" tabIndex={0} onClick={focusDiv} ref={divFocus}>
                     <button className="h-full w-fit p-3">
                         <Search size={16} />

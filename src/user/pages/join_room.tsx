@@ -33,10 +33,7 @@ const JoinRoom = () => {
             data : {thread : formData},
             navigate,
             onSuccess : (response) => {
-                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(`../whisperroom/${formData}`) })
-                setTimeout(() => {
-                    navigate(`../whisperroom/${formData}`);
-                }, 5100)
+                alertBox({ message: response.data.message, success: true, top: "0", onClose: () => navigate(`../whisperroom/${formData}`) });
             },
             onError : (error) => alertBox({ message: error.response.data.detail, success: false, top: "0" }),
             finallyCallback: () => setLoading(false)

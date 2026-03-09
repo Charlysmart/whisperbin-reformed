@@ -7,13 +7,13 @@ const InboxChat = ({ user, time, content, read, task, image } : InboxChatType) =
             <div className="lg:w-[5%] h-fit md:p-3 p-1 w-[15%] md:block rounded-full bg-gradient-card-alt">
                 <User2Icon className="w-full h-full text-muted" />                
             </div>
-            <div className="px-2 lg:w-[95%] w-[85%]">
+            <div className="px-2 lg:w-[95%] w-[85%] whitespace-nowrap overflow-hidden truncate">
                 <div className="flex flex-wrap w-full justify-between items-start">
-                    <div className="space-y-1">
-                        <h2 className="md:text-[16px] text-[15px] text-primary overflow-hidden whitespace-nowrap" style={{textOverflow: "ellipsis"}}>{user}</h2>
+                    <div className="space-y-1 min-w-0 flex-1">
+                        <h2 className="md:text-[16px] text-[15px] text-primary whitespace-nowrap overflow-hidden truncate">{user}</h2>
                         <div className="flex items-center">
                             {!image && <Image size={16} />}
-                            <p className="md:text-[14px] text-[15px] text-muted truncate">{content}</p>
+                            <p className="flex-1 md:text-[14px] text-[15px] text-muted truncate">{content}</p>
                         </div>
                     </div>
                     <div className="space-y-1">
