@@ -26,7 +26,6 @@ import Preloader from "@/components/preloader";
 import AdminRegister from "@/admin/pages/register";
 import Users from "@/admin/pages/users";
 import AdminAuthentication from "@/protected_routes/admin_auth";
-import ResetLinkModal from "./components/invalid_link_modal";
 
 
 function App() {
@@ -43,7 +42,6 @@ function App() {
             <Route path="/verify" element={<Verify />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
             <Route path="/reset_password" element={<ResetPassword />} />
-            <Route path="/reset" element={<ResetLinkModal />} />
             <Route path="*" element={<NotFound />} />
             <Route element={<ServerCheck />} >
               <Route element={<UserAuthentication />}>
