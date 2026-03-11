@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const Inbox = lazy(() => import("@/user/pages/inbox"));
-const Login = lazy(() => import("@/login"));
+const Login = lazy(() => import("@/pages/login"));
 const Chat = lazy(() => import("@/user/pages/chat"));
 const UserProfile = lazy(() => import("@/user/pages/userProfile"));
 const SendMessage = lazy(() => import("@/user/pages/sendMessage"));
@@ -14,16 +14,19 @@ const JoinRoom = lazy(() => import("@/user/pages/join_room"));
 const Whisperroom = lazy(() => import("@/user/pages/whisperroom"));
 const NotFound = lazy(() => import("@/components/not_found"));
 const AdminDashboard = lazy(() => import("@/admin/pages/dashboard"));
+const ForgotPassword = lazy(() => import("@/pages/forgot_password"))
+const ResetPassword = lazy(() => import("@/pages/reset_password"))
 const Home = lazy(() => import("@/home"));
 import SidebarLayout from "@/user/layout/sidebarLayout";
 import { GradientProvider } from "@/user/components/gradient";
 import PreloaderProvider from "@/context/loaderContext";
-import ServerCheck from "./components/serverGate";
-import UserAuthentication from "./protected_routes/user_auth";
-import Preloader from "./components/preloader";
-import AdminRegister from "./admin/pages/register";
-import Users from "./admin/pages/users";
-import AdminAuthentication from "./protected_routes/admin_auth";
+import ServerCheck from "@/components/serverGate";
+import UserAuthentication from "@/protected_routes/user_auth";
+import Preloader from "@/components/preloader";
+import AdminRegister from "@/admin/pages/register";
+import Users from "@/admin/pages/users";
+import AdminAuthentication from "@/protected_routes/admin_auth";
+import ResetLinkModal from "./components/invalid_link_modal";
 
 
 function App() {
@@ -38,6 +41,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin_register" element={<AdminRegister />} />
             <Route path="/verify" element={<Verify />} />
+            <Route path="/forgot_password" element={<ForgotPassword />} />
+            <Route path="/reset_password" element={<ResetPassword />} />
+            <Route path="/reset" element={<ResetLinkModal />} />
             <Route path="*" element={<NotFound />} />
             <Route element={<ServerCheck />} >
               <Route element={<UserAuthentication />}>

@@ -65,7 +65,7 @@ const Login = () => {
                         </div>
                     </div>
                     <div className=" mb-4 text-center flex flex-col gap-3">
-                        <p className="md:text-[30px] text-[20px] font-bold text-ash">Login to AnonyText</p>
+                        <p className="md:text-[30px] text-[20px] font-bold text-ash">Login to WhisperBin</p>
                         <p className="text-[16px] text-muted">Securely access your anonymous messaging platform.</p>
                     </div>
 
