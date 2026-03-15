@@ -34,8 +34,8 @@ function App() {
       <Suspense fallback={<Preloader />} >
         <GradientProvider />
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route element={<PreloaderProvider />}>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin_register" element={<AdminRegister />} />
