@@ -35,12 +35,12 @@ const Home = () => {
                             <p>WhisperBin is the secure platform to send private messages and join real-time temporary chat rooms without ever revealing your identity. No traces left behind.</p>
                         </div>
                         <div className="flex gap-5">
-                            <Button label="Start Messaging" type="button" extraClass="py-2 px-3 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033] transition duration-1000 hover:transform hover:rotate-360" onclick={() => navigate("../send_message")} />
+                            <Button label="Start Messaging" type="button" extraClass="py-2 px-3 bg-gradient-primary text-ash rounded-xl shadow-lg shadow-[#c3110033] transition duration-1000" onclick={() => navigate("../send_message")} />
                         </div>
                     </div>
                 </div>
-                <div className="md:w-1/2 w-full md:h-100 h-fit flex justify-center items-center">
-                    <img src={chains} alt="chains" loading="lazy" className="h-fit w-[80%] transform transition duration-500 hover:scale-[1.02] rounded-2xl shadow-2xl shadow-[#c3110033]" />
+                <div className="md:w-1/2 w-full flex justify-center items-center">
+                    <img src={chains} alt="chains" loading="lazy" className="w-[80%] transform transition duration-500 hover:scale-[1.02] rounded-2xl shadow-2xl shadow-[#c3110033]" />
                 </div>
             </section>
 
@@ -91,8 +91,8 @@ const Home = () => {
                         </ul>
                     </div>
                 </div>
-                <div className="md:w-1/2 w-full md:h-100 h-fit flex justify-center items-center">
-                    <img src={affirm} alt="affirm" loading="lazy" className="h-fit w-[80%] rounded-2xl shadow-2xl shadow-[#c3110033] transform transition duration-500 hover:scale-[1.02]" />
+                <div className="md:w-1/2 w-full flex justify-center items-center">
+                    <img src={affirm} alt="affirm" loading="lazy" className="w-[80%] rounded-2xl shadow-2xl shadow-[#c3110033] transform transition duration-500 hover:scale-[1.02]" />
                 </div>
             </section>
             
