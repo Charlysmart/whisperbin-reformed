@@ -3,7 +3,7 @@ import AuthInputs from "@/components/authInputs";
 import Button from "@/components/button";
 import Logo from "@/components/logo";
 import "@/App.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
@@ -57,7 +57,7 @@ const Login = () => {
     return (
         <div className="w-full no-copy lg:block md:flex overflow-y-auto bg-gradient-body h-screen">
             <section className="flex w-full justify-center items-center py-5">
-                <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border bg-surface hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
+                <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
                     <div className="flex justify-center items-center flex-col mb-3 gap-5">
                         <Logo />
                         <div className="bg-ember p-3 text-scarlet font-bold rounded-full">
@@ -70,7 +70,7 @@ const Login = () => {
                     </div>
 
                     <form className="flex flex-col gap-5" onSubmit={signIn}>
-                        <AuthInputs label="Username" type="text" attribute="username" placeholder="Enter Your unique username" onchange={handleRegisterInput} value={formData.username} />
+                        <input type="text" name="username" id="username" placeholder="Enter Your unique username" className="w-full border text-ash border-alpha-input-border h-10 rounded-md p-2 text-[14px] focus:outline-alpha-secondary-border focus:outline-1" onChange={handleRegisterInput} value={formData.username} required />
                         <div className="flex flex-col gap-2">
                             <label htmlFor="password" className="text-[15px] font-semibold text-muted">Password</label>
                             <div className="flex gap-2 w-full border border-alpha-input-border h-10 rounded-md focus:outline-blue-400 focus:outline-1">
@@ -78,14 +78,13 @@ const Login = () => {
                                 <button type="button" className="w-[10%] flex justify-center text-muted items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
                             </div>
                         </div>
-                        <p className="text-[15px] mt-7 text-end text-blaze font-bold">Forgot password?</p>
+                        <Link to="../forgot_password"><p className="text-[15px] mt-7 text-end text-blaze font-bold">Forgot password?</p></Link>
                         <div className="mt-5 mb-5 flex flex-col gap-4">
                             <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
                         </div>
                     </form>
                     <div className="text-[14px] space-y-3">
                         <p className="text-muted">Don't have an account yet? <span className="text-blaze font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
-                        <p className="text-muted">Your privacy is our priority. Read our <span className="text-blaze font-bold">Privacy Policy.</span></p>
                     </div>
                 </div>
             </section>

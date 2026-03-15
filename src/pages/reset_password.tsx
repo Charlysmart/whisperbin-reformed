@@ -1,10 +1,12 @@
 import Button from "@/components/button";
 import Logo from "@/components/logo"
+import VerifyPreloader from "@/components/verify_preloader";
 import { ArrowLeft, Eye, EyeClosed, Info, Lock } from "lucide-react"
 
 const ResetPassword = () => {
     return (
         <div className="font-inter">
+            <VerifyPreloader />
             <section className="md:flex hidden justify-center items-center h-[60px] shadow-2xl">
                 <Logo />
             </section>
