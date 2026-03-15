@@ -61,7 +61,7 @@ const SendMessage = () => {
                     <p className="text-[16px]">Compose your anonymous message below. Your identity will remain hidden.</p>
                     <div className="flex flex-wrap gap-3 items-end justify-between">
                         <div className="w-full">
-                            <AuthInputs type="text" label="Recipient Anonymous Username" attribute="username" placeholder="e.g: secretfriend" value={formData.username} onchange={handleRegisterInput} />
+                            <AuthInputs type="text" label="Recipient Anonymous Username" attribute="username" placeholder="e.g: secretfriend" value={formData.username.toLowerCase()} onchange={handleRegisterInput} />
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">

@@ -90,7 +90,7 @@ const AnonymousChat = () => {
         patchData({url: `/pages/${url}/${thread}`, onSuccess : () => {
             if (task === "reply") navigate(`../chat/${thread}`);
             if (task === "read") {
-                setInfo(prev => ({...prev, data: prev.data.map(item => item.message_thread === thread ? {...item, replied: true} : item)}))
+                setInfo(prev => ({...prev, data: prev.data.map(item => item.message_thread === thread ? {...item, read: true} : item)}))
             }
         }, onError: (error) => {
             if (error.response) {
@@ -143,7 +143,7 @@ const AnonymousChat = () => {
                 <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>
                 <p className="md:text-[18px] text-[15px]">Messages sent to your anonymous link. Reply to start a conversation.</p>
             </div>
-            <div className="flex flex-wrap gap-3 justify-between bg-transparent border border-alpha-secondary-bg backdrop-blur-2xl p-5 rounded-2xl shadow-md">
+            <div className="flex flex-wrap gap-3 justify-between bg-transparent border border-alpha-secondary-bg  p-5 rounded-2xl shadow-md">
                 <div className="md:w-1/3 w-full flex gap-4">
                     <Button label="All Messages" buttonType={meta.filter === "all" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
                     <Button label="Unread" buttonType={meta.filter === "unread" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
