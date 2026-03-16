@@ -149,12 +149,6 @@ const AnonymousChat = () => {
                     <Button label="Unread" buttonType={meta.filter === "unread" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
                     <Button label="Replied" buttonType={meta.filter === "replied" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
                 </div>
-                <div className="flex lg:w-1/3 w-full h-11 border border-alpha-input-border bg-surface focus:border-scarlet overflow-hidden rounded-md" tabIndex={0} ref={divFocus} onClick={focusDiv}>
-                    <button className="h-full w-fit p-3">
-                        <Search size={16} />
-                    </button>
-                    <input type="search" placeholder="Search messages..." className="border-none w-full outline-none" />
-                </div>
             </div>
             <div className="space-y-5 w-full">
                 {info.data.length !== 0 ? info.data.map(item => (

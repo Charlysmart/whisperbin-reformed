@@ -1,12 +1,14 @@
 import { ArrowLeft, Lock, RefreshCcw, ShieldAlert, X } from "lucide-react"
 import Button from "./button"
+import { useNavigate } from "react-router-dom";
 
 const ResetLinkModal = () => {
+    const navigate = useNavigate();
     return (
         <div className="w-screen h-screen absolute top-0 left-0 flex justify-center items-center font-inter z-10000 backdrop-blur-sm">
             <section className="lg:w-[30%] md:w-[60%] w-[90%] md:p-10 px-5 p-1 space-y-5 border-t-7 border-scarlet shadow-2xl rounded-lg bg-white">
                 <div className="flex justify-end text-gray-700">
-                    <button><X /></button>
+                    <button onClick={() => navigate("../login")}><X /></button>
                 </div>
                 <div className="flex flex-col items-center gap-5">
                     <div className="p-5 border-5 border-white rounded-full bg-secondary text-ember">

@@ -42,9 +42,8 @@ function App() {
             <Route path="/admin_register" element={<AdminRegister />} />
             <Route path="/verify" element={<Verify />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
-            <Route path="/reset_password" element={<ResetPassword />} />
-            <Route path="/veri" element={<VerifyPreloader />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/reset_password" element={<ResetPassword />} />
             <Route element={<ServerCheck />} >
               <Route element={<UserAuthentication />}>
                 <Route element={<SidebarLayout />}>

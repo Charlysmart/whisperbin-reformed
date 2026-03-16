@@ -1,6 +1,8 @@
 import { WifiOff } from "lucide-react";
 import Button from "./button"
+import { useNavigate } from "react-router-dom";
 const ServerDown = () => {
+    const navigate = useNavigate();
     return (
         <div className="w-full h-screen flex justify-center items-center font-inter bg-void">
             <div className="lg:w-[40%] md:w-[70%] w-[95%] bg-surface shadow-2xl shadow-alpha-primary-glow rounded-2xl px-5 py-20 flex flex-col items-center gap-7">
@@ -13,7 +15,7 @@ const ServerDown = () => {
                 </div>
                 <div className="flex gap-5">
                     <Button type="button" buttonType="brand" label="Reload" extraClass="p-2" onclick={() => location.reload()} />
-                    <Button type="button" label="Go Home" extraClass="p-2 text-blaze" />
+                    <Button type="button" label="Go Home" extraClass="p-2 text-blaze" onclick={() => navigate("../")} />
                 </div>
             </div>
         </div>

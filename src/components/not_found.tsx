@@ -15,7 +15,7 @@ const NotFound = () => {
                     <p className="md:text-[18px] text-[16px] text-muted">We're sorry, but it seems the page you were looking for has vanished or never existed. Perhaps you mistyped the address or followed a broken link.</p>
                 </div>
                 <div className="flex gap-5">
-                    <Button type="button" buttonType="brand" label="Go Home" extraClass="p-2" />
+                    <Button type="button" buttonType="brand" label="Go Home" extraClass="p-2" onclick={() => navigate("../")} />
                     <Button type="button" label="Back" extraClass="p-2 text-blaze" onclick={() => navigate(-1)} />
                 </div>
             </div>
