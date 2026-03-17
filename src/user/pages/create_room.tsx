@@ -10,6 +10,7 @@ import { Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleRightClick } from "@/utils/contextMenu";
+import SEO from "@/components/seo";
 
 const CreateRoom = () => {
     const { formData, setFormData } = useFormInput<{title : string, display_admin : boolean}>({
@@ -56,35 +57,42 @@ const CreateRoom = () => {
     }, []);
 
     return (
-        <div className="bg-void no-copy flex flex-col gap-5 text-ash items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-60px)]">
-            {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
-            <div className="px-5 py-7 bg-surface shadow-xl drop-shadow-alpha-primary-shadow-hover border border-alpha-card-border rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
-                <section className="flex flex-col items-center">
-                    <h1 className="font-bold lg:text-[30px] md:text-[25px] text-[18px] text-gray-00">Create New Whisperroom</h1>
-                    <p className="text-muted lg:text-[15px] md:text-[14px] text-[12px]">Start an anonymous room conversation instantly.</p>
-                </section>
-                <section className="space-y-5">
-                    <AuthInputs label="Whisperroom Name" type="text" attribute="title" placeholder="e.g: Class Bash" value={formData.title} onchange={handleRoomChange} />
-                    <div className="flex gap-2">
-                        <label htmlFor="admin">I would like to show as admin</label>
-                        <input type="checkbox" name="display_admin" id="admin" className="checked:accent-scarlet" checked={formData.display_admin} onChange={handleRoomChange} />
-                    </div>                 
-                    <div className="flex justify-end gap-3">
-                        <Button buttonType="outlined" type="reset" label="Clear" onclick={() => setFormData({ title : "", display_admin : false})} extraClass="px-5 py-2 text-gray-600" />
-                        <Button buttonType="brand" type="button" label={loading ? <div className="flex justify-center items-center gap-1">Creating Room...<span className="spinner"/></div> :"Create Room"} disable={formData.title.trim() === ""} onclick={CreateRoom} extraClass="px-3 py-2" />
-                    </div>
-                </section>
+        <>
+            <SEO 
+                title="Create Chat Room — WhisperBin"
+                description="Create a private or anonymous chat room and invite others to join on WhisperBin."
+                url={`${import.meta.env.VITE_SITE_URL}/create_room`}
+            />
+            <div className="bg-void no-copy flex flex-col gap-5 text-ash items-center w-full font-inter px-2 overflow-y-auto md:font-normal font-medium py-10 h-[calc(100vh-60px)]">
+                {modalInfo.modal && <SuccessModal thread={modalInfo.thread} title={modalInfo.title} />}
+                <div className="px-5 py-7 bg-surface shadow-xl drop-shadow-alpha-primary-shadow-hover border border-alpha-card-border rounded-2xl space-y-5 lg:w-[45%] md:w-[70%] w-full">
+                    <section className="flex flex-col items-center">
+                        <h1 className="font-bold lg:text-[30px] md:text-[25px] text-[18px] text-gray-00">Create New Whisperroom</h1>
+                        <p className="text-muted lg:text-[15px] md:text-[14px] text-[12px]">Start an anonymous room conversation instantly.</p>
+                    </section>
+                    <section className="space-y-5">
+                        <AuthInputs label="Whisperroom Name" type="text" attribute="title" placeholder="e.g: Class Bash" value={formData.title} onchange={handleRoomChange} />
+                        <div className="flex gap-2">
+                            <label htmlFor="admin">I would like to show as admin</label>
+                            <input type="checkbox" name="display_admin" id="admin" className="checked:accent-scarlet" checked={formData.display_admin} onChange={handleRoomChange} />
+                        </div>                 
+                        <div className="flex justify-end gap-3">
+                            <Button buttonType="outlined" type="reset" label="Clear" onclick={() => setFormData({ title : "", display_admin : false})} extraClass="px-5 py-2 text-gray-600" />
+                            <Button buttonType="brand" type="button" label={loading ? <div className="flex justify-center items-center gap-1">Creating Room...<span className="spinner"/></div> :"Create Room"} disable={formData.title.trim() === ""} onclick={CreateRoom} extraClass="px-3 py-2" />
+                        </div>
+                    </section>
+                </div>
+                <div className="px-5 py-7 lg:w-[45%] md:w-[70%] w-full bg-alpha-overlay rounded-2xl text-muted">
+                    <h2 className="flex gap-2 mb-5 font-medium"><Shield className="text-ember" /> Your Privacy Matters</h2>
+                    <ul className="list-disc text-[14px] space-y-1">
+                        <li>Anonymous conversations.</li>
+                        <li>No user accounts or identity tracking.</li>
+                        <li>Messages are temporary and automatically deleted after dissolving group.</li>
+                        <li>Rooms dissolve after inactivity or when the last user leaves</li>
+                    </ul>
+                </div>
             </div>
-            <div className="px-5 py-7 lg:w-[45%] md:w-[70%] w-full bg-alpha-overlay rounded-2xl text-muted">
-                <h2 className="flex gap-2 mb-5 font-medium"><Shield className="text-ember" /> Your Privacy Matters</h2>
-                <ul className="list-disc text-[14px] space-y-1">
-                    <li>Anonymous conversations.</li>
-                    <li>No user accounts or identity tracking.</li>
-                    <li>Messages are temporary and automatically deleted after dissolving group.</li>
-                    <li>Rooms dissolve after inactivity or when the last user leaves</li>
-                </ul>
-            </div>
-        </div>
+        </>
     );
 }
 

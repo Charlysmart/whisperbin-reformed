@@ -9,6 +9,7 @@ import { postData } from "@/api/post_request";
 import useFormInput from "@/context/formChange";
 import { alertBox } from "@/utils/alert";
 import { handleRightClick } from "@/utils/contextMenu";
+import SEO from "@/components/seo";
 
 type LoginProps = {
     username: string,
@@ -55,40 +56,47 @@ const Login = () => {
     }, []);
     
     return (
-        <div className="w-full no-copy lg:block md:flex overflow-y-auto bg-gradient-body h-screen">
-            <section className="flex w-full justify-center items-center py-5">
-                <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
-                    <div className="flex justify-center items-center flex-col mb-3 gap-5">
-                        <Logo />
-                        <div className="bg-ember p-3 text-scarlet font-bold rounded-full">
-                            <ShieldCheck size={28} /> 
-                        </div>
-                    </div>
-                    <div className=" mb-4 text-center flex flex-col gap-3">
-                        <p className="md:text-[30px] text-[20px] font-bold text-ash">Login to WhisperBin</p>
-                        <p className="text-[16px] text-muted">Securely access your anonymous messaging platform.</p>
-                    </div>
-
-                    <form className="flex flex-col gap-5" onSubmit={signIn}>
-                        <input type="text" name="username" id="username" placeholder="Enter Your unique username" className="w-full border text-ash border-alpha-input-border h-10 rounded-md p-2 text-[14px] focus:outline-alpha-secondary-border focus:outline-1" onChange={handleRegisterInput} value={formData.username} required />
-                        <div className="flex flex-col gap-2">
-                            <label htmlFor="password" className="text-[15px] font-semibold text-muted">Password</label>
-                            <div className="flex gap-2 w-full border border-alpha-input-border h-10 rounded-md focus:outline-blue-400 focus:outline-1">
-                                <input type={viewPwd ? "text" : "password"} name="password" id="password" placeholder="Enter Your password" className="w-[90%] h-10 rounded-md p-2 text-[14px] outline-none text-ash" onChange={handleRegisterInput} value={formData.password} required />
-                                <button type="button" className="w-[10%] flex justify-center text-muted items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
+        <>
+            <SEO 
+                title="Login — WhisperBin"
+                description="Login to your WhisperBin account to access anonymous messages, chats, and private rooms."
+                url={`${import.meta.env.VITE_SITE_URL}/login`}
+            />
+            <div className="w-full no-copy lg:block md:flex overflow-y-auto bg-gradient-body h-screen">
+                <section className="flex w-full justify-center items-center py-5">
+                    <div className="lg:w-[40%] md:w-[70%] w-[90%] h-fit border border-alpha-card-border hover:shadow rounded-2xl md:px-10 px-3 py-10 font-inter font-medium">
+                        <div className="flex justify-center items-center flex-col mb-3 gap-5">
+                            <Logo />
+                            <div className="bg-ember p-3 text-scarlet font-bold rounded-full">
+                                <ShieldCheck size={28} /> 
                             </div>
                         </div>
-                        <Link to="../forgot_password"><p className="text-[15px] mt-7 text-end text-blaze font-bold">Forgot password?</p></Link>
-                        <div className="mt-5 mb-5 flex flex-col gap-4">
-                            <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
+                        <div className=" mb-4 text-center flex flex-col gap-3">
+                            <p className="md:text-[30px] text-[20px] font-bold text-ash">Login to WhisperBin</p>
+                            <p className="text-[16px] text-muted">Securely access your anonymous messaging platform.</p>
                         </div>
-                    </form>
-                    <div className="text-[14px] space-y-3">
-                        <p className="text-muted">Don't have an account yet? <span className="text-blaze font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
+
+                        <form className="flex flex-col gap-5" onSubmit={signIn}>
+                            <input type="text" name="username" id="username" placeholder="Enter Your unique username" className="w-full border text-ash border-alpha-input-border h-10 rounded-md p-2 text-[14px] focus:outline-alpha-secondary-border focus:outline-1" onChange={handleRegisterInput} value={formData.username} required />
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="password" className="text-[15px] font-semibold text-muted">Password</label>
+                                <div className="flex gap-2 w-full border border-alpha-input-border h-10 rounded-md focus:outline-blue-400 focus:outline-1">
+                                    <input type={viewPwd ? "text" : "password"} name="password" id="password" placeholder="Enter Your password" className="w-[90%] h-10 rounded-md p-2 text-[14px] outline-none text-ash" onChange={handleRegisterInput} value={formData.password} required />
+                                    <button type="button" className="w-[10%] flex justify-center text-muted items-center" onClick={() => setPwd(!viewPwd)}>{viewPwd ? <EyeClosed /> : <Eye />}</button>
+                                </div>
+                            </div>
+                            <Link to="../forgot_password"><p className="text-[15px] mt-7 text-end text-blaze font-bold">Forgot password?</p></Link>
+                            <div className="mt-5 mb-5 flex flex-col gap-4">
+                                <Button label={loading ? <div className="flex justify-center items-center gap-1">Logging in...<span className="spinner"/></div> :"Login"} disable={loading ? true : false} buttonType="colored" extraClass="w-full py-2" type="submit" />
+                            </div>
+                        </form>
+                        <div className="text-[14px] space-y-3">
+                            <p className="text-muted">Don't have an account yet? <span className="text-blaze font-bold cursor-pointer" onClick={() => navigate("../register")}>Register here</span></p>
+                        </div>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        </>
     )
 }
 

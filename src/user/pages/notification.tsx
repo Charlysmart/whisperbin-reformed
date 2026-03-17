@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connectSocket } from "@/utils/socket";
 import { handleRightClick } from "@/utils/contextMenu";
+import SEO from "@/components/seo";
 
 const NotificationBlock = ({ read, type, content, time, linkText, link, id } : NotificationBlockType) => {
     const iconMap = {
@@ -104,29 +105,36 @@ const Notification = () => {
         }
     }, []);
     return (
-        <div className="bg-void no-copy text-ash w-full h-[calc(100vh-60px)] flex justify-center lg:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
-            <section className="md:w-[80%] w-full space-y-5">
-                <div>
-                    <b className="text-[30px] ">Notifications</b>
-                </div>
-                <div className="w-full flex flex-wrap gap-4">
-                    <div className="flex md:gap-2 justify-between *:hover:bg-gray-100">
-                        <Button label="All" buttonType={meta.filter === "all" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
-                        <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "unread"}))} />
+        <>
+            <SEO 
+                title="Notifications — WhisperBin"
+                description="Stay updated with new messages, replies, and activity on your WhisperBin account."
+                url={`${import.meta.env.VITE_SITE_URL}/notifications`}
+            />
+            <div className="bg-void no-copy text-ash w-full h-[calc(100vh-60px)] flex justify-center lg:px-10 px-3 py-5 font-inter  md:font-normal font-medium overflow-y-auto">
+                <section className="md:w-[80%] w-full space-y-5">
+                    <div>
+                        <b className="text-[30px] ">Notifications</b>
                     </div>
-                </div>
-                <div className="space-y-5 cursor-pointer mb-5">
-                    {info.data.length >= 1 ? info.data.map(item => (
-                        <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"
-                    }
-                    {info.count > 0 && <div className="flex justify-center items-center-safe gap-3">
-                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
-                        <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
-                    </div>}
-                </div>
-            </section>
-        </div>
+                    <div className="w-full flex flex-wrap gap-4">
+                        <div className="flex md:gap-2 justify-between *:hover:bg-gray-100">
+                            <Button label="All" buttonType={meta.filter === "all" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
+                            <Button label="Unread" buttonType={meta.filter === "unread" ? "colored" : ""} extraClass="w-fit h-full px-4 py-2 border-0" onclick={() => setMeta(prev => ({...prev, filter: "unread"}))} />
+                        </div>
+                    </div>
+                    <div className="space-y-5 cursor-pointer mb-5">
+                        {info.data.length >= 1 ? info.data.map(item => (
+                            <NotificationBlock key={item.id} read={item.read} time={timeFormat(item.added)} type={item.type} linkText="View Message" content={item.content && item.content} link={item.type === "message" ? "anonymous_messages" : item.type === "reply" ? `/chat/${item.notify_id}` : "anonymous_messages"} id={item.id} />)) : "No Notification yet!"
+                        }
+                        {info.count > 0 && <div className="flex justify-center items-center-safe gap-3">
+                            <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage > 1 ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage > 1 ? prev.currentPage - 1 : prev.currentPage}))} />
+                            <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                            <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300 disabled:border-none" disable={meta.currentPage < meta.pages ? false : true} onclick={() => setMeta(prev => ({...prev, currentPage: prev.currentPage < prev.pages ? prev.currentPage + 1 : prev.currentPage}))} />
+                        </div>}
+                    </div>
+                </section>
+            </div>
+        </>
     );
 }
 

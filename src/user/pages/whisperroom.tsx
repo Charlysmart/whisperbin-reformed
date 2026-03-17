@@ -12,6 +12,7 @@ import { deleteData } from "@/api/delete_request";
 import ReplyModal from "@/user/components/reply";
 import { timeFormat } from "@/utils/time";
 import { handleRightClick } from "@/utils/contextMenu";
+import SEO from "@/components/seo";
 
 const Whisperroom = () => {
     const imagePicker = useRef<HTMLInputElement>(null);
@@ -245,110 +246,117 @@ const Whisperroom = () => {
         }
     }, []);
     return (
-        <div>
-            {replyModal.state && 
-                <div className="w-full no-copy h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal({id: null, state: false, sender: null})}>
-                    <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
-                </div>
-            }
+        <>
+            <SEO 
+                title="Whisper Room — WhisperBin"
+                description="Join this anonymous WhisperBin room and chat freely without revealing your identity."
+                url={`${import.meta.env.VITE_SITE_URL}/whisperroom/${room_thread}`}
+            />
+            <div>
+                {replyModal.state && 
+                    <div className="w-full no-copy h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setReplyModal({id: null, state: false, sender: null})}>
+                        <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
+                    </div>
+                }
 
-            <div className={`bg-surface no-copy w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
-            <div className="h-15 flex justify-between items-center p-3 bg-void">
-                <div className="flex items-center gap-5">
-                    <button onClick={() => navigate(-1)}><ArrowLeft /></button>
-                    <div>
-                        <b>{info.title}</b>
-                        <p className="text-[13px]">{info.count} members</p>
+                <div className={`bg-surface no-copy w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
+                <div className="h-15 flex justify-between items-center p-3 bg-void">
+                    <div className="flex items-center gap-5">
+                        <button onClick={() => navigate(-1)}><ArrowLeft /></button>
+                        <div>
+                            <b>{info.title}</b>
+                            <p className="text-[13px]">{info.count} members</p>
+                        </div>
+                    </div>
+                    <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 flex">
+                        <div className="w-fit flex" title="leave room" onClick={leaveRoom}>
+                            <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
+                            <Button label={<><LogOut /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                        </div>
+                        {info.is_admin && 
+                            <div className="w-fit flex" title="dissolve room" onClick={dissolveRoom}>
+                                <Button label="Dissolve Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
+                                <Button label={<><CircleMinus className="text-red-600" /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                            </div>
+                        }
                     </div>
                 </div>
-                <div className="text-[14px] h-full *:items-center *:justify-center space-x-3 flex">
-                    <div className="w-fit flex" title="leave room" onClick={leaveRoom}>
-                        <Button label="Leave Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
-                        <Button label={<><LogOut /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                <div className="h-[calc(100%-60px)] bg-surface-alt  border-t border-alpha-divider md:px-5 px-2 py-4 flex flex-col justify-between">
+                    <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
+                        {data.map(item => (
+                            item.sender ? 
+                            <div className="flex justify-end items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                                <div className="bg-gradient-btn md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: true})}>
+                                    {item.reply_to && 
+                                        <div className="border-l-4 border-l-ash text-ash-alt bg-alpha-overlay p-2 rounded-lg">
+                                            <p>{item.reply_to}</p>
+                                        </div>
+                                    }
+                                    {item.admin && (
+                                        <Crown size={14} className="text-ash ml-1 text-right" />
+                                    )}
+                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    <p className="md:text-[16px] text-[16px]">{item.content}</p>
+                                    <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
+                                </div>
+                            </div> 
+                            :
+                            <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
+                                <div className="bg-surface border border-alpha-card-border md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-r-xl rounded-bl-xl space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: false})}>
+                                    {item.reply_to &&
+                                        <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt p-2 rounded-lg">
+                                            <p>{item.reply_to}</p>
+                                        </div>                                
+                                    }
+                                    {item.admin && (
+                                        <Crown size={15} className="text-ember ml-1" />
+                                    )}
+                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    <p className="md:text-[16px] text-[16px]">{item.content}</p>
+                                    <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
+                                </div>
+                            </div>
+                        ))} 
+
+                        {showScrollBtn && (
+                            <button
+                                onClick={() => scrollToBottom()}
+                                className="fixed bottom-28 right-6 bg-scarlet text-white px-3 py-2 rounded-full shadow-lg hover:bg-ember transition"
+                            >
+                                ↓
+                            </button>
+                        )}
+                        <div ref={messagesEndRef} />
                     </div>
-                    {info.is_admin && 
-                        <div className="w-fit flex" title="dissolve room" onClick={dissolveRoom}>
-                            <Button label="Dissolve Room" buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:block hidden" />
-                            <Button label={<><CircleMinus className="text-red-600" /></>} buttonType="outlined" extraClass="w-fit px-3 h-full gap-2 md:hidden block" />
+                    <div className="flex flex-col justify-end w-full mt-2">
+                        {info.reply_content.trim() !== "" && 
+                        <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-ember border-alpha-card-border bg-surface-alt md:w-[85%] w-[75%] p-2 rounded-lg">
+                            <div className="flex justify-end text-muted">
+                                <X size={16} onClick={() => {
+                                    setInfo(prev => ({...prev, reply_content: ""}));
+                                    setFormData(prev => ({...prev, reply: null}))}} />
+                            </div>
+                            <p>{info.reply_content}</p>
+                        </div>}
+                        {preview && (
+                            <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
+                        )}
+                        <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
+                            <div className="md:w-[3%] w-[10%] flex justify-center">
+                                <Image onClick={() => imagePicker.current.click()} />
+                                <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
+                            </div>
+                            <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
+                            <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
+                                <SendIcon size={18} className="text-white" /> 
+                                <span className="md:block hidden">Send</span>
+                            </button>
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
-            <div className="h-[calc(100%-60px)] bg-surface-alt  border-t border-alpha-divider md:px-5 px-2 py-4 flex flex-col justify-between">
-                <div className="space-y-5 h-[90%] overflow-y-auto no-scrollbar" onScroll={handleScroll}>
-                    {data.map(item => (
-                        item.sender ? 
-                        <div className="flex justify-end items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
-                            <div className="bg-gradient-btn md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-lg space-y-2" onTouchStart={() => startTimer(item.id, true)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: true})}>
-                                {item.reply_to && 
-                                    <div className="border-l-4 border-l-ash text-ash-alt bg-alpha-overlay p-2 rounded-lg">
-                                        <p>{item.reply_to}</p>
-                                    </div>
-                                }
-                                {item.admin && (
-                                    <Crown size={14} className="text-ash ml-1 text-right" />
-                                )}
-                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
-                                <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
-                            </div>
-                        </div> 
-                        :
-                        <div className="flex justify-start items-center gap-2 w-full" key={item.id} id={`id_${item.id}`}>
-                            <div className="bg-surface border border-alpha-card-border md:max-w-[70%] max-w-[80%] w-fit p-2 rounded-r-xl rounded-bl-xl space-y-2" onTouchStart={() => startTimer(item.id, false)} onTouchEnd={cancelTimer} onTouchCancel={cancelTimer} onDoubleClick={() => setReplyModal({id: item.id, state: true, sender: false})}>
-                                {item.reply_to &&
-                                    <div className="border border-l-4 border-l-ember border-alpha-card-border bg-surface-alt p-2 rounded-lg">
-                                        <p>{item.reply_to}</p>
-                                    </div>                                
-                                }
-                                {item.admin && (
-                                    <Crown size={15} className="text-ember ml-1" />
-                                )}
-                                {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
-                                <p className="md:text-[16px] text-[16px]">{item.content}</p>
-                                <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
-                            </div>
-                        </div>
-                    ))} 
-
-                    {showScrollBtn && (
-                        <button
-                            onClick={() => scrollToBottom()}
-                            className="fixed bottom-28 right-6 bg-scarlet text-white px-3 py-2 rounded-full shadow-lg hover:bg-ember transition"
-                        >
-                            ↓
-                        </button>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-                <div className="flex flex-col justify-end w-full mt-2">
-                    {info.reply_content.trim() !== "" && 
-                    <div className="border border-l-4 md:ml-[4%] ml-[11%] border-l-ember border-alpha-card-border bg-surface-alt md:w-[85%] w-[75%] p-2 rounded-lg">
-                        <div className="flex justify-end text-muted">
-                            <X size={16} onClick={() => {
-                                setInfo(prev => ({...prev, reply_content: ""}));
-                                setFormData(prev => ({...prev, reply: null}))}} />
-                        </div>
-                        <p>{info.reply_content}</p>
-                    </div>}
-                    {preview && (
-                        <img src={preview} className="w-30 h-25 object-contain mt-2 md:ml-[4%] ml-[11%]" />
-                    )}
-                    <div className="flex gap-2 h-[60px] justify-center w-full items-center mt-2">
-                        <div className="md:w-[3%] w-[10%] flex justify-center">
-                            <Image onClick={() => imagePicker.current.click()} />
-                            <input type="file" className="hidden" ref={imagePicker} onChange={handleChange} />
-                        </div>
-                        <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
-                        <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                            <SendIcon size={18} className="text-white" /> 
-                            <span className="md:block hidden">Send</span>
-                        </button>
-                    </div>
-                </div>
             </div>
-        </div>
-        </div>
+        </>
     );
 }
 

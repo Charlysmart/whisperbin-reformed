@@ -102,8 +102,8 @@ const Inbox = () => {
             <div>
                 <b className="text-[30px]">Inbox</b>
             </div>
-            <div className="w-[90%] flex flex-wrap justify-end gap-4">
-                <div className="flex w-[10%] gap-2 justify-between *:hover:bg-gray-100">
+            <div className="w-full flex flex-wrap justify-end gap-4">
+                <div className="flex gap-2 justify-between *:hover:bg-gray-100">
                     <Button label="All" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" onclick={() => setMeta(prev => ({...prev, filter: "all"}))} />
                     <Button label="Unread" buttonType="outlined" extraClass="w-fit h-full px-4 py-2" onclick={() => setMeta(prev => ({...prev, filter: "unread"}))} />
                 </div>

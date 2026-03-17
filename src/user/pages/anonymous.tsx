@@ -12,6 +12,7 @@ import { connectSocket } from "@/utils/socket";
 import { AnonymousPreview } from "@//user/components/anonymousPreview";
 import "@/assets.css";
 import { handleRightClick } from "@/utils/contextMenu";
+import SEO from "@/components/seo";
 
 const AnonymousBlock = ({ read, content, time, replied, reply, task, be_replied } : AnonymousType) => {
     const iconMap = {
@@ -137,42 +138,49 @@ const AnonymousChat = () => {
     }, [])
 
     return (
-        <div className={`bg-void w-full h-[calc(100vh-60px)] no-copy transition duration-500 text-ash md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
-            {modal.opened && <AnonymousPreview content={modal.content} onclick={() => openModal({content: "", opened: false})} />}
-            <div>
-                <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>
-                <p className="md:text-[18px] text-[15px]">Messages sent to your anonymous link. Reply to start a conversation.</p>
-            </div>
-            <div className="flex flex-wrap gap-3 justify-between bg-transparent border border-alpha-secondary-bg  p-5 rounded-2xl shadow-md">
-                <div className="md:w-1/3 w-full flex gap-4">
-                    <Button label="All Messages" buttonType={meta.filter === "all" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
-                    <Button label="Unread" buttonType={meta.filter === "unread" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
-                    <Button label="Replied" buttonType={meta.filter === "replied" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
+        <>
+            <SEO 
+                title="Anonymous Chats — WhisperBin"
+                description="Start and manage anonymous conversations privately on WhisperBin."
+                url={`${import.meta.env.VITE_SITE_URL}/anonymous_messages`}
+            />
+            <div className={`bg-void w-full h-[calc(100vh-60px)] no-copy transition duration-500 text-ash md:px-10 px-3 py-5 font-inter md:font-normal font-medium overflow-y-auto space-y-5`}>
+                {modal.opened && <AnonymousPreview content={modal.content} onclick={() => openModal({content: "", opened: false})} />}
+                <div>
+                    <b className="md:text-[30px] text-[20px]">Anonymous Messages</b>
+                    <p className="md:text-[18px] text-[15px]">Messages sent to your anonymous link. Reply to start a conversation.</p>
+                </div>
+                <div className="flex flex-wrap gap-3 justify-between bg-transparent border border-alpha-secondary-bg  p-5 rounded-2xl shadow-md">
+                    <div className="md:w-1/3 w-full flex gap-4">
+                        <Button label="All Messages" buttonType={meta.filter === "all" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"all"}))} />
+                        <Button label="Unread" buttonType={meta.filter === "unread" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"unread"}))} />
+                        <Button label="Replied" buttonType={meta.filter === "replied" ? "brand" : "outlined"} type="button" extraClass="w-fit h-full md:px-4 p-2 md:text-[16px] text-[12px]" onclick={() => setMeta(prev => ({...prev, filter:"replied"}))} />
+                    </div>
+                </div>
+                <div className="space-y-5 w-full">
+                    {info.data.length !== 0 ? info.data.map(item => (
+                        <AnonymousBlock key={item.message_thread} 
+                            read={item.read} 
+                            content={item.content} 
+                            time={timeFormat(item.sent_at)} 
+                            replied={item.replied} 
+                            reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} 
+                            task={() => {
+                                handleModal(item.content, item.message_thread, item.read);
+                                !item.read && markFunction(item.message_thread, "read")
+                            }} 
+                            be_replied = {item.be_replied} />
+                    )) : <p>No Data!</p>}
+                    {meta.pages > 0 && 
+                        <div className="flex justify-center items-center-safe gap-3">
+                            <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage -= 1}))} />
+                            <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
+                            <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage += 1}))} />
+                        </div>
+                    }
                 </div>
             </div>
-            <div className="space-y-5 w-full">
-                {info.data.length !== 0 ? info.data.map(item => (
-                    <AnonymousBlock key={item.message_thread} 
-                        read={item.read} 
-                        content={item.content} 
-                        time={timeFormat(item.sent_at)} 
-                        replied={item.replied} 
-                        reply={() => item.replied ? navigate(`../chat/${item.message_thread}`) : markFunction(item.message_thread, "reply")} 
-                        task={() => {
-                            handleModal(item.content, item.message_thread, item.read);
-                            !item.read && markFunction(item.message_thread, "read")
-                        }} 
-                        be_replied = {item.be_replied} />
-                )) : <p>No Data!</p>}
-                {meta.pages > 0 && 
-                    <div className="flex justify-center items-center-safe gap-3">
-                        <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage -= 1}))} />
-                        <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                        <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage += 1}))} />
-                    </div>
-                }
-            </div>
-        </div>
+        </>
     );
 }
 

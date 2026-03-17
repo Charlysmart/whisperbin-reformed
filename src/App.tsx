@@ -18,7 +18,6 @@ const ForgotPassword = lazy(() => import("@/pages/forgot_password"))
 const ResetPassword = lazy(() => import("@/pages/reset_password"))
 const Home = lazy(() => import("@/home"));
 import SidebarLayout from "@/user/layout/sidebarLayout";
-import { GradientProvider } from "@/user/components/gradient";
 import PreloaderProvider from "@/context/loaderContext";
 import ServerCheck from "@/components/serverGate";
 import UserAuthentication from "@/protected_routes/user_auth";
@@ -26,14 +25,12 @@ import Preloader from "@/components/preloader";
 import AdminRegister from "@/admin/pages/register";
 import Users from "@/admin/pages/users";
 import AdminAuthentication from "@/protected_routes/admin_auth";
-import VerifyPreloader from "./components/verify_preloader";
 
 
 function App() {
   return (
     <Router>
       <Suspense fallback={<Preloader />} >
-        <GradientProvider />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<PreloaderProvider />}>
