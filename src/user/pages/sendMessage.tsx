@@ -57,37 +57,37 @@ const SendMessage = () => {
     return (
         <>
             <Helmet>
-  <title>Send Anonymous Message to {username} — WhisperBin</title>
+                <title>{`Send Anonymous Message to ${username} — WhisperBin`}</title>
 
-  <meta
-    name="description"
-    content={`Send anonymous messages to ${username} on WhisperBin. No identity. No fear. Just honesty.`}
-  />
+                <meta
+                    name="description"
+                    content={`Send anonymous messages to ${username} on WhisperBin. No identity. No fear. Just honesty.`}
+                />
 
-  <link 
-    rel="canonical" 
-    href={`${import.meta.env.VITE_SITE_URL}/send_message/${username}`} 
-  />
+                <link 
+                    rel="canonical" 
+                    href={`${import.meta.env.VITE_SITE_URL}/send_message/${username}`} 
+                />
 
-  {/* Open Graph */}
-  <meta property="og:title" content={`Send Anonymous Message to ${username}`} />
-  <meta
-    property="og:description"
-    content={`Drop an anonymous message for ${username} on WhisperBin.`}
-  />
-  <meta property="og:image" content={`${import.meta.env.VITE_SITE_URL}/images/unnamed.png`} />
-  <meta property="og:url" content={`${import.meta.env.VITE_SITE_URL}/send_message/${username}`} />
-  <meta property="og:type" content="website" />
+                {/* Open Graph */}
+                <meta property="og:title" content={`Send Anonymous Message to ${username}`} />
+                <meta
+                    property="og:description"
+                    content={`Drop an anonymous message for ${username} on WhisperBin.`}
+                />
+                <meta property="og:image" content={`${import.meta.env.VITE_SITE_URL}/images/unnamed.png`} />
+                <meta property="og:url" content={`${import.meta.env.VITE_SITE_URL}/send_message/${username}`} />
+                <meta property="og:type" content="website" />
 
-  {/* Twitter */}
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={`Send Anonymous Message to ${username}`} />
-  <meta
-    name="twitter:description"
-    content={`Send a secret message to ${username} anonymously.`}
-  />
-  <meta name="twitter:image" content={`${import.meta.env.VITE_SITE_URL}/images/unnamed.png`} />
-</Helmet>
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`Send Anonymous Message to ${username}`} />
+                <meta
+                    name="twitter:description"
+                    content={`Send a secret message to ${username} anonymously.`}
+                />
+                <meta name="twitter:image" content={`${import.meta.env.VITE_SITE_URL}/images/unnamed.png`} />
+            </Helmet>
 
             <div className={`w-full no-copy h-[calc(100vh-60px)] bg-surface-alt md:px-10 px-3 py-5 font-inter text-ash md:font-normal font-medium overflow-y-auto space-y-5`}>
                 <b className="md:text-[30px] text-[18px]">Send Anonymous Message</b>

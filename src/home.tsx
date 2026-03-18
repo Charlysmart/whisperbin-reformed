@@ -117,7 +117,7 @@ const Home = () => {
                 </motion.div>
             </section>
 
-            <section className="flex md:flex-row flex-col md:gap-0 gap-10 justify-between h-fit w-full">
+            <section className="flex md:flex-row flex-col md:gap-0 gap-10 justify-between h-fit w-full overflow-x-hidden">
                 <motion.div className="md:w-1/2 w-full flex flex-col items-center justify-center"
                 initial={{opacity: 0, x: -100}}
                 transition={{duration: 1}}
@@ -146,8 +146,8 @@ const Home = () => {
             
             <section className="bg-gradient-hero flex flex-col items-center">
                 <motion.div className="lg:w-[50%] md:w-[70%] flex flex-col items-center text-center text-ash space-y-7 px-2 py-15"
-                initial={{opacity: 0, y: 100}}
-                whileInView={{opacity: 1, y: 0}}
+                initial={{opacity: 0}}
+                whileInView={{opacity: 1}}
                 transition={{duration: 1}}
                 viewport={{once: true}}
                 >
@@ -163,8 +163,8 @@ const Home = () => {
                     <p className="flex justify-center items-center gap-2 text-gray-400 md:text-[14px] text-[12px]"><ShieldCheck size={14} /> All personal details are kept secret.</p>
                 </motion.div>
                 <motion.footer className="flex md:flex-row flex-col justify-between items-center w-[80%] border-t border-alpha-card-border py-5 md:gap-0 gap-3"
-                initial={{opacity: 0, y: 100}}
-                whileInView={{opacity: 1, y: 0}}
+                initial={{opacity: 0}}
+                whileInView={{opacity: 1}}
                 transition={{duration: 1}}
                 viewport={{once: true}}
                 >
