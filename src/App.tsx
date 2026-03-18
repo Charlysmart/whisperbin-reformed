@@ -36,7 +36,7 @@ function App() {
           <Route element={<PreloaderProvider />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/admin_register" element={<AdminRegister />} />
+            <Route path="/cpanel" element={<AdminRegister />} />
             <Route path="/verify" element={<Verify />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
             <Route path="*" element={<NotFound />} />
