@@ -120,14 +120,13 @@ const Chat = () => {
         if (e.key === "Enter") sendMessage();
     }
 
-    async function sendImage(): Promise<string> {
+    async function sendImage(): Promise<{url :string, public_id : string}> {
         const payLoad = new FormData();
         payLoad.append("image", image);
 
         try {
             const response = await postData({ url: "/pages/upload_image", data: payLoad});
-            const filename = response.data.image || response.data; 
-            setFormData(prev => ({...prev, image : filename}));
+            const filename = response.data; 
             return filename;
         }
         catch (error) {
@@ -143,14 +142,14 @@ const Chat = () => {
             return
         }
 
-        let imageName: string | null = null;
+        let imageDetails: {url :string, public_id : string} | null = null;
 
         try {
             setLoading(true);
             if (image) {
                 try {
-                    imageName = await sendImage();
-                    if (!imageName) return
+                    imageDetails = await sendImage();
+                    if (!imageDetails) return
                 } catch {
                     return; // stop if upload fails
                 }
@@ -158,7 +157,8 @@ const Chat = () => {
     
             const payload = {
                 message: formData.message,
-                image: imageName,
+                image: imageDetails.url,
+                public_id: imageDetails.public_id,
                 message_thread: formData.message_thread,
                 reply_to: formData.reply_id
             };        
@@ -305,7 +305,7 @@ const Chat = () => {
                                             <p>{item.reply_to}</p>
                                         </div>
                                     }
-                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{item.sent_at}</p>
                                 </div>
@@ -318,7 +318,7 @@ const Chat = () => {
                                             <p>{item.reply_to}</p>
                                         </div>                                
                                     }
-                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px] text-ash">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{item.sent_at}</p>
                                 </div>

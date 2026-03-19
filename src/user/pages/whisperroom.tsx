@@ -19,6 +19,7 @@ const Whisperroom = () => {
     const navigate = useNavigate();
     const { room_thread } = useParams();
     const [data, setData] = useState<WhisperroomType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [info, setInfo] = useState<{title : string, reply_content : string, count : number, is_admin: boolean}>({
         title: "",
         reply_content: "",
@@ -120,7 +121,7 @@ const Whisperroom = () => {
     }
 
     // Sending the image to the backend
-    async function sendImage() {
+    async function sendImage(): Promise<{url :string, public_id : string}> {
         const formInput = new FormData();
         if (formData.image) formInput.append("image", formData.image);
         
@@ -130,7 +131,7 @@ const Whisperroom = () => {
                 data: formInput,
                 navigate
             });
-            const filename = response.data.image || response.data;
+            const filename = response.data;
             return filename
         }
         catch (error) {
@@ -165,28 +166,40 @@ const Whisperroom = () => {
             alertBox({ message: "Can't send empty message", success: false, top: "0" });
             return
         }
-        let imageName: string | null
-        if (formData.image) {
-            try {
-                imageName = await sendImage();
-                if (!imageName) return
-            }
-            catch {
-                return;
-            }            
-        }
-        const payload = {
-            content : formData.message,
-            reply_to : formData.reply,
-            image : imageName
-        }
+        let imageDetails: {url :string, public_id : string} | null = null;
 
-        await websocket.current?.send({
-            type : "message",
-            data : payload
-        });
-        setFormData({message: "", reply: null, image: null});
-        setInfo(prev => ({...prev, reply_content: ""}))
+        try {
+            setLoading(true);
+            if (formData.image) {
+                try {
+                    imageDetails = await sendImage();
+                    if (!imageDetails) return
+                }
+                catch {
+                    return;
+                }  
+            }          
+        
+            const payload = {
+                content : formData.message,
+                reply_to : formData.reply,
+                image: imageDetails.url,
+                public_id: imageDetails.public_id
+            }
+
+            await websocket.current?.send({
+                type : "message",
+                data : payload
+            });
+            setFormData({message: "", reply: null, image: null});
+            setInfo(prev => ({...prev, reply_content: ""}));
+        }            
+        catch (error) {
+            return error;
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -295,7 +308,7 @@ const Whisperroom = () => {
                                     {item.admin && (
                                         <Crown size={14} className="text-ash ml-1 text-right" />
                                     )}
-                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                                 </div>
@@ -311,7 +324,7 @@ const Whisperroom = () => {
                                     {item.admin && (
                                         <Crown size={15} className="text-ember ml-1" />
                                     )}
-                                    {item.image && <img src={`${import.meta.env.VITE_SERVER_URL}/pages/image/${encodeURIComponent(item.image)}`} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                                 </div>
@@ -348,8 +361,14 @@ const Whisperroom = () => {
                             </div>
                             <input type="text" name="message" id="message" placeholder="Write an anonymous message..." className="h-full border border-alpha-input-border focus:border-scarlet shadow shadow-alpha-primary-glow md:w-[85%] w-[75%] rounded-md px-3 outline-0" onChange={handleRegisterInput} value={formData.message} onKeyDown={altSendMessage} />
                             <button className="bg-gradient-btn text-white md:px-5 h-10 rounded-md shadow shadow-primary-shadow md:w-[10%] w-[13%] flex gap-1 text-[14px] items-center justify-center" onClick={sendMessage}>
-                                <SendIcon size={18} className="text-white" /> 
-                                <span className="md:block hidden">Send</span>
+                                {!loading ?
+                                    <>
+                                        <SendIcon size={18} className="text-white" /> 
+                                        <span className="md:block hidden">Send</span>
+                                    </>
+                                :
+                                    <span className="spinner"></span>
+                                }
                             </button>
                         </div>
                     </div>
