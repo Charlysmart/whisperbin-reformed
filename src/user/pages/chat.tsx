@@ -18,6 +18,10 @@ const Chat = () => {
     const [more, setMore] = useState<boolean>(false);
     const imagePicker = useRef<HTMLInputElement | null>(null);
     const [data, setData] = useState<ChatType>([]);
+    const [displayImage, setDisplayImage] = useState<{image: string, display: boolean}>({
+        image: "",
+        display: false
+    });
     const [loading, setLoading] = useState<boolean>(false);
     const [block, setBlocked] = useState<{blocked : boolean, blocked_by: boolean | null}>({
         blocked : null,
@@ -271,6 +275,11 @@ const Chat = () => {
                         <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
                     </div>
                 }
+                {displayImage.display && 
+                    <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setDisplayImage({image: null, display: false})}>
+                        <img src={displayImage.image} alt={displayImage.image} className="lg:w-[50%] w-[90%] flex justify-center items-center" />
+                    </div>
+                }
                 <div className="h-15 flex justify-between items-center p-3 bg-void">
                     <div className="flex items-center gap-5">
                         <button onClick={() => navigate(-1)}><ArrowLeft /></button>
@@ -305,7 +314,7 @@ const Chat = () => {
                                             <p>{item.reply_to}</p>
                                         </div>
                                     }
-                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} onClick={() => setDisplayImage({image: item.image, display: true})} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{item.sent_at}</p>
                                 </div>
@@ -318,7 +327,7 @@ const Chat = () => {
                                             <p>{item.reply_to}</p>
                                         </div>                                
                                     }
-                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} onClick={() => setDisplayImage({image: item.image, display: true})} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px] text-ash">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{item.sent_at}</p>
                                 </div>

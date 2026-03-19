@@ -20,6 +20,10 @@ const Whisperroom = () => {
     const { room_thread } = useParams();
     const [data, setData] = useState<WhisperroomType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [displayImage, setDisplayImage] = useState<{image: string, display: boolean}>({
+        image: "",
+        display: false
+    });
     const [info, setInfo] = useState<{title : string, reply_content : string, count : number, is_admin: boolean}>({
         title: "",
         reply_content: "",
@@ -271,6 +275,11 @@ const Whisperroom = () => {
                         <ReplyModal onreply={() => onReply(replyModal.id)} ondelete={() => onDelete(replyModal.id)} sender={replyModal.sender} />
                     </div>
                 }
+                {displayImage.display && 
+                    <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setDisplayImage({image: null, display: false})}>
+                        <img src={displayImage.image} alt={displayImage.image} className="lg:w-[50%] w-[90%] flex justify-center items-center" />
+                    </div>
+                }
 
                 <div className={`bg-surface no-copy w-full text-ash h-[calc(100vh-60px)] lg:px-10 md:px-5 px-2 md:py-5 py-2 font-inter overflow-y-auto md:font-normal font-medium`}>
                 <div className="h-15 flex justify-between items-center p-3 bg-void">
@@ -308,7 +317,7 @@ const Whisperroom = () => {
                                     {item.admin && (
                                         <Crown size={14} className="text-ash ml-1 text-right" />
                                     )}
-                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} onClick={() => setDisplayImage({image: item.image, display: true})} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                                 </div>
@@ -324,7 +333,7 @@ const Whisperroom = () => {
                                     {item.admin && (
                                         <Crown size={15} className="text-ember ml-1" />
                                     )}
-                                    {item.image && <img src={item.image} alt={item.image} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
+                                    {item.image && <img src={item.image} alt={item.image} onClick={() => setDisplayImage({image: item.image, display: true})} className="max-w-full max-h-60 object-contain rounded-md mb-2"/>}
                                     <p className="md:text-[16px] text-[16px]">{item.content}</p>
                                     <p className="text-start text-[12px] text-muted">{timeFormat(item.time)}</p>
                                 </div>
