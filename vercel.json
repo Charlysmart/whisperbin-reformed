@@ -3,6 +3,10 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
+    },
+    {
+      "source": "/message/:id",
+      "destination": "https://api.whisperbin.shop/message/:id"
     }
   ]
 }
