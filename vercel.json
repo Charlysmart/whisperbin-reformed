@@ -6,10 +6,10 @@
     },
     {
       "source": "/drop_anonymous/:username",
-      "destination": "https://api.whisperbin.shop/drop_anonymous/:username"
+      "destination": "https://api.whisperbin.shop/pages/drop_anonymous/:username"
     },
     {
-      "source": "/pages/drop_anonymous",
+      "source": "/drop_anonymous",
       "destination": "https://api.whisperbin.shop/pages/drop_anonymous"
     }
   ]
