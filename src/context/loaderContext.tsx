@@ -5,15 +5,16 @@ import { Outlet } from "react-router-dom";
 const preloaderContext = createContext<any>(null);
 
 const PreloaderProvider = () => {
-    const [preloader, setPreloader] = useState<boolean>(false);
-
+    const [count, setCount] = useState(0);
     const startLoading = () => {
-        setPreloader(true);
+        setCount(prev => prev + 1);
     }
 
     const stopLoading = () => {
-            setPreloader(false);
+        setCount(prev => Math.max(prev - 1, 0));
     }
+    
+    const preloader = count > 0;
 
     return (
         <preloaderContext.Provider value={{ preloader, startLoading, stopLoading }}>
