@@ -1,16 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    },
-    {
       "source": "/drop_anonymous/:username",
       "destination": "https://api.whisperbin.shop/pages/drop_anonymous/:username"
     },
     {
       "source": "/drop_anonymous",
       "destination": "https://api.whisperbin.shop/pages/drop_anonymous"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
