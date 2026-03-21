@@ -5,8 +5,8 @@
       "destination": "/index.html"
     },
     {
-      "source": "/message/:id",
-      "destination": "https://api.whisperbin.shop/message/:id"
+      "source": "/send_anonymous/:username",
+      "destination": "https://api.whisperbin.shop/send_anonymous/:username"
     }
   ]
 }
