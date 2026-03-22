@@ -48,7 +48,7 @@ const UserProfile = () => {
                 <label htmlFor="messageLink" className="md:text-[20px] text-[18px] font-semibold">Your Anonymous Message Link</label>
                 <div className="border-2 border-alpha-input-border w-full px-3 py-1 bg-void flex justify-between items-center rounded-md gap-2">
                     <input type="text" name="messageLink" id="messageLink" readOnly value={`${import.meta.env.VITE_SITE_URL}/send_message/${username}`} className="md:text-[14px] text-[13px] outline-0 w-full" ref={to_copy} />
-                    <button onClick={() => setText(to_copy.current.value)}><Copy size={16} /></button>
+                    <button onClick={() => setText(`https://${to_copy.current.value}`)}><Copy size={16} /></button>
                 </div>
                 <p className="md:text-[14px] text-[13px]">Share this link to receive anonymous messages. Your identity is always protected.</p>
             </div>

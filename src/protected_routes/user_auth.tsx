@@ -13,7 +13,7 @@ const UserAuthentication = () => {
     
     useEffect(() => {
         async function check_user() {
-            startLoading();
+            startLoading("userauth");
             let url = "/pages/general";
             try {
                 await axiosClient.get(url);
@@ -45,7 +45,7 @@ const UserAuthentication = () => {
                 }
             }
             finally {
-                stopLoading();
+                stopLoading("userauth");
             }
         }  
         check_user();

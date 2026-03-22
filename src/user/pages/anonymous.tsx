@@ -74,7 +74,7 @@ const AnonymousChat = () => {
     }
 
     function fetchAnonymous() {
-        startLoading();
+        startLoading("fetchAnony");
         fetchData();
     }
     
@@ -83,7 +83,7 @@ const AnonymousChat = () => {
             setInfo(prev => ({count: response.data.count, data: response.data.anonymous}));
         }, onError: (error) => {
             if (error.response) console.log(error.response.data.detail);            
-        }, finallyCallback: () => {stopLoading();} })  
+        }, finallyCallback: () => {stopLoading("fetchanony");} })  
     }
 
     function markFunction(thread : string, task : "reply" | "read") {
@@ -173,9 +173,9 @@ const AnonymousChat = () => {
                     )) : <p>No Data!</p>}
                     {meta.pages > 0 && 
                         <div className="flex justify-center items-center-safe gap-3">
-                            <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage -= 1}))} />
+                            <Button label={<><ArrowLeft /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage > 1 ? false : true} onclick={() => meta.currentPage > 1 && setMeta(prev => ({...prev, currentPage: prev.currentPage - 1}))} />
                             <p className="text-gray-400 font-medium text-[18px]">{meta.currentPage} / {meta.pages}</p>
-                            <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage += 1}))} />
+                            <Button label={<><ArrowRight /></>} type="button" extraClass="p-2 text-blue-500 bg-blue-100 border-3 border-blue-300" disable={meta.currentPage < meta.pages ? false : true} onclick={() => meta.currentPage < meta.pages && setMeta(prev => ({...prev, currentPage: prev.currentPage + 1}))} />
                         </div>
                     }
                 </div>

@@ -18,12 +18,12 @@ const FetchUserProvider = ({children} : {children : React.ReactNode}) => {
     const { startLoading, stopLoading } = usePreloader();
 
     useEffect(() => {
-        startLoading();
+        startLoading("user");
         getData({
             url: "pages/user",
             onSuccess: (response) => setUserDetail(response.data),
             onError: (error) => console.log(error.response.data.detail),    
-            finallyCallback: stopLoading
+            finallyCallback: stopLoading("user")
         });
     }, []);
     

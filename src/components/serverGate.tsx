@@ -9,16 +9,15 @@ const ServerCheck = () => {
   const { startLoading, stopLoading } = usePreloader();
 
   useEffect(() => {
-    startLoading();
     const checkServer = async () => {
-      startLoading();
+      startLoading("servergate");
       try {
         await axiosClient.get("pages/health", { timeout: 3000 });
         setOk(true);
       } catch (error) {
         setOk(false);
       } finally {
-        stopLoading();
+        stopLoading("servergate");
       }
   };
 

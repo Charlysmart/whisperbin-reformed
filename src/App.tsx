@@ -1,11 +1,9 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const Inbox = lazy(() => import("@/user/pages/inbox"));
-const Login = lazy(() => import("@/pages/login"));
 const Chat = lazy(() => import("@/user/pages/chat"));
 const UserProfile = lazy(() => import("@/user/pages/userProfile"));
 const SendMessage = lazy(() => import("@/user/pages/sendMessage"));
-const Register = lazy(() => import("@/user/pages/register"));
 const Verify = lazy(() => import("@/user/pages/verify"));
 const Notification = lazy(() => import("@/user/pages/notification"));
 const AnonymousChat = lazy(() => import("@/user/pages/anonymous"));
@@ -16,7 +14,9 @@ const NotFound = lazy(() => import("@/components/not_found"));
 const AdminDashboard = lazy(() => import("@/admin/pages/dashboard"));
 const ForgotPassword = lazy(() => import("@/pages/forgot_password"))
 const ResetPassword = lazy(() => import("@/pages/reset_password"))
-const Home = lazy(() => import("@/home"));
+import Home from "@/home";
+import Register from "@/user/pages/register";
+import Login from "@/pages/login";
 import SidebarLayout from "@/user/layout/sidebarLayout";
 import PreloaderProvider from "@/context/loaderContext";
 import ServerCheck from "@/components/serverGate";

@@ -36,15 +36,15 @@ const Sidebar = () => {
                         </button>
                     </div>
                     <div className="space-y-4 **:flex **:items-center **:gap-1.5 *:p-2 font-inter font-semibold *:hover:bg-ember *:hover:rounded-md">
-                        <NavLink to="/anonymous_messages"><li className={path === "anonymous_messages" && "active"}><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
-                        {userDetail.role === "admin" && <NavLink to="/dashboard"><li className={path === "dashboard" && "active"}><LayoutDashboard size={20} /> <span className="text-[16px]">Dashboard</span></li></NavLink>}
-                        <NavLink to="/inbox"><li className={path === "inbox" && "active"}><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
-                        <NavLink to="/send_message"><li className={path === "send_message" && "active"}><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
-                        <NavLink to="/user_profile"><li className={path === "user_profile" && "active"}><User size={20} /> <span className="text-[16px]">User Profile</span></li></NavLink>
-                        <NavLink to="/notifications"><li className={path === "notifications" && "active"}><Bell size={20} /> <span className="text-[16px]">Notifications</span></li></NavLink>
-                        <NavLink to="/create_room"><li className={path === "create_room" && "active"}><PlusCircle size={20} /> <span className="text-[16px]">Create Room</span></li></NavLink>
-                        <NavLink to="/join_room"><li className={path === "join_room" && "active"}><DoorOpen size={20} /> <span className="text-[16px]">Join Room</span></li></NavLink>
-                        {userDetail.role === "admin" && <NavLink to="/users"><li className={path === "users" && "active"}><Users size={20} /> <span className="text-[16px]">User Management</span></li></NavLink>}
+                        <NavLink to="/anonymous_messages"><li className={path === "anonymous_messages" ? "active" : undefined}><GhostIcon size={20} /> <span className="text-[16px]">Anonymous</span></li></NavLink>
+                        {userDetail.role === "admin" && <NavLink to="/dashboard"><li className={path === "dashboard" ? "active" : undefined}><LayoutDashboard size={20} /> <span className="text-[16px]">Dashboard</span></li></NavLink>}
+                        <NavLink to="/inbox"><li className={path === "inbox" ?"active" : undefined}><Inbox size={20} /> <span className="text-[16px]">Inbox</span></li></NavLink>
+                        <NavLink to="/send_message"><li className={path === "send_message" ? "active" : undefined}><Send size={20} /> <span className="text-[16px]">Send Message</span></li></NavLink>
+                        <NavLink to="/user_profile"><li className={path === "user_profile" ? "active" : undefined}><User size={20} /> <span className="text-[16px]">User Profile</span></li></NavLink>
+                        <NavLink to="/notifications"><li className={path === "notifications" ? "active" : undefined}><Bell size={20} /> <span className="text-[16px]">Notifications</span></li></NavLink>
+                        <NavLink to="/create_room"><li className={path === "create_room" ? "active" : undefined}><PlusCircle size={20} /> <span className="text-[16px]">Create Room</span></li></NavLink>
+                        <NavLink to="/join_room"><li className={path === "join_room" ? "active" : undefined}><DoorOpen size={20} /> <span className="text-[16px]">Join Room</span></li></NavLink>
+                        {userDetail.role === "admin" && <NavLink to="/users"><li className={path === "users" ? "active" : undefined}><Users size={20} /> <span className="text-[16px]">User Management</span></li></NavLink>}
                     </div>
                 </div>}
                 {!sideBarUse && <div className="border-r border-ember bg-surface text-ash w-full h-screen px-2 cursor-pointer">
@@ -56,13 +56,13 @@ const Sidebar = () => {
                     <div className="space-y-4 mt-2 flex flex-col items-center list-none *:p-2 font-inter *:hover:bg-ember *:hover:rounded-md">
                         <NavLink to="/anonymous_messages"><li className={path === "anonymous_messages" && "active"}><GhostIcon size={20} /></li></NavLink>
                         {userDetail.role === "admin" && <NavLink to="/dashboard"><li className={path === "dashboard" && "active"}><LayoutDashboard size={20} /></li></NavLink>}
-                        <NavLink to="/inbox"><li className={path === "inbox" && "active"}><Inbox size={20} /></li></NavLink>
-                        <NavLink to="/send_message"><li className={path === "send_message" && "active"}><Send size={20} /></li></NavLink>
-                        <NavLink to="/user_profile"><li className={path === "user_profile" && "active"}><User size={20} /></li></NavLink>
-                        <NavLink to="/notifications"><li className={path === "notifications" && "active"}><Bell size={20} /></li></NavLink>
-                        <NavLink to="/create_room"><li className={path === "create_room" && "active"}><PlusCircle size={20} /></li></NavLink>
-                        <NavLink to="/join_room"><li className={path === "join_room" && "active"}><DoorOpen size={20} /></li></NavLink>
-                        {userDetail.role === "admin" && <NavLink to="/users"><li className={path === "users" && "active"}><Users size={20} /></li></NavLink>}
+                        <NavLink to="/inbox"><li className={path === "inbox" ? "active" : undefined}><Inbox size={20} /></li></NavLink>
+                        <NavLink to="/send_message"><li className={path === "send_message" ? "active" : undefined}><Send size={20} /></li></NavLink>
+                        <NavLink to="/user_profile"><li className={path === "user_profile" ? "active" : undefined}><User size={20} /></li></NavLink>
+                        <NavLink to="/notifications"><li className={path === "notifications" ? "active" : undefined}><Bell size={20} /></li></NavLink>
+                        <NavLink to="/create_room"><li className={path === "create_room" ? "active" : undefined}><PlusCircle size={20} /></li></NavLink>
+                        <NavLink to="/join_room"><li className={path === "join_room" ? "active" : undefined}><DoorOpen size={20} /></li></NavLink>
+                        {userDetail.role === "admin" && <NavLink to="/users"><li className={path === "users" ? "active" : undefined}><Users size={20} /></li></NavLink>}
                     </div>
                 </div>}
             </div>        
