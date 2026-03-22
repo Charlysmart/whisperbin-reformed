@@ -127,6 +127,7 @@ const Chat = () => {
     async function sendImage(): Promise<{url :string, public_id : string}> {
         const payLoad = new FormData();
         payLoad.append("image", image);
+        payLoad.append("thread", thread);
 
         try {
             const response = await postData({ url: "/pages/upload_image", data: payLoad});

@@ -127,7 +127,8 @@ const Whisperroom = () => {
     // Sending the image to the backend
     async function sendImage(): Promise<{url :string, public_id : string}> {
         const formInput = new FormData();
-        if (formData.image) formInput.append("image", formData.image);
+        formInput.append("image", formData.image);
+        formInput.append("thread", room_thread);
         
         try {
             const response =  await postData({
