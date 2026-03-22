@@ -20,6 +20,7 @@ const Whisperroom = () => {
     const { room_thread } = useParams();
     const [data, setData] = useState<WhisperroomType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const lastActionRef = useRef<"message" | "delete" | null>(null);
     const [displayImage, setDisplayImage] = useState<{image: string, display: boolean}>({
         image: "",
         display: false
@@ -66,10 +67,11 @@ const Whisperroom = () => {
     }
 
     useEffect(() => {
-        if (data.length > 0) {
+        if (data.length > 0 && lastActionRef.current !== "delete") {
             scrollToBottom(false);
         }
-    }, [data.length]);
+    }, [data]);
+
 
     const handleScroll = (e) => {
         const target = e.currentTarget;
@@ -90,16 +92,17 @@ const Whisperroom = () => {
     };
 
     // reply logic and modal
-    let timer;
+    const timerRef = useRef<any>(null);
 
     function startTimer(id: number, sender: boolean) {
-        timer = setTimeout(() => {
-            setReplyModal({id: id, state: true, sender: sender})
+        timerRef.current = setTimeout(() => {
+            setReplyModal(prev => ({...prev, id, state: true, sender}));
         }, 2000);
     }
 
     function cancelTimer() {
-        clearTimeout(timer);
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
     }
 
     function onReply(id: number) {
@@ -121,7 +124,10 @@ const Whisperroom = () => {
 
     // To make enter key send message
     function altSendMessage(e: React.KeyboardEvent) {
-        if (e.key === "Enter") sendMessage();
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
     }
 
     // Sending the image to the backend
@@ -188,8 +194,8 @@ const Whisperroom = () => {
             const payload = {
                 content : formData.message,
                 reply_to : formData.reply,
-                image: imageDetails.url,
-                public_id: imageDetails.public_id
+                image: imageDetails?.url || null,
+                public_id: imageDetails?.public_id || null,
             }
 
             await websocket.current?.send({
@@ -228,6 +234,7 @@ const Whisperroom = () => {
                     })
                 }
                 else if (event.type === "message") {
+                    lastActionRef.current = "message";
                     setData(prev => {
                         const updated = [...prev, event.data];
 
@@ -238,9 +245,9 @@ const Whisperroom = () => {
                     });
                 }
                 else if (event.type === "delete"){
+                    lastActionRef.current = "delete";
                     const msgId = event.data;
-                    const msgData = document.querySelector(`#id_${msgId}`);
-                    if (msgData) msgData.remove()
+                    setData(prev => prev.filter(msg => msg.id !== msgId));
                 }
                 else if (event.type === "update") {
                     if (event.data) {

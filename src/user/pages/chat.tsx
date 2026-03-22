@@ -18,12 +18,13 @@ const Chat = () => {
     const [more, setMore] = useState<boolean>(false);
     const imagePicker = useRef<HTMLInputElement | null>(null);
     const [data, setData] = useState<ChatType>([]);
+    const lastActionRef = useRef<"message" | "delete" | null>(null);
     const [displayImage, setDisplayImage] = useState<{image: string, display: boolean}>({
         image: "",
         display: false
     });
     const [loading, setLoading] = useState<boolean>(false);
-    const [block, setBlocked] = useState<{blocked : boolean, blocked_by: boolean | null}>({
+    const [block, setBlocked] = useState<{blocked : boolean | null, blocked_by: boolean | null}>({
         blocked : null,
         blocked_by : null
     })
@@ -90,16 +91,17 @@ const Chat = () => {
     };
 
     // reply logic and modal
-    let timer;
+    const timerRef = useRef<any>(null);
 
     function startTimer(id: number, sender: boolean) {
-        timer = setTimeout(() => {
-            setReplyModal(prev => ({...prev, id: id, state: true, sender: sender}))
+        timerRef.current = setTimeout(() => {
+            setReplyModal(prev => ({...prev, id, state: true, sender}));
         }, 2000);
     }
 
     function cancelTimer() {
-        clearTimeout(timer);
+        clearTimeout(timerRef.current);
+        timerRef.current = null
     }
 
     function onReply(id: number) {
@@ -121,7 +123,10 @@ const Chat = () => {
 
     // To make enter key send message
     function altSendMessage(e: React.KeyboardEvent) {
-        if (e.key === "Enter") sendMessage();
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
     }
 
     async function sendImage(): Promise<{url :string, public_id : string}> {
@@ -162,8 +167,8 @@ const Chat = () => {
     
             const payload = {
                 message: formData.message,
-                image: imageDetails.url,
-                public_id: imageDetails.public_id,
+                image: imageDetails?.url || null,
+                public_id: imageDetails?.public_id || null,
                 message_thread: formData.message_thread,
                 reply_to: formData.reply_id
             };        
@@ -222,10 +227,10 @@ const Chat = () => {
     }
 
     useEffect(() => {
-        if (data.length > 0) {
+        if (data.length > 0 && lastActionRef.current !== "delete") {
             scrollToBottom(false);
         }
-    }, [data.length]);
+    }, [data]);
 
     useEffect(() => {
         getChat();
@@ -238,6 +243,7 @@ const Chat = () => {
                     alertBox({ message: data.data, success: false, top: "0" });
                 }
                 else if (data.type === "message") {
+                    lastActionRef.current = "message";
                     setData(prev => {
                         const updated = [...prev, data.data];
 
@@ -248,8 +254,8 @@ const Chat = () => {
                     });
                 } 
                 else if (data.type === "delete") {
-                    let content = document.querySelector(`#id_${data.data}`);
-                    if (content) content.remove();
+                    lastActionRef.current = "delete";
+                    setData(prev => prev.filter(msg => msg.id !== data.data));
                 }
                 else if (data.type === "block") {
                     setBlocked(data.payload);
