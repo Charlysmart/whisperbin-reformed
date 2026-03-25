@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/drop_anonymous/:username",
-      "destination": "https://api.whisperbin.shop/pages/drop_anonymous/:username"
+      "destination": "https://api.whisperbin.com/pages/drop_anonymous/:username"
     },
     {
       "source": "/drop_anonymous",
-      "destination": "https://api.whisperbin.shop/pages/drop_anonymous"
+      "destination": "https://api.whisperbin.com/pages/drop_anonymous"
     },
     {
       "source": "/(.*)",
