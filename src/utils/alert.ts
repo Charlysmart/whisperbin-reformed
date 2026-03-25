@@ -4,7 +4,7 @@ import "@/App.css";
 
 export const alertBox = ({ message, success, top, onClose } : AlertType) => {
     const div = document.createElement("div");
-    div.classList.add("md:max-w-[35%]", "max-w-[70%]", "h-fit", "shadow-md", "shadow-alpha-primary-shadow", "rounded-lg", "bg-surface", "border", "border-alpha-card-border", "p-3", "overflow-hidden", "absolute", "right-2", `top-${top}`);
+    div.classList.add("md:max-w-[40%]", "max-w-[70%]", "h-fit", "shadow-md", "shadow-alpha-primary-shadow", "rounded-lg", "bg-surface", "border", "border-alpha-card-border", "p-3", "overflow-hidden", "absolute", "right-2", `top-${top}`);
     const close = document.createElement("div");
     close.classList.add("flex", "justify-end");
     const closeIcon = createElement(X, {
@@ -24,7 +24,7 @@ export const alertBox = ({ message, success, top, onClose } : AlertType) => {
     });
     successIconContainer.appendChild(success ? successIcon : failureIcon)
     const text = document.createElement("div");
-    text.classList.add("font-inter","text-ash", "font-medium");
+    text.classList.add("font-inter","text-ash", "font-medium", "wrap-break-word");
     text.textContent = message;
     textContainer.append(successIconContainer, text)
     const slider = document.createElement("div");

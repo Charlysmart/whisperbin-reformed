@@ -285,7 +285,7 @@ const Whisperroom = () => {
                 }
                 {displayImage.display && 
                     <div className="w-full h-screen backdrop-blur-2xl absolute top-0 left-0 flex justify-center items-center" onClick={() => setDisplayImage({image: null, display: false})}>
-                        <img src={displayImage.image} alt={displayImage.image} className="lg:w-[50%] w-[90%] flex justify-center items-center" />
+                        <img src={displayImage.image} alt={displayImage.image} className="lg:w-[30%] w-[90%] flex justify-center items-center" />
                     </div>
                 }
 
