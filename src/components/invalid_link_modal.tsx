@@ -1,6 +1,6 @@
 import { ArrowLeft, Lock, RefreshCcw, ShieldAlert, X } from "lucide-react"
 import Button from "./button"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const ResetLinkModal = () => {
     const navigate = useNavigate();
@@ -17,8 +17,8 @@ const ResetLinkModal = () => {
                     <h2 className="font-bold text-[25px]">Reset Link Invalid</h2>
                     <p className="text-muted">This password reset link has expired or is no longer valid. For your security, reset links are only active for 15 minutes</p>
                     <div className="flex flex-col space-y-5 w-full">
-                        <Button label={<><RefreshCcw /> Request New Reset Link</>} type="button" buttonType="brand" extraClass="py-2 w-full flex justify-center items-center text-gray-700 gap-2" />
-                        <Button label={<><ArrowLeft /> Back to Forgot Password</>} type="button" extraClass="py-2 w-full flex justify-center items-center text-gray-700" />
+                        <Link to="../forgot_password"><Button label={<><RefreshCcw /> Request New Reset Link</>} type="button" buttonType="brand" extraClass="py-2 w-full flex justify-center items-center text-gray-700 gap-2" /></Link>
+                        <Link to="../login"><Button label={<><ArrowLeft /> Back to Login</>} type="button" extraClass="py-2 w-full flex justify-center items-center text-gray-700" /></Link>
                     </div>
                     <div className="flex p-3 bg-secondary gap-2">
                         <div className="w-[10%]">

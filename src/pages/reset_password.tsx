@@ -111,7 +111,7 @@ const ResetPassword = () => {
 
                     <div className="flex flex-col space-y-5">
                         <Button label={state.sending ? <div className="flex justify-center items-center gap-1">Resetting Password...<span className="spinner"/></div> : "Reset Password"} type="button" buttonType="brand" extraClass="py-2 w-full" onclick={changePassword} />
-                        <Link to="../forget_password"><Button label={<><ArrowLeft /> Back to Forgot Password</>} type="button" extraClass="py-2 w-full flex justify-center items-center text-gray-700" /></Link>
+                        <Link to="../forgot_password"><Button label={<><ArrowLeft /> Back to Forgot Password</>} type="button" extraClass="py-2 w-full flex justify-center items-center text-gray-700" /></Link>
                     </div>
                 </div>
             </section>
