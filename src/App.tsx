@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 const Inbox = lazy(() => import("@/user/pages/inbox"));
 const Chat = lazy(() => import("@/user/pages/chat"));
 const UserProfile = lazy(() => import("@/user/pages/userProfile"));
@@ -62,6 +63,7 @@ function App() {
             </Route>
           </Route>
         </Routes>
+        <Analytics />
       </Suspense>
     </Router>
   );
